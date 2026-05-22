@@ -1,0 +1,670 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		01D8BC02CF5D1390B9AC51E8 /* AppGroupStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC613E02FD54F6BDFEFEEE24 /* AppGroupStore.swift */; };
+		0CBAFC84B74388A3F94715D4 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3621DEEEC9953A82A9FFC3D7 /* NotificationService.swift */; };
+		0E95F92878BB5DBBE9DBD345 /* ContactPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C53110EB5A4042FF0E54882 /* ContactPickerView.swift */; };
+		11B6AF01D381647864D129B9 /* FriendLookupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2BCB8A25D5A96921D75E1 /* FriendLookupService.swift */; };
+		14ACF24ABFA9E0CC136C1448 /* MyTodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C993E303F97886ABC7A5F41 /* MyTodoView.swift */; };
+		16658CE19962A439BBB683AF /* TaskStore+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737E969145A085F3EFE759A1 /* TaskStore+Cloud.swift */; };
+		189A32C8BC3F9C4761C18E40 /* TaskWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCBD7D3368C2E12AFE82340 /* TaskWidgetView.swift */; };
+		212C6EBD75B5036F3FD59A8F /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A88D0D57E6FBFA20FCA318B /* RootView.swift */; };
+		29AC79F6814DC1867E224CF1 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CAD697D50785D63916E226B /* Theme.swift */; };
+		3B98C415EECDA76F0511B2CC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D0BDDCE4EB9B9A8D724B1DD /* AppDelegate.swift */; };
+		3E5A175711F12F193DA88036 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20F16E3D7A0F8BC06C9697B /* SettingsView.swift */; };
+		41208C1452BE1F386E331977 /* AssignFlightCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0262AE3355AFB9CB25371D1F /* AssignFlightCoordinator.swift */; };
+		435940781F4D0B39BD5E4D61 /* AddTodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FF84A62EAAA0622F487C3E /* AddTodoView.swift */; };
+		454BC2A0DB412941FA39F6F1 /* TaskEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5480EC867E109710725730E /* TaskEntry.swift */; };
+		4681DF58B34DCB18935AEDA9 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13593B072FE59DB9585DF624 /* EmptyStateView.swift */; };
+		4CDDF7A6BE440B47DEED2E95 /* FriendsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988D734D9B820B4762B07131 /* FriendsStore.swift */; };
+		4D4788D3A61ACA1B18EBC201 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 32D6EA40522676B011FA9DA9 /* Supabase */; };
+		5152AFCFBC2CECB405E6FF41 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BCC0D0D799B5FA79DC7F0F /* Task.swift */; };
+		52901B2C1E03AA85D2847059 /* StickyColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6451EC1662B40727029ABBC2 /* StickyColor.swift */; };
+		587D7C135BBF1FE35CAD55AE /* FriendsTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F91D3B31327D0A80FF2C5D /* FriendsTabView.swift */; };
+		5900AA7902A2EB8AB50FFCC8 /* PersonAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029B5A83EC39AC884CC8D263 /* PersonAvatarView.swift */; };
+		65626D30B915C0792D6586CB /* CheckmateWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 152B791773B171362BCAB551 /* CheckmateWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6AAB268F3ACF3F122C92886A /* ContactsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932FD0A835541FB8A924C7F4 /* ContactsService.swift */; };
+		77C8E6800FDC458E45F8AE14 /* CheckBurstView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF16F3033B1664B2CBCA8C13 /* CheckBurstView.swift */; };
+		77D6C78F74DADA9C6A5BA011 /* TaskStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 189C8AFECB8ADAECD6DC94E5 /* TaskStore.swift */; };
+		7C8D5C6D9960EC3ED9E00041 /* Secrets.example.plist in Resources */ = {isa = PBXBuildFile; fileRef = D6340FA8D4437B3C006EBAED /* Secrets.example.plist */; };
+		805E797A9B1829BBBACC6F31 /* TaskWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B35A0A993FFC8894137EF0 /* TaskWidget.swift */; };
+		87C1ED4F3DCAA7AB098F677C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9629FF8B89372E5272459202 /* Assets.xcassets */; };
+		90D01B5FF295E6CAB66B4A21 /* MarkDoneIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745E013478049914C8C19F07 /* MarkDoneIntent.swift */; };
+		9448E0EB38C2E073879356E3 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BCC0D0D799B5FA79DC7F0F /* Task.swift */; };
+		980B93609BF1558E838A6400 /* StickyColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6451EC1662B40727029ABBC2 /* StickyColor.swift */; };
+		99DA44CAAB728454AD5B0BC5 /* CheckmateConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9E1F543A7B194091F9C2C3 /* CheckmateConfig.swift */; };
+		9C1DA8401D424292C243FF30 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EA10FD78C232BCCD3AE7E5 /* AuthView.swift */; };
+		A06E3F86CB16EDBD0A79B9C9 /* HomeBottomBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15953CD899FE32F8C207ED4C /* HomeBottomBar.swift */; };
+		A404B525817350AABE35AD24 /* ProgressPill.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFCAA367E20C4D7546EED410 /* ProgressPill.swift */; };
+		B5CCE6285D9D1162FED956AA /* Assignee.swift in Sources */ = {isa = PBXBuildFile; fileRef = C207F400083E1A8EF29D1C7F /* Assignee.swift */; };
+		B7B4ED0194BD16A7126F88E1 /* AppGroupStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC613E02FD54F6BDFEFEEE24 /* AppGroupStore.swift */; };
+		BCE7AC101A12B629B399EF30 /* FriendLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA454A0ECDA828105D4BF2C1 /* FriendLink.swift */; };
+		C186030F7CFC6007192B7320 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 448CC6FC4908B6DD93EDAD47 /* AuthService.swift */; };
+		C874343041001D35048E35F5 /* CheckmateApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D91384C10F55CEAD352F7C8 /* CheckmateApp.swift */; };
+		C8E980231CF312ABA5A33D20 /* SupabaseClient+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCED4B9897F2DFD97EC2387D /* SupabaseClient+Shared.swift */; };
+		C9DF0BC143E7154414BFA6AD /* AssignToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = F782E5B80040178756DBF97D /* AssignToken.swift */; };
+		CCE19021C09D0084E9AE788A /* RealtimeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580D1848DEE000BC565CAF26 /* RealtimeService.swift */; };
+		DACE947D49F1D0ADDD287F89 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35510CE899357E7BBEB68595 /* Profile.swift */; };
+		E111FC8E2CE188D8100C0EAF /* InviteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BFE143B366E147516F54699 /* InviteService.swift */; };
+		E39D78AB84A9D8ACED84FE03 /* StickyNoteCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03B574970CEE345A2E65A0A /* StickyNoteCardView.swift */; };
+		E3FC2C4097F3AAED15E5E65B /* AssignFlightOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C806C8D1BCDEEDF18C8D5D /* AssignFlightOverlay.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		818CAE483CB25FC0590D035A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FD35D482C753F115C738ADC5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BFB125D8776FF6416D75C2B5;
+			remoteInfo = CheckmateWidget;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		9950AEEB01B4A7B239C9E137 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				65626D30B915C0792D6586CB /* CheckmateWidget.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0262AE3355AFB9CB25371D1F /* AssignFlightCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignFlightCoordinator.swift; sourceTree = "<group>"; };
+		029B5A83EC39AC884CC8D263 /* PersonAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonAvatarView.swift; sourceTree = "<group>"; };
+		078705B3E813C703E4BA8925 /* Checkmate.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Checkmate.entitlements; sourceTree = "<group>"; };
+		0A88D0D57E6FBFA20FCA318B /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		0BFE143B366E147516F54699 /* InviteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteService.swift; sourceTree = "<group>"; };
+		0CAD697D50785D63916E226B /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		0D0BDDCE4EB9B9A8D724B1DD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		13593B072FE59DB9585DF624 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
+		152B791773B171362BCAB551 /* CheckmateWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = CheckmateWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		15953CD899FE32F8C207ED4C /* HomeBottomBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeBottomBar.swift; sourceTree = "<group>"; };
+		189C8AFECB8ADAECD6DC94E5 /* TaskStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskStore.swift; sourceTree = "<group>"; };
+		1C53110EB5A4042FF0E54882 /* ContactPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactPickerView.swift; sourceTree = "<group>"; };
+		21EA10FD78C232BCCD3AE7E5 /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
+		35510CE899357E7BBEB68595 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
+		3621DEEEC9953A82A9FFC3D7 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		448CC6FC4908B6DD93EDAD47 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		580D1848DEE000BC565CAF26 /* RealtimeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealtimeService.swift; sourceTree = "<group>"; };
+		6451EC1662B40727029ABBC2 /* StickyColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickyColor.swift; sourceTree = "<group>"; };
+		737E969145A085F3EFE759A1 /* TaskStore+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskStore+Cloud.swift"; sourceTree = "<group>"; };
+		745E013478049914C8C19F07 /* MarkDoneIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkDoneIntent.swift; sourceTree = "<group>"; };
+		74FF84A62EAAA0622F487C3E /* AddTodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTodoView.swift; sourceTree = "<group>"; };
+		76D44E3B347C69121EEA66E8 /* Checkmate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Checkmate.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		81BCC0D0D799B5FA79DC7F0F /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
+		8A9E1F543A7B194091F9C2C3 /* CheckmateConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckmateConfig.swift; sourceTree = "<group>"; };
+		8C993E303F97886ABC7A5F41 /* MyTodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTodoView.swift; sourceTree = "<group>"; };
+		932FD0A835541FB8A924C7F4 /* ContactsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsService.swift; sourceTree = "<group>"; };
+		9629FF8B89372E5272459202 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		988D734D9B820B4762B07131 /* FriendsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsStore.swift; sourceTree = "<group>"; };
+		9D91384C10F55CEAD352F7C8 /* CheckmateApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckmateApp.swift; sourceTree = "<group>"; };
+		A3F91D3B31327D0A80FF2C5D /* FriendsTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsTabView.swift; sourceTree = "<group>"; };
+		A5480EC867E109710725730E /* TaskEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskEntry.swift; sourceTree = "<group>"; };
+		A6BDA4D22B2B6FE0BDF56C9C /* CheckmateWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CheckmateWidget.entitlements; sourceTree = "<group>"; };
+		A7C806C8D1BCDEEDF18C8D5D /* AssignFlightOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignFlightOverlay.swift; sourceTree = "<group>"; };
+		B20F16E3D7A0F8BC06C9697B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		B68A3A4E584B94833BABCFEA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C207F400083E1A8EF29D1C7F /* Assignee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assignee.swift; sourceTree = "<group>"; };
+		CC613E02FD54F6BDFEFEEE24 /* AppGroupStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroupStore.swift; sourceTree = "<group>"; };
+		CF16F3033B1664B2CBCA8C13 /* CheckBurstView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBurstView.swift; sourceTree = "<group>"; };
+		CFCBD7D3368C2E12AFE82340 /* TaskWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskWidgetView.swift; sourceTree = "<group>"; };
+		D0B35A0A993FFC8894137EF0 /* TaskWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskWidget.swift; sourceTree = "<group>"; };
+		D6340FA8D4437B3C006EBAED /* Secrets.example.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Secrets.example.plist; sourceTree = "<group>"; };
+		DCED4B9897F2DFD97EC2387D /* SupabaseClient+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SupabaseClient+Shared.swift"; sourceTree = "<group>"; };
+		DFCAA367E20C4D7546EED410 /* ProgressPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressPill.swift; sourceTree = "<group>"; };
+		E03B574970CEE345A2E65A0A /* StickyNoteCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickyNoteCardView.swift; sourceTree = "<group>"; };
+		EA454A0ECDA828105D4BF2C1 /* FriendLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendLink.swift; sourceTree = "<group>"; };
+		EBA2BCB8A25D5A96921D75E1 /* FriendLookupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendLookupService.swift; sourceTree = "<group>"; };
+		F3B4F3BB8241308F8369D307 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		F782E5B80040178756DBF97D /* AssignToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignToken.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		414E52FF2673A50C4766359E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4D4788D3A61ACA1B18EBC201 /* Supabase in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		040C4053F53A4BD012FF57EA /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				74FF84A62EAAA0622F487C3E /* AddTodoView.swift */,
+				21EA10FD78C232BCCD3AE7E5 /* AuthView.swift */,
+				1C53110EB5A4042FF0E54882 /* ContactPickerView.swift */,
+				A3F91D3B31327D0A80FF2C5D /* FriendsTabView.swift */,
+				8C993E303F97886ABC7A5F41 /* MyTodoView.swift */,
+				0A88D0D57E6FBFA20FCA318B /* RootView.swift */,
+				B20F16E3D7A0F8BC06C9697B /* SettingsView.swift */,
+				E03B574970CEE345A2E65A0A /* StickyNoteCardView.swift */,
+				0CAD697D50785D63916E226B /* Theme.swift */,
+				65074416B43EFEF9C4A4F773 /* Components */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		09FD731D48BB7B6109E1BDC8 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				C207F400083E1A8EF29D1C7F /* Assignee.swift */,
+				F782E5B80040178756DBF97D /* AssignToken.swift */,
+				EA454A0ECDA828105D4BF2C1 /* FriendLink.swift */,
+				35510CE899357E7BBEB68595 /* Profile.swift */,
+				6451EC1662B40727029ABBC2 /* StickyColor.swift */,
+				81BCC0D0D799B5FA79DC7F0F /* Task.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		223D684A4EBDA6DF9C618A2A /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				CC613E02FD54F6BDFEFEEE24 /* AppGroupStore.swift */,
+				0262AE3355AFB9CB25371D1F /* AssignFlightCoordinator.swift */,
+				448CC6FC4908B6DD93EDAD47 /* AuthService.swift */,
+				932FD0A835541FB8A924C7F4 /* ContactsService.swift */,
+				EBA2BCB8A25D5A96921D75E1 /* FriendLookupService.swift */,
+				988D734D9B820B4762B07131 /* FriendsStore.swift */,
+				0BFE143B366E147516F54699 /* InviteService.swift */,
+				3621DEEEC9953A82A9FFC3D7 /* NotificationService.swift */,
+				580D1848DEE000BC565CAF26 /* RealtimeService.swift */,
+				DCED4B9897F2DFD97EC2387D /* SupabaseClient+Shared.swift */,
+				189C8AFECB8ADAECD6DC94E5 /* TaskStore.swift */,
+				737E969145A085F3EFE759A1 /* TaskStore+Cloud.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		422224056258D95884025989 = {
+			isa = PBXGroup;
+			children = (
+				DDD26764A0C36BAC69402F67 /* Checkmate */,
+				BDFE98DE3B1F260A6950F835 /* CheckmateWidget */,
+				87F0EB0B4248C984D3FCD253 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		65074416B43EFEF9C4A4F773 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				A7C806C8D1BCDEEDF18C8D5D /* AssignFlightOverlay.swift */,
+				CF16F3033B1664B2CBCA8C13 /* CheckBurstView.swift */,
+				13593B072FE59DB9585DF624 /* EmptyStateView.swift */,
+				15953CD899FE32F8C207ED4C /* HomeBottomBar.swift */,
+				029B5A83EC39AC884CC8D263 /* PersonAvatarView.swift */,
+				DFCAA367E20C4D7546EED410 /* ProgressPill.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		87F0EB0B4248C984D3FCD253 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				76D44E3B347C69121EEA66E8 /* Checkmate.app */,
+				152B791773B171362BCAB551 /* CheckmateWidget.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BDFE98DE3B1F260A6950F835 /* CheckmateWidget */ = {
+			isa = PBXGroup;
+			children = (
+				A6BDA4D22B2B6FE0BDF56C9C /* CheckmateWidget.entitlements */,
+				F3B4F3BB8241308F8369D307 /* Info.plist */,
+				745E013478049914C8C19F07 /* MarkDoneIntent.swift */,
+				A5480EC867E109710725730E /* TaskEntry.swift */,
+				D0B35A0A993FFC8894137EF0 /* TaskWidget.swift */,
+				CFCBD7D3368C2E12AFE82340 /* TaskWidgetView.swift */,
+			);
+			path = CheckmateWidget;
+			sourceTree = "<group>";
+		};
+		DDD26764A0C36BAC69402F67 /* Checkmate */ = {
+			isa = PBXGroup;
+			children = (
+				0D0BDDCE4EB9B9A8D724B1DD /* AppDelegate.swift */,
+				9629FF8B89372E5272459202 /* Assets.xcassets */,
+				078705B3E813C703E4BA8925 /* Checkmate.entitlements */,
+				9D91384C10F55CEAD352F7C8 /* CheckmateApp.swift */,
+				8A9E1F543A7B194091F9C2C3 /* CheckmateConfig.swift */,
+				B68A3A4E584B94833BABCFEA /* Info.plist */,
+				D6340FA8D4437B3C006EBAED /* Secrets.example.plist */,
+				09FD731D48BB7B6109E1BDC8 /* Models */,
+				223D684A4EBDA6DF9C618A2A /* Services */,
+				040C4053F53A4BD012FF57EA /* Views */,
+			);
+			path = Checkmate;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B7693172E594336FC991AE2C /* Checkmate */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 741B6262152ABA08A119B093 /* Build configuration list for PBXNativeTarget "Checkmate" */;
+			buildPhases = (
+				19DDFB2F731CD60B3F867448 /* Sources */,
+				D330B9C639A5D41E60AF89F3 /* Resources */,
+				414E52FF2673A50C4766359E /* Frameworks */,
+				9950AEEB01B4A7B239C9E137 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				20555B01E2E8EF0C08BD7C0F /* PBXTargetDependency */,
+			);
+			name = Checkmate;
+			packageProductDependencies = (
+				32D6EA40522676B011FA9DA9 /* Supabase */,
+			);
+			productName = Checkmate;
+			productReference = 76D44E3B347C69121EEA66E8 /* Checkmate.app */;
+			productType = "com.apple.product-type.application";
+		};
+		BFB125D8776FF6416D75C2B5 /* CheckmateWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 81B0FF1C16BC353CEBE828A9 /* Build configuration list for PBXNativeTarget "CheckmateWidget" */;
+			buildPhases = (
+				F390E7BF1E1CACF13965F703 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CheckmateWidget;
+			packageProductDependencies = (
+			);
+			productName = CheckmateWidget;
+			productReference = 152B791773B171362BCAB551 /* CheckmateWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FD35D482C753F115C738ADC5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2650;
+				TargetAttributes = {
+					B7693172E594336FC991AE2C = {
+						ProvisioningStyle = Automatic;
+					};
+					BFB125D8776FF6416D75C2B5 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 17182A7465C29555FA4F547E /* Build configuration list for PBXProject "Checkmate" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 422224056258D95884025989;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				065AE3813C28AA1CC18B883D /* XCRemoteSwiftPackageReference "supabase-swift" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 87F0EB0B4248C984D3FCD253 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B7693172E594336FC991AE2C /* Checkmate */,
+				BFB125D8776FF6416D75C2B5 /* CheckmateWidget */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D330B9C639A5D41E60AF89F3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				87C1ED4F3DCAA7AB098F677C /* Assets.xcassets in Resources */,
+				7C8D5C6D9960EC3ED9E00041 /* Secrets.example.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		19DDFB2F731CD60B3F867448 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				435940781F4D0B39BD5E4D61 /* AddTodoView.swift in Sources */,
+				3B98C415EECDA76F0511B2CC /* AppDelegate.swift in Sources */,
+				B7B4ED0194BD16A7126F88E1 /* AppGroupStore.swift in Sources */,
+				41208C1452BE1F386E331977 /* AssignFlightCoordinator.swift in Sources */,
+				E3FC2C4097F3AAED15E5E65B /* AssignFlightOverlay.swift in Sources */,
+				C9DF0BC143E7154414BFA6AD /* AssignToken.swift in Sources */,
+				B5CCE6285D9D1162FED956AA /* Assignee.swift in Sources */,
+				C186030F7CFC6007192B7320 /* AuthService.swift in Sources */,
+				9C1DA8401D424292C243FF30 /* AuthView.swift in Sources */,
+				77C8E6800FDC458E45F8AE14 /* CheckBurstView.swift in Sources */,
+				C874343041001D35048E35F5 /* CheckmateApp.swift in Sources */,
+				99DA44CAAB728454AD5B0BC5 /* CheckmateConfig.swift in Sources */,
+				0E95F92878BB5DBBE9DBD345 /* ContactPickerView.swift in Sources */,
+				6AAB268F3ACF3F122C92886A /* ContactsService.swift in Sources */,
+				4681DF58B34DCB18935AEDA9 /* EmptyStateView.swift in Sources */,
+				BCE7AC101A12B629B399EF30 /* FriendLink.swift in Sources */,
+				11B6AF01D381647864D129B9 /* FriendLookupService.swift in Sources */,
+				4CDDF7A6BE440B47DEED2E95 /* FriendsStore.swift in Sources */,
+				587D7C135BBF1FE35CAD55AE /* FriendsTabView.swift in Sources */,
+				A06E3F86CB16EDBD0A79B9C9 /* HomeBottomBar.swift in Sources */,
+				E111FC8E2CE188D8100C0EAF /* InviteService.swift in Sources */,
+				14ACF24ABFA9E0CC136C1448 /* MyTodoView.swift in Sources */,
+				0CBAFC84B74388A3F94715D4 /* NotificationService.swift in Sources */,
+				5900AA7902A2EB8AB50FFCC8 /* PersonAvatarView.swift in Sources */,
+				DACE947D49F1D0ADDD287F89 /* Profile.swift in Sources */,
+				A404B525817350AABE35AD24 /* ProgressPill.swift in Sources */,
+				CCE19021C09D0084E9AE788A /* RealtimeService.swift in Sources */,
+				212C6EBD75B5036F3FD59A8F /* RootView.swift in Sources */,
+				3E5A175711F12F193DA88036 /* SettingsView.swift in Sources */,
+				980B93609BF1558E838A6400 /* StickyColor.swift in Sources */,
+				E39D78AB84A9D8ACED84FE03 /* StickyNoteCardView.swift in Sources */,
+				C8E980231CF312ABA5A33D20 /* SupabaseClient+Shared.swift in Sources */,
+				9448E0EB38C2E073879356E3 /* Task.swift in Sources */,
+				16658CE19962A439BBB683AF /* TaskStore+Cloud.swift in Sources */,
+				77D6C78F74DADA9C6A5BA011 /* TaskStore.swift in Sources */,
+				29AC79F6814DC1867E224CF1 /* Theme.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F390E7BF1E1CACF13965F703 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01D8BC02CF5D1390B9AC51E8 /* AppGroupStore.swift in Sources */,
+				90D01B5FF295E6CAB66B4A21 /* MarkDoneIntent.swift in Sources */,
+				52901B2C1E03AA85D2847059 /* StickyColor.swift in Sources */,
+				5152AFCFBC2CECB405E6FF41 /* Task.swift in Sources */,
+				454BC2A0DB412941FA39F6F1 /* TaskEntry.swift in Sources */,
+				805E797A9B1829BBBACC6F31 /* TaskWidget.swift in Sources */,
+				189A32C8BC3F9C4761C18E40 /* TaskWidgetView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		20555B01E2E8EF0C08BD7C0F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BFB125D8776FF6416D75C2B5 /* CheckmateWidget */;
+			targetProxy = 818CAE483CB25FC0590D035A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		16E3F931E7DBEA69705CA089 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = X342WVSJ3T;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.10;
+			};
+			name = Release;
+		};
+		33D8B89E590350D41DCF5313 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = X342WVSJ3T;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.10;
+			};
+			name = Debug;
+		};
+		3653A61063DDF7C4F58F7689 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Checkmate/Checkmate.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Checkmate/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.madhurima.checkmate;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		6D278F074771175BE7DD54DA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Checkmate/Checkmate.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Checkmate/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.madhurima.checkmate;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8D1CE8694A38C2289A89B135 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = CheckmateWidget/CheckmateWidget.entitlements;
+				INFOPLIST_FILE = CheckmateWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.madhurima.checkmate.widget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		9DF202AE43CC95F749994B70 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = CheckmateWidget/CheckmateWidget.entitlements;
+				INFOPLIST_FILE = CheckmateWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.madhurima.checkmate.widget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		17182A7465C29555FA4F547E /* Build configuration list for PBXProject "Checkmate" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				33D8B89E590350D41DCF5313 /* Debug */,
+				16E3F931E7DBEA69705CA089 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		741B6262152ABA08A119B093 /* Build configuration list for PBXNativeTarget "Checkmate" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6D278F074771175BE7DD54DA /* Debug */,
+				3653A61063DDF7C4F58F7689 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		81B0FF1C16BC353CEBE828A9 /* Build configuration list for PBXNativeTarget "CheckmateWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9DF202AE43CC95F749994B70 /* Debug */,
+				8D1CE8694A38C2289A89B135 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		065AE3813C28AA1CC18B883D /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase/supabase-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		32D6EA40522676B011FA9DA9 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 065AE3813C28AA1CC18B883D /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = FD35D482C753F115C738ADC5 /* Project object */;
+}

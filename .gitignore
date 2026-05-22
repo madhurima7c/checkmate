@@ -1,0 +1,7 @@
+.DS_Store
+DerivedData/
+*.xcuserstate
+**/xcuserdata/
+Checkmate/Secrets.plist
+Checkmate/Fonts/figma.zip
+Checkmate/Fonts/FigmaHand-Regular.ttf
