@@ -4,123 +4,249 @@ import UIKit
 /// Text input anchored to the bottom-left of a sticky note (Figma add-todo editor).
 struct BottomAnchoredTextEditor: View {
     @Binding var text: String
-    var isFocused: FocusState<Bool>.Binding
     var placeholder: String = "Tap to write"
+    var placeholderIcon: String? = nil
+    var resetToken: Int = 0
+    var dismissToken: Int = 0
+    var onWritingActiveChanged: ((Bool) -> Void)?
+
+    @State private var isActive = false
+    @State private var focusRequest = 0
 
     private let horizontalPadding: CGFloat = 14
     private let verticalPadding: CGFloat = 14
 
-    var body: some View {
-        ZStack(alignment: .bottomLeading) {
-            if text.isEmpty && !isFocused.wrappedValue {
-                Button {
-                    isFocused.wrappedValue = true
-                } label: {
-                    HStack(spacing: 4) {
-                        Image(systemName: "plus")
-                            .font(.system(size: 14, weight: .medium))
-                        Text(placeholder)
-                            .font(.system(size: 16))
-                    }
-                    .foregroundStyle(Theme.Palette.strike)
-                    .padding(.horizontal, horizontalPadding)
-                    .padding(.bottom, verticalPadding)
-                }
-                .buttonStyle(.plain)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
-            }
+    private var showPlaceholder: Bool {
+        text.isEmpty && !isActive
+    }
 
+    var body: some View {
+        ZStack {
             BottomAnchoredTextViewRepresentable(
                 text: $text,
-                isFocused: isFocused,
+                focusRequest: focusRequest,
+                resetToken: resetToken,
+                dismissToken: dismissToken,
                 horizontalPadding: horizontalPadding,
-                verticalPadding: verticalPadding
+                verticalPadding: verticalPadding,
+                onWritingActiveChanged: { active in
+                    isActive = active
+                    onWritingActiveChanged?(active)
+                }
             )
-            .opacity(text.isEmpty && !isFocused.wrappedValue ? 0.02 : 1)
+
+            if showPlaceholder {
+                placeholderButton
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .contentShape(Rectangle())
+                    .zIndex(1)
+            }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .onChange(of: resetToken) { _, _ in
+            isActive = false
+            focusRequest = 0
+            onWritingActiveChanged?(false)
+        }
+        .onChange(of: dismissToken) { _, _ in
+            isActive = text.isEmpty ? false : true
+            onWritingActiveChanged?(false)
+        }
+    }
+
+    private var placeholderButton: some View {
+        Button(action: startWriting) {
+            HStack(spacing: 4) {
+                if let placeholderIcon {
+                    FigmaIcon(name: placeholderIcon, size: 15)
+                } else {
+                    Image(systemName: "plus")
+                        .font(.system(size: 14, weight: .medium))
+                }
+                Text(placeholder)
+                    .font(.system(size: 16))
+            }
+            .foregroundStyle(Theme.Palette.strike)
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func startWriting() {
+        isActive = true
+        focusRequest += 1
+        onWritingActiveChanged?(true)
     }
 }
 
 private struct BottomAnchoredTextViewRepresentable: UIViewRepresentable {
     @Binding var text: String
-    var isFocused: FocusState<Bool>.Binding
+    let focusRequest: Int
+    let resetToken: Int
+    let dismissToken: Int
     let horizontalPadding: CGFloat
     let verticalPadding: CGFloat
+    var onWritingActiveChanged: (Bool) -> Void
 
-    func makeUIView(context: Context) -> UITextView {
-        let view = UITextView()
+    func makeUIView(context: Context) -> BottomAnchoredTextView {
+        let view = BottomAnchoredTextView()
         view.backgroundColor = .clear
         view.font = .systemFont(ofSize: 16, weight: .medium)
         view.textColor = UIColor(Theme.Palette.body)
         view.textAlignment = .left
         view.isScrollEnabled = true
+        view.isEditable = true
+        view.isSelectable = true
+        view.keyboardDismissMode = .interactive
         view.textContainer.lineFragmentPadding = 0
         view.textContainerInset = .zero
+        view.textContainer.widthTracksTextView = true
         view.delegate = context.coordinator
-        view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        view.onLayout = { [weak coordinator = context.coordinator] in
+            guard let coordinator, let view = coordinator.textView else { return }
+            coordinator.applyBottomAnchor(to: view)
+        }
+        context.coordinator.textView = view
         return view
     }
 
-    func updateUIView(_ uiView: UITextView, context: Context) {
-        if uiView.text != text {
+    func updateUIView(_ uiView: BottomAnchoredTextView, context: Context) {
+        context.coordinator.textBinding = $text
+        context.coordinator.horizontalPadding = horizontalPadding
+        context.coordinator.verticalPadding = verticalPadding
+        context.coordinator.onWritingActiveChanged = onWritingActiveChanged
+
+        if context.coordinator.handledResetToken != resetToken {
+            context.coordinator.handledResetToken = resetToken
+            context.coordinator.handledDismissToken = dismissToken
+            context.coordinator.handledFocusRequest = focusRequest
             uiView.text = text
-            context.coordinator.applyBottomInset(to: uiView)
+            uiView.resignFirstResponder()
+            onWritingActiveChanged(false)
+            context.coordinator.applyBottomAnchor(to: uiView)
+            return
         }
 
-        if isFocused.wrappedValue, !uiView.isFirstResponder {
-            uiView.becomeFirstResponder()
-        } else if !isFocused.wrappedValue, uiView.isFirstResponder {
+        if context.coordinator.handledDismissToken != dismissToken {
+            context.coordinator.handledDismissToken = dismissToken
             uiView.resignFirstResponder()
+            onWritingActiveChanged(false)
+            context.coordinator.applyBottomAnchor(to: uiView)
         }
+
+        if !uiView.isFirstResponder, uiView.text != text {
+            uiView.text = text
+            context.coordinator.applyBottomAnchor(to: uiView)
+        }
+
+        if focusRequest > 0, context.coordinator.handledFocusRequest != focusRequest {
+            context.coordinator.handledFocusRequest = focusRequest
+            context.coordinator.focusTextView(uiView)
+        }
+    }
+
+    static func dismantleUIView(_ uiView: BottomAnchoredTextView, coordinator: Coordinator) {
+        uiView.resignFirstResponder()
+        coordinator.textView = nil
     }
 
     func makeCoordinator() -> Coordinator {
-        Coordinator(self)
+        Coordinator()
     }
 
     final class Coordinator: NSObject, UITextViewDelegate {
-        var parent: BottomAnchoredTextViewRepresentable
+        var textBinding: Binding<String>?
+        var horizontalPadding: CGFloat = 14
+        var verticalPadding: CGFloat = 14
+        var onWritingActiveChanged: ((Bool) -> Void)?
+        weak var textView: BottomAnchoredTextView?
+        var handledFocusRequest = 0
+        var handledResetToken = -1
+        var handledDismissToken = -1
 
-        init(_ parent: BottomAnchoredTextViewRepresentable) {
-            self.parent = parent
-        }
-
-        func textViewDidChange(_ textView: UITextView) {
-            parent.text = textView.text
-            applyBottomInset(to: textView)
-        }
-
-        func textViewDidBeginEditing(_ textView: UITextView) {
-            parent.isFocused.wrappedValue = true
-            applyBottomInset(to: textView)
-            // Place caret at end (bottom of sticky-note flow).
-            let end = textView.text.count
-            textView.selectedRange = NSRange(location: end, length: 0)
-        }
-
-        func textViewDidEndEditing(_ textView: UITextView) {
-            parent.isFocused.wrappedValue = false
-        }
-
-        func applyBottomInset(to textView: UITextView) {
+        func applyBottomAnchor(to textView: UITextView) {
             guard textView.bounds.width > 1, textView.bounds.height > 1 else { return }
+
+            let lineHeight = textView.font?.lineHeight ?? 20
             let usableWidth = textView.bounds.width
-                - parent.horizontalPadding * 2
+                - horizontalPadding * 2
                 - textView.textContainer.lineFragmentPadding * 2
-            let size = textView.sizeThatFits(
-                CGSize(width: max(usableWidth, 1), height: .greatestFiniteMagnitude)
-            )
-            let contentHeight = max(size.height, textView.font?.lineHeight ?? 20)
+
+            let contentHeight: CGFloat
+            if textView.text.isEmpty {
+                contentHeight = lineHeight
+            } else {
+                let size = textView.sizeThatFits(
+                    CGSize(width: max(usableWidth, 1), height: .greatestFiniteMagnitude)
+                )
+                contentHeight = max(size.height, lineHeight)
+            }
+
             let topInset = max(
-                parent.verticalPadding,
-                textView.bounds.height - contentHeight - parent.verticalPadding
+                verticalPadding,
+                textView.bounds.height - contentHeight - verticalPadding
             )
             textView.textContainerInset = UIEdgeInsets(
                 top: topInset,
-                left: parent.horizontalPadding,
-                bottom: parent.verticalPadding,
-                right: parent.horizontalPadding
+                left: horizontalPadding,
+                bottom: verticalPadding,
+                right: horizontalPadding
             )
+
+            let targetY = max(
+                0,
+                textView.contentSize.height - textView.bounds.height + textView.adjustedContentInset.bottom
+            )
+            if abs(textView.contentOffset.y - targetY) > 0.5 {
+                textView.setContentOffset(CGPoint(x: 0, y: targetY), animated: false)
+            }
         }
+
+        func focusTextView(_ textView: UITextView) {
+            applyBottomAnchor(to: textView)
+            DispatchQueue.main.async { [weak self, weak textView] in
+                guard let self, let textView else { return }
+                if !textView.isFirstResponder {
+                    textView.becomeFirstResponder()
+                }
+                self.placeCaretAtBottom(textView)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                    self.applyBottomAnchor(to: textView)
+                    self.placeCaretAtBottom(textView)
+                }
+            }
+        }
+
+        func placeCaretAtBottom(_ textView: UITextView) {
+            applyBottomAnchor(to: textView)
+            let end = (textView.text as NSString).length
+            textView.selectedRange = NSRange(location: end, length: 0)
+            applyBottomAnchor(to: textView)
+        }
+
+        func textViewDidChange(_ textView: UITextView) {
+            textBinding?.wrappedValue = textView.text
+            applyBottomAnchor(to: textView)
+        }
+
+        func textViewDidBeginEditing(_ textView: UITextView) {
+            onWritingActiveChanged?(true)
+            placeCaretAtBottom(textView)
+        }
+
+        func textViewDidEndEditing(_ textView: UITextView) {
+            onWritingActiveChanged?(!textView.text.isEmpty)
+            applyBottomAnchor(to: textView)
+        }
+    }
+}
+
+private final class BottomAnchoredTextView: UITextView {
+    var onLayout: (() -> Void)?
+
+    override var canBecomeFirstResponder: Bool { true }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        onLayout?()
     }
 }

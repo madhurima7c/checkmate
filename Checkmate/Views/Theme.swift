@@ -1,14 +1,14 @@
 import SwiftUI
 
-// Central design tokens. Values pulled from the Figma file
-// UQufnoBL4RZ5imvjq323AO via the Figma MCP.
 enum Theme {
-    // Springs — fluid + playful. Reuse these everywhere so the motion has
-    // a consistent rhythm.
     static let spring = Animation.spring(response: 0.34, dampingFraction: 0.78)
     static let boop = Animation.spring(response: 0.22, dampingFraction: 0.72)
     static let snappy = Animation.spring(response: 0.26, dampingFraction: 0.86)
     static let instant = Animation.easeOut(duration: 0.14)
+    /// Book-page color flip on sticky editor.
+    static let colorFlip = Animation.spring(response: 0.36, dampingFraction: 0.78)
+    /// Checkbox fill zoom from center.
+    static let checkPop = Animation.spring(response: 0.32, dampingFraction: 0.62)
 
     enum Radius {
         static let card: CGFloat = 16
@@ -19,46 +19,56 @@ enum Theme {
     }
 
     enum Palette {
-        // App canvas.
         static let canvas = Color(hex: 0xF6F6F6)
-        // Primary text.
         static let ink = Color(hex: 0x0E0E0E)
-        // Body sticky text.
         static let body = Color(hex: 0x2F2F2F)
-        // Header date label (muted).
-        static let subtitle = Color(white: 0.706, opacity: 0.76)  // rgba(180,180,180,0.76)
-        // "1 of 6 done" pill text.
+        static let subtitle = Color(white: 0.706, opacity: 0.76)
         static let dim = Color(hex: 0xA9A9A9)
-        // Strikethrough body.
         static let strike = Color(white: 0, opacity: 0.38)
-        // Checkbox stroke.
         static let checkboxStroke = Color(white: 0, opacity: 0.39)
-        // Done check + progress dial.
         static let blue = Color(hex: 0x4A8FFF)
-        // NEW badge.
+        /// Figma #08f — modal chip + assign ring.
+        static let selectionBlue = Color(hex: 0x0088FF)
+        static let selectionFill = Color(hex: 0x0088FF).opacity(0.07)
+        static let assignLabelMuted = Color(hex: 0x888888)
         static let newRed = Color(hex: 0xF83A00)
-        // Bottom bar dark button (+ FAB).
         static let dark = Color(hex: 0x2F3231)
-        // Card / panel surface.
         static let surface = Color.white
+        static let chipBorder = Color(hex: 0xE3E3E3)
     }
 
     enum Stroke {
         static let cardBorder: CGFloat = 4
         static let cardBorderLarge: CGFloat = 6
+        static let progressTrack: CGFloat = 3.5
+        static let progressArc: CGFloat = 4
     }
 }
 
-// Replaces the old orange accent that lived on TaskRowView.
 extension Color {
     static let checkmateBlue = Theme.Palette.blue
 }
 
-// Sticky-style soft shadow used on every card / floating element.
 extension View {
+    /// Figma sticky shadow (empty + grid cards).
     func stickyShadow() -> some View {
         self
+            .shadow(color: .black.opacity(0.03), radius: 3.4, x: 1.5, y: -5.3)
+            .shadow(color: .black.opacity(0.03), radius: 1.4, x: 0, y: 1.5)
+            .shadow(color: .black.opacity(0.03), radius: 0.5, x: 0, y: 0)
+    }
+
+    func tabBarShadow() -> some View {
+        self
             .shadow(color: .black.opacity(0.07), radius: 4.5, x: 0, y: 2)
+            .shadow(color: .black.opacity(0.03), radius: 0.5, x: 0, y: 0)
+    }
+
+    /// Figma 573:2513 add-todo sticky preview shadow.
+    func modalStickyShadow() -> some View {
+        self
+            .shadow(color: .black.opacity(0.03), radius: 4.5, x: 2, y: -7)
+            .shadow(color: .black.opacity(0.03), radius: 1.9, x: 0, y: 2)
             .shadow(color: .black.opacity(0.03), radius: 0.5, x: 0, y: 0)
     }
 }

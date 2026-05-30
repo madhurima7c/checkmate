@@ -17,7 +17,7 @@ struct AssignFlightOverlay: View {
                 let startSide: CGFloat = 172
                 let endSide = max(landing.width, landing.height)
                 let side = startSide + (endSide - startSide) * p
-                let settle = 1 + 0.06 * (1 - abs(p - 0.92) / 0.92)
+                let settle = 1 + 0.02 * (1 - abs(p - 0.92) / 0.92)
 
                 FlyingStickyCard(color: flight.color, text: flight.text)
                     .frame(width: side, height: side)

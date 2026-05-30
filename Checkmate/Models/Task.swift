@@ -19,17 +19,32 @@ struct CheckmateTask: Identifiable, Codable, Equatable {
 
     var isPersonal: Bool { receiverId == nil || receiverId == senderId }
 
-    var isAssignedToFriend: Bool {
-        if inviteContact != nil { return true }
-        guard let assigneeName else { return false }
-        return assigneeName != "Myself"
-    }
-    var isNew: Bool { !isSeen && receiverId != nil && receiverId != senderId }
     var isOverdue: Bool { dueDate < Calendar.current.startOfDay(for: Date()) }
 
     func wasAssignedToMe(currentUserId: UUID?) -> Bool {
         guard let currentUserId, let receiverId else { return false }
         return receiverId == currentUserId && senderId != currentUserId
+    }
+
+    func isOutgoingToFriend(currentUserId: UUID) -> Bool {
+        guard senderId == currentUserId else { return false }
+        if inviteContact != nil { return true }
+        guard let receiverId else { return false }
+        return receiverId != currentUserId
+    }
+
+    func isIncomingFromOther(currentUserId: UUID) -> Bool {
+        guard receiverId == currentUserId else { return false }
+        return senderId != currentUserId
+    }
+
+    /// Legacy helper — prefer `isOutgoingToFriend(currentUserId:)`.
+    func isAssignedToFriend(currentUserId: UUID) -> Bool {
+        isOutgoingToFriend(currentUserId: currentUserId)
+    }
+
+    func isNew(currentUserId: UUID) -> Bool {
+        !isSeen && isIncomingFromOther(currentUserId: currentUserId)
     }
 
     enum CodingKeys: String, CodingKey {

@@ -38,8 +38,9 @@ enum TaskAssignee: Equatable, Identifiable {
         ]
     }
 
+    @MainActor
     static func from(task: CheckmateTask) -> TaskAssignee {
-        guard task.isAssignedToFriend else { return .myself }
+        guard task.isOutgoingToFriend else { return .myself }
         if let contact = task.inviteContact {
             return .person(FriendLink(name: task.assigneeName ?? "Friend", contact: contact, profileId: task.receiverId))
         }

@@ -70,7 +70,7 @@ extension TaskStore {
             throw TaskStoreError.notAuthenticated
         }
 
-        let wasFriend = findTask(id: id)?.isAssignedToFriend ?? false
+        let wasFriend = findTask(id: id)?.isOutgoingToFriend ?? false
         let payload = buildUpdatePayload(
             text: text,
             color: color,

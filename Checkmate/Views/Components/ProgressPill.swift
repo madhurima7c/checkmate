@@ -1,6 +1,5 @@
 import SwiftUI
 
-// Figma: dial + "x of y done" — no pill background, sits on the page fade.
 struct ProgressPill: View {
     let done: Int
     let total: Int
@@ -12,7 +11,7 @@ struct ProgressPill: View {
     var body: some View {
         HStack(spacing: 4) {
             ProgressDial(fraction: fraction)
-                .frame(width: 20, height: 20)
+                .frame(width: 22, height: 22)
 
             Text("\(done) of \(total) done")
                 .font(.system(size: 20, weight: .semibold))
@@ -31,12 +30,12 @@ struct ProgressDial: View {
     var body: some View {
         ZStack {
             Circle()
-                .stroke(Color.black.opacity(0.12), lineWidth: 2.5)
+                .stroke(Theme.Palette.blue.opacity(0.22), lineWidth: Theme.Stroke.progressTrack)
             Circle()
                 .trim(from: 0, to: fraction)
                 .stroke(
                     Theme.Palette.blue,
-                    style: StrokeStyle(lineWidth: 2.5, lineCap: .round)
+                    style: StrokeStyle(lineWidth: Theme.Stroke.progressArc, lineCap: .round)
                 )
                 .rotationEffect(.degrees(-90))
                 .animation(Theme.spring, value: fraction)

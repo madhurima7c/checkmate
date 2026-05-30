@@ -11,13 +11,17 @@ struct TodoSavePayload {
     let editingId: UUID?
 }
 
+/// Figma iPhone 16 & 17 Pro - 30 (573:2413) — Add todo sheet.
 struct AddTodoView: View {
     @Environment(\.dismiss) private var dismiss
 
     var editingTask: CheckmateTask? = nil
     var onSaved: ((TodoSavePayload) -> Void)? = nil
+    var resetToken: Int = 0
 
     @State private var text = ""
+    @State private var keyboardVisible = false
+    @State private var composerDismissToken = 0
     @State private var color: StickyColor = .yellow
     @StateObject private var friendsStore = FriendsStore.shared
     @State private var assignee: TaskAssignee = .myself
@@ -29,8 +33,6 @@ struct AddTodoView: View {
     @State private var showCustomDatePicker = false
     @State private var isSubmitting = false
     @State private var error: String?
-
-    @FocusState private var textFocused: Bool
 
     enum DueOption: Equatable {
         case today, tomorrow, custom
@@ -52,18 +54,28 @@ struct AddTodoView: View {
 
             VStack(spacing: 0) {
                 header
-                ScrollView {
-                    VStack(spacing: 24) {
-                        stickyEditor
+
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 0) {
+                        stickySection
+                            .padding(.top, 28)
+
                         colorRow
+                            .padding(.top, 22)
+
                         assignScheduleCard
+                            .padding(.top, 58)
+                            .padding(.horizontal, 24)
                     }
-                    .padding(.top, 24)
-                    .padding(.bottom, 120)
+                    .padding(.bottom, keyboardVisible ? 24 : 108)
                 }
                 .scrollDismissesKeyboard(.interactively)
+
+                if !keyboardVisible, !text.trimmingCharacters(in: .whitespaces).isEmpty {
+                    ConfirmButtonChrome { confirmButton }
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                }
             }
-            .safeAreaInset(edge: .bottom) { confirmButton }
 
             if let error {
                 Text(error)
@@ -73,23 +85,7 @@ struct AddTodoView: View {
             }
         }
         .sheet(isPresented: $showCustomDatePicker) {
-            VStack {
-                DatePicker(
-                    "Pick a date",
-                    selection: $customDate,
-                    in: Date.today...,
-                    displayedComponents: .date
-                )
-                .datePickerStyle(.graphical)
-                .padding()
-                Button("Done") {
-                    dueOption = .custom
-                    showCustomDatePicker = false
-                }
-                .buttonStyle(.borderedProminent)
-                .padding(.bottom)
-            }
-            .presentationDetents([.medium])
+            customDateSheet
         }
         .overlay {
             if showContactPicker {
@@ -103,7 +99,276 @@ struct AddTodoView: View {
                 .ignoresSafeArea()
             }
         }
-        .onAppear(perform: loadEditingState)
+        .animation(Theme.snappy, value: keyboardVisible)
+        .tracksKeyboardVisibility($keyboardVisible)
+        .onAppear {
+            loadEditingState()
+            KeyboardDismiss.resign()
+        }
+        .onChange(of: resetToken) { _, _ in
+            text = editingTask?.text ?? ""
+            keyboardVisible = false
+            composerDismissToken += 1
+            KeyboardDismiss.resign()
+        }
+    }
+
+    private func dismissComposer() {
+        composerDismissToken += 1
+        KeyboardDismiss.resign()
+    }
+
+    // MARK: - Header (573:2452–2453)
+
+    private var header: some View {
+        ZStack {
+            Text(isEditing ? "Edit todo" : "Add todo")
+                .font(.system(size: 18, weight: .semibold))
+                .foregroundStyle(Theme.Palette.ink)
+
+            HStack {
+                Button { dismiss() } label: {
+                    FigmaIcon(name: "CaretLeft", size: 24)
+                        .frame(width: 32, height: 32)
+                }
+                .buttonStyle(BoopButtonStyle())
+                Spacer()
+            }
+            .padding(.horizontal, 24)
+        }
+        .padding(.top, 16)
+        .padding(.bottom, 4)
+    }
+
+    // MARK: - Sticky preview (573:2513)
+
+    private var stickySection: some View {
+        ZStack(alignment: .topTrailing) {
+            ColorFlipCard(color: $color)
+                .frame(width: 172, height: 176)
+                .allowsHitTesting(false)
+
+            BottomAnchoredTextEditor(
+                text: $text,
+                placeholderIcon: "TapToWritePlus",
+                resetToken: resetToken,
+                dismissToken: composerDismissToken,
+                onWritingActiveChanged: { _ in }
+            )
+            .frame(width: 172, height: 176)
+
+            if !assignee.isMyself, let link = assignee.friendLink {
+                PersonAvatarView(name: link.name, imageData: link.avatarData, size: 28)
+                    .padding(12)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
+        }
+        .animation(Theme.snappy, value: assignee.id)
+        .frame(maxWidth: .infinity)
+    }
+
+    // MARK: - Color dots (573:2462–2468)
+
+    private var colorRow: some View {
+        HStack(spacing: 6.5) {
+            ForEach(StickyColor.allCases) { c in
+                Button {
+                    dismissComposer()
+                    withAnimation(Theme.colorFlip) { color = c }
+                } label: {
+                    ZStack {
+                        if c == color {
+                            Circle()
+                                .stroke(Color(hex: 0x32312F), lineWidth: 1.63)
+                                .frame(width: 31.8, height: 31.8)
+                        }
+                        Circle()
+                            .fill(c.dot)
+                            .overlay(Circle().strokeBorder(.white, lineWidth: 2.45))
+                            .frame(width: 30.2, height: 30.2)
+                            .modalColorDotShadow()
+                    }
+                }
+                .buttonStyle(BoopButtonStyle())
+            }
+        }
+        .frame(maxWidth: .infinity)
+    }
+
+    // MARK: - Assign + schedule card (573:2469)
+
+    private var assignScheduleCard: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            VStack(alignment: .leading, spacing: 16) {
+                sectionLabel("Assign to")
+                AssigneeCarousel(
+                    assignee: $assignee,
+                    people: friendsStore.assignablePeople(includeDemos: CheckmateConfig.isPrototype),
+                    onAdd: {
+                        dismissComposer()
+                        Task {
+                            if await ContactsService.requestAccessIfNeeded() {
+                                showContactPicker = true
+                            }
+                        }
+                    },
+                    onInteract: dismissComposer
+                )
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, 23)
+            .padding(.bottom, 20)
+
+            Rectangle()
+                .fill(Color(hex: 0xE8E8E8))
+                .frame(height: 1)
+
+            VStack(alignment: .leading, spacing: 16) {
+                sectionLabel("By when")
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 12) {
+                        dueChip(option: .today, label: "Today", day: Date.today)
+                        dueChip(option: .tomorrow, label: "Tomorrow", day: Date.today.adding(days: 1))
+                        customDueChip
+                    }
+                }
+                HStack(spacing: 12) {
+                    Text("All day")
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundStyle(Theme.Palette.body)
+                    Toggle("", isOn: $allDay.animation(Theme.spring))
+                        .onChange(of: allDay) { _, _ in dismissComposer() }
+                        .labelsHidden()
+                        .tint(Color(hex: 0x34C759))
+                    if !allDay {
+                        DatePicker("", selection: $dueAt, displayedComponents: .hourAndMinute)
+                            .labelsHidden()
+                    }
+                    Spacer(minLength: 0)
+                }
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, 20)
+            .padding(.bottom, 23)
+        }
+        .background(
+            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                .fill(Color.white)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        .stroke(Color.black.opacity(0.03), lineWidth: 1)
+                )
+        )
+    }
+
+    private func sectionLabel(_ title: String) -> some View {
+        Text(title)
+            .font(.system(size: 15, weight: .semibold))
+            .foregroundStyle(Theme.Palette.dim)
+    }
+
+    private var customDueChip: some View {
+        Button {
+            dismissComposer()
+            showCustomDatePicker = true
+        } label: {
+            HStack(spacing: 2) {
+                Text("Custom")
+                    .font(.system(size: 16, weight: .medium))
+                FigmaIcon(name: "CaretRight", size: 16)
+            }
+            .foregroundStyle(Theme.Palette.body)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .background(chipBackground(selected: dueOption == .custom))
+        }
+        .buttonStyle(BoopButtonStyle())
+    }
+
+    private func dueChip(option: DueOption, label: String, day: Date) -> some View {
+        let isSelected = dueOption == option
+        let formatter = DateFormatter()
+        formatter.dateFormat = "d"
+        return Button {
+            dismissComposer()
+            withAnimation(Theme.snappy) { dueOption = option }
+        } label: {
+            HStack(spacing: 4) {
+                CalendarGlyph(dayNumber: formatter.string(from: day), selected: isSelected)
+                Text(label)
+                    .font(.system(size: 16, weight: .medium))
+            }
+            .foregroundStyle(Theme.Palette.body)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .background(chipBackground(selected: isSelected))
+        }
+        .buttonStyle(BoopButtonStyle())
+    }
+
+    private func chipBackground(selected: Bool) -> some View {
+        RoundedRectangle(cornerRadius: 12, style: .continuous)
+            .fill(selected ? Theme.Palette.selectionFill : .white)
+            .overlay(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .stroke(selected ? Theme.Palette.selectionBlue : Theme.Palette.chipBorder, lineWidth: 1)
+            )
+    }
+
+    // MARK: - Confirm (573:2460–2461)
+
+    private var confirmButton: some View {
+        Button {
+            Task { await submit() }
+        } label: {
+            Group {
+                if isSubmitting {
+                    ProgressView().tint(.white)
+                } else {
+                    Text("Confirm")
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundStyle(.white)
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 62)
+            .background(
+                RoundedRectangle(cornerRadius: 19, style: .continuous)
+                    .fill(Theme.Palette.dark)
+                    .tabBarShadow()
+            )
+        }
+        .buttonStyle(BoopButtonStyle())
+        .disabled(isSubmitting)
+        .padding(.horizontal, 24)
+        .padding(.bottom, 12)
+    }
+
+    private var customDateSheet: some View {
+        VStack {
+            DatePicker(
+                "Pick a date",
+                selection: $customDate,
+                in: Date.today...,
+                displayedComponents: .date
+            )
+            .datePickerStyle(.graphical)
+            .padding()
+            Button("Done") {
+                dueOption = .custom
+                showCustomDatePicker = false
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(Theme.Palette.selectionBlue)
+            .padding(.bottom)
+        }
+        .presentationDetents([.medium])
+    }
+
+    private func selectContact(_ link: FriendLink) async {
+        let enriched = await FriendLookupService.enrich(link)
+        withAnimation(Theme.snappy) { assignee = .person(enriched) }
+        friendsStore.remember(enriched)
     }
 
     private func loadEditingState() {
@@ -125,277 +390,10 @@ struct AddTodoView: View {
         }
     }
 
-    private var header: some View {
-        ZStack {
-            Text(isEditing ? "Edit todo" : "Add todo")
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundStyle(Theme.Palette.ink)
-            HStack {
-                Button { dismiss() } label: {
-                    Image(systemName: "chevron.left")
-                        .font(.system(size: 18, weight: .semibold))
-                        .foregroundStyle(Theme.Palette.ink)
-                        .frame(width: 32, height: 32)
-                }
-                .buttonStyle(BoopButtonStyle())
-                Spacer()
-            }
-            .padding(.horizontal, 16)
-        }
-        .frame(height: 52)
-    }
-
-    private var stickyEditor: some View {
-        ZStack {
-            ColorSpreadCard(color: $color)
-                .frame(width: 172, height: 176)
-
-            ZStack {
-                if text.isEmpty && !textFocused {
-                    Button {
-                        textFocused = true
-                    } label: {
-                        VStack {
-                            Spacer()
-                            HStack(spacing: 4) {
-                                Image(systemName: "plus")
-                                    .font(.system(size: 14, weight: .medium))
-                                Text("Tap to write")
-                                    .font(.system(size: 16))
-                            }
-                            .foregroundStyle(Theme.Palette.strike)
-                            Spacer()
-                        }
-                        .frame(width: 172, height: 176)
-                    }
-                    .buttonStyle(.plain)
-                }
-
-                TextEditor(text: $text)
-                    .focused($textFocused)
-                    .scrollContentBackground(.hidden)
-                    .background(.clear)
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundStyle(Theme.Palette.body)
-                    .multilineTextAlignment(.center)
-                    .opacity(text.isEmpty && !textFocused ? 0.01 : 1)
-                    .frame(width: 172, height: 176)
-            }
-
-            if !assignee.isMyself, let link = assignee.friendLink {
-                PersonAvatarView(name: link.name, imageData: link.avatarData, size: 28)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
-                    .padding(12)
-            }
-        }
-    }
-
-    private func selectContact(_ link: FriendLink) async {
-        let enriched = await FriendLookupService.enrich(link)
-        withAnimation(Theme.boop) { assignee = .person(enriched) }
-        friendsStore.remember(enriched)
-    }
-
-    private var colorRow: some View {
-        HStack(spacing: 7) {
-            ForEach(StickyColor.allCases) { c in
-                Button {
-                    withAnimation(.spring(response: 0.38, dampingFraction: 0.68)) {
-                        color = c
-                    }
-                } label: {
-                    ZStack {
-                        if c == color {
-                            Circle()
-                                .stroke(Theme.Palette.dark, lineWidth: 1.6)
-                                .frame(width: 34, height: 34)
-                        }
-                        Circle()
-                            .fill(c.dot)
-                            .overlay(Circle().strokeBorder(.white, lineWidth: 2.4))
-                            .frame(width: 30, height: 30)
-                            .stickyShadow()
-                    }
-                }
-                .buttonStyle(BoopButtonStyle())
-            }
-        }
-    }
-
-    /// Figma 573:2469 — Assign to + By when in one white card.
-    private var assignScheduleCard: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Assign to")
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(Theme.Palette.dim)
-                FlowLayout(spacing: 6) {
-                    assignChip(.myself, link: nil)
-                    ForEach(friendsStore.assignablePeople(includeDemos: CheckmateConfig.isPrototype)) { link in
-                        assignChip(.person(link), link: link)
-                    }
-                    Button {
-                        Task {
-                            if await ContactsService.requestAccessIfNeeded() {
-                                showContactPicker = true
-                            }
-                        }
-                    } label: {
-                        HStack(spacing: 2) {
-                            Image(systemName: "plus")
-                                .font(.system(size: 12, weight: .semibold))
-                            Text("Add")
-                                .font(.system(size: 16, weight: .medium))
-                        }
-                        .foregroundStyle(Theme.Palette.body)
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 6)
-                        .background(chipBackground(selected: false))
-                    }
-                    .buttonStyle(BoopButtonStyle())
-                }
-            }
-            .padding(.horizontal, 20)
-            .padding(.top, 23)
-            .padding(.bottom, 20)
-
-            Divider()
-                .background(Color(hex: 0xE8E8E8))
-                .padding(.horizontal, 1)
-
-            VStack(alignment: .leading, spacing: 12) {
-                Text("By when")
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(Theme.Palette.dim)
-                HStack(spacing: 6) {
-                    dueChip(option: .today, label: "Today", day: Date.today)
-                    dueChip(option: .tomorrow, label: "Tomorrow", day: Date.today.adding(days: 1))
-                    Button { showCustomDatePicker = true } label: {
-                        HStack(spacing: 2) {
-                            Text("Custom")
-                                .font(.system(size: 16, weight: .medium))
-                            Image(systemName: "chevron.right")
-                                .font(.system(size: 12, weight: .semibold))
-                        }
-                        .foregroundStyle(Theme.Palette.body)
-                        .padding(.leading, 6).padding(.trailing, 8)
-                        .padding(.vertical, 6)
-                        .background(chipBackground(selected: dueOption == .custom))
-                    }
-                    .buttonStyle(BoopButtonStyle())
-                }
-                HStack(spacing: 12) {
-                    Text("All day")
-                        .font(.system(size: 16, weight: .medium))
-                    Toggle("", isOn: $allDay.animation(Theme.spring))
-                        .labelsHidden()
-                        .tint(Color(hex: 0x34C759))
-                    if !allDay {
-                        DatePicker("", selection: $dueAt, displayedComponents: .hourAndMinute)
-                            .labelsHidden()
-                    }
-                    Spacer()
-                }
-            }
-            .padding(.horizontal, 20)
-            .padding(.top, 20)
-            .padding(.bottom, 23)
-        }
-        .background(
-            RoundedRectangle(cornerRadius: Theme.Radius.panel, style: .continuous)
-                .fill(Color.white)
-                .shadow(color: .black.opacity(0.03), radius: 0, y: 0)
-                .overlay(
-                    RoundedRectangle(cornerRadius: Theme.Radius.panel, style: .continuous)
-                        .stroke(Color.black.opacity(0.03), lineWidth: 1)
-                )
-        )
-        .padding(.horizontal, 24)
-    }
-
-    private func assignChip(_ target: TaskAssignee, link: FriendLink?) -> some View {
-        let selected = assignee.id == target.id
-        let label = link?.chipLabel ?? "Myself"
-        return Button {
-            withAnimation(Theme.boop) { assignee = target }
-        } label: {
-            HStack(spacing: 6) {
-                if let link {
-                    PersonAvatarView(name: link.name, imageData: link.avatarData, size: 18)
-                } else {
-                    PersonAvatarView(name: "Myself", size: 18)
-                }
-                Text(label)
-                    .font(.system(size: 16, weight: .medium))
-                    .lineLimit(1)
-            }
-            .foregroundStyle(Theme.Palette.body)
-            .padding(.horizontal, 10)
-            .padding(.vertical, 6)
-            .background(chipBackground(selected: selected))
-        }
-        .buttonStyle(BoopButtonStyle())
-    }
-
-    private func dueChip(option: DueOption, label: String, day: Date) -> some View {
-        let isSelected = dueOption == option
-        let formatter = DateFormatter()
-        formatter.dateFormat = "d"
-        return Button {
-            withAnimation(Theme.boop) { dueOption = option }
-        } label: {
-            HStack(spacing: 4) {
-                CalendarGlyph(dayNumber: formatter.string(from: day))
-                Text(label)
-                    .font(.system(size: 16, weight: .medium))
-            }
-            .foregroundStyle(Theme.Palette.body)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 6)
-            .background(chipBackground(selected: isSelected))
-        }
-        .buttonStyle(BoopButtonStyle())
-    }
-
-    private func chipBackground(selected: Bool) -> some View {
-        RoundedRectangle(cornerRadius: Theme.Radius.chip)
-            .fill(selected ? Color(hex: 0xF1F1F1) : .white)
-            .overlay(
-                RoundedRectangle(cornerRadius: Theme.Radius.chip)
-                    .stroke(selected ? Theme.Palette.dark.opacity(0.6) : Color(hex: 0xE3E3E3), lineWidth: 1)
-            )
-    }
-
-    private var confirmButton: some View {
-        Button {
-            Task { await submit() }
-        } label: {
-            Group {
-                if isSubmitting {
-                    ProgressView().tint(.white)
-                } else {
-                    Text("Confirm")
-                        .font(.system(size: 20, weight: .semibold))
-                        .foregroundStyle(.white)
-                }
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: 62)
-            .background(
-                RoundedRectangle(cornerRadius: Theme.Radius.pill, style: .continuous)
-                    .fill(Theme.Palette.dark)
-            )
-        }
-        .buttonStyle(BoopButtonStyle())
-        .disabled(text.trimmingCharacters(in: .whitespaces).isEmpty || isSubmitting)
-        .opacity(text.trimmingCharacters(in: .whitespaces).isEmpty ? 0.5 : 1)
-        .padding(.horizontal, 24)
-        .padding(.bottom, 12)
-    }
-
     private func submit() async {
         let trimmed = text.trimmingCharacters(in: .whitespaces)
         guard !trimmed.isEmpty else { return }
+        dismissComposer()
         isSubmitting = true
         let payload = TodoSavePayload(
             text: trimmed,
@@ -413,102 +411,50 @@ struct AddTodoView: View {
     }
 }
 
-// MARK: - Color spread ("zoop") on sticky
+// MARK: - Sticky preview card (573:2513)
 
-struct ColorSpreadCard: View {
+struct ColorFlipCard: View {
     @Binding var color: StickyColor
     @State private var displayed: StickyColor = .yellow
-    @State private var spreadColor: StickyColor?
-    @State private var spreadProgress: CGFloat = 0
 
     var body: some View {
-        let shape = RoundedRectangle(cornerRadius: Theme.Radius.cardLarge, style: .continuous)
-        ZStack(alignment: .bottom) {
-            shape.fill(displayed.paper)
-            if let spread = spreadColor {
-                Ellipse()
-                    .fill(spread.paper)
-                    .frame(width: 220, height: 180 * spreadProgress + 1)
-                    .offset(y: 90 * (1 - spreadProgress))
-                    .mask(shape)
+        let shape = RoundedRectangle(cornerRadius: 24, style: .continuous)
+        shape
+            .fill(displayed.paper)
+            .overlay(shape.strokeBorder(.white, lineWidth: 6))
+            .modalStickyShadow()
+            .onChange(of: color) { _, new in
+                withAnimation(Theme.colorFlip) { displayed = new }
             }
-        }
-        .overlay(shape.strokeBorder(.white, lineWidth: Theme.Stroke.cardBorderLarge))
-        .stickyShadow()
-        .clipShape(shape)
-        .onChange(of: color) { _, new in
-            playSpread(to: new)
-        }
-        .onAppear { displayed = color }
-    }
-
-    private func playSpread(to new: StickyColor) {
-        spreadColor = new
-        spreadProgress = 0.001
-        withAnimation(.spring(response: 0.42, dampingFraction: 0.62)) {
-            spreadProgress = 1
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.38) {
-            displayed = new
-            spreadColor = nil
-            spreadProgress = 0.001
-        }
+            .onAppear { displayed = color }
     }
 }
 
-// MARK: - Wrapping chip row
-
-struct FlowLayout: Layout {
-    var spacing: CGFloat = 6
-
-    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
-        let result = arrange(proposal: proposal, subviews: subviews)
-        return result.size
-    }
-
-    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
-        let result = arrange(proposal: proposal, subviews: subviews)
-        for (index, origin) in result.origins.enumerated() {
-            subviews[index].place(at: CGPoint(x: bounds.minX + origin.x, y: bounds.minY + origin.y), proposal: .unspecified)
-        }
-    }
-
-    private func arrange(proposal: ProposedViewSize, subviews: Subviews) -> (size: CGSize, origins: [CGPoint]) {
-        let maxW = proposal.width ?? .infinity
-        var x: CGFloat = 0
-        var y: CGFloat = 0
-        var rowH: CGFloat = 0
-        var origins: [CGPoint] = []
-        for sub in subviews {
-            let size = sub.sizeThatFits(.unspecified)
-            if x + size.width > maxW, x > 0 {
-                x = 0
-                y += rowH + spacing
-                rowH = 0
-            }
-            origins.append(CGPoint(x: x, y: y))
-            rowH = max(rowH, size.height)
-            x += size.width + spacing
-        }
-        return (CGSize(width: maxW, height: y + rowH), origins)
+extension View {
+    fileprivate func modalColorDotShadow() -> some View {
+        shadow(color: .black.opacity(0.07), radius: 7.3, x: 0, y: 1.6)
+            .shadow(color: .black.opacity(0.03), radius: 0.5, x: 0, y: 0)
     }
 }
 
 struct CalendarGlyph: View {
     let dayNumber: String
+    var selected: Bool = false
+
+    private var ink: Color { selected ? Theme.Palette.selectionBlue : Theme.Palette.body }
 
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 3)
-                .stroke(Theme.Palette.body, lineWidth: 1.4)
+                .stroke(ink, lineWidth: 1.4)
                 .frame(width: 16, height: 16)
             Rectangle()
-                .fill(Theme.Palette.body)
+                .fill(ink)
                 .frame(width: 16, height: 5)
                 .offset(y: -5.5)
             Text(dayNumber)
                 .font(.system(size: 7, weight: .bold))
-                .foregroundStyle(Theme.Palette.body)
+                .foregroundStyle(selected ? .white : ink)
                 .offset(y: 2)
         }
         .frame(width: 18, height: 18)

@@ -12,7 +12,9 @@ struct MyTodoView: View {
     @State private var showAddTodo = false
     @State private var editingTask: CheckmateTask?
     @State private var taskToDelete: CheckmateTask?
+    @State private var focusedCardId: UUID?
     @State private var selectedTab: AppTab = .myTodo
+    @State private var addSheetToken = 0
     @Namespace private var stickyNamespace
 
     private let dayRange = 0...14
@@ -30,7 +32,9 @@ struct MyTodoView: View {
             }
 
             bottomChrome
+                .zIndex(20)
             AssignFlightOverlay()
+                .zIndex(30)
         }
         .animation(Theme.spring, value: selectedTab)
         .task {
@@ -41,14 +45,20 @@ struct MyTodoView: View {
             }
         }
         .sheet(isPresented: $showAddTodo) {
-            AddTodoView(onSaved: handleSave)
+            AddTodoView(onSaved: handleSave, resetToken: addSheetToken)
                 .presentationDetents([.large])
-                .presentationDragIndicator(.visible)
+                .presentationDragIndicator(.hidden)
+                .interactiveDismissDisabled()
+                .presentationCornerRadius(48)
+                .presentationBackground(Theme.Palette.canvas)
         }
         .sheet(item: $editingTask) { task in
-            AddTodoView(editingTask: task, onSaved: handleSave)
+            AddTodoView(editingTask: task, onSaved: handleSave, resetToken: addSheetToken)
                 .presentationDetents([.large])
-                .presentationDragIndicator(.visible)
+                .presentationDragIndicator(.hidden)
+                .interactiveDismissDisabled()
+                .presentationCornerRadius(48)
+                .presentationBackground(Theme.Palette.canvas)
         }
         .sheet(isPresented: $showSettings) {
             SettingsView()
@@ -89,35 +99,27 @@ struct MyTodoView: View {
     }
 
     private var header: some View {
-        HStack(alignment: .firstTextBaseline, spacing: 8) {
+        HStack(alignment: .center, spacing: 8) {
             Text(selectedTab == .myTodo ? "My todo" : "Friends")
                 .font(.system(size: 26, weight: .semibold))
                 .foregroundStyle(Theme.Palette.ink)
-            if selectedTab == .myTodo {
-                Text(headerDateLabel)
+            if selectedTab == .myTodo || selectedTab == .friends {
+                Text(TodoDayLabel.title(forOffset: dayOffset))
                     .font(.system(size: 26, weight: .semibold))
                     .foregroundStyle(Theme.Palette.subtitle)
+                    .contentTransition(.numericText())
+                    .id(dayOffset)
+                    .animation(Theme.snappy, value: dayOffset)
             }
             Spacer()
             Button { showSettings = true } label: {
-                Image("GearSix")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 28, height: 28)
+                FigmaIcon.gear(size: 28)
             }
             .buttonStyle(BoopButtonStyle())
         }
         .padding(.horizontal, 24)
-        .padding(.top, 8)
-        .padding(.bottom, 20)
-    }
-
-    private var headerDateLabel: String {
-        if dayOffset == 0 { return "Today" }
-        if dayOffset == 1 { return "Tomorrow" }
-        let f = DateFormatter()
-        f.setLocalizedDateFormatFromTemplate("MMM d")
-        return f.string(from: Date.today.adding(days: dayOffset))
+        .padding(.top, 16)
+        .padding(.bottom, 0)
     }
 
     private var myTodoPages: some View {
@@ -129,6 +131,7 @@ struct MyTodoView: View {
             }
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
+        .animation(Theme.snappy, value: dayOffset)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
@@ -139,81 +142,53 @@ struct MyTodoView: View {
         let completed = store.myTodoCompleted(on: day)
         let all = pending + completed
 
-        if all.isEmpty && offset == 0 {
-            ZStack(alignment: .topLeading) {
-                EmptyStateView()
-                Color.clear
-                    .gridLandingMeasurement(tab: .myTodo)
-                    .padding(.horizontal, 24)
-                    .padding(.top, 8)
-                    .frame(maxWidth: .infinity)
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-        } else if all.isEmpty {
-            Spacer()
-            Text("No todos this day")
-                .font(.subheadline)
-                .foregroundStyle(Theme.Palette.dim)
-            Spacer()
+        if all.isEmpty {
+            TodoEmptyDayPage(tab: .myTodo, showLandingAnchor: offset == 0)
         } else {
-            let progress = store.progress(on: day, tab: .myTodo)
-            ScrollView {
-                LazyVGrid(
-                    columns: [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)],
-                    spacing: 10
-                ) {
-                    if pending.isEmpty {
-                        Color.clear
-                            .gridLandingMeasurement(tab: .myTodo)
-                    }
-                    ForEach(Array(pending.enumerated()), id: \.element.id) { index, task in
-                        StickyNoteCardView(
-                            task: task,
-                            isNewBadge: store.isNew(task),
-                            namespace: stickyNamespace,
-                            onEdit: { editingTask = task },
-                            onDelete: { taskToDelete = task }
-                        )
-                        .background {
-                            if index == 0 {
-                                GridLandingAnchor(tab: .myTodo)
-                            }
-                        }
-                    }
-                    ForEach(completed) { task in
-                        StickyNoteCardView(
-                            task: task,
-                            namespace: stickyNamespace,
-                            onEdit: { editingTask = task },
-                            onDelete: { taskToDelete = task }
-                        )
-                    }
-                }
+            ScrollEdgeFades {
+                TodoTaskGrid(
+                        pending: pending,
+                        completed: completed,
+                        tab: .myTodo,
+                        isNew: { store.isNew($0) },
+                        avatarName: myTodoAvatarName,
+                        avatarData: myTodoAvatarData,
+                        allowsEdit: { !$0.isIncomingFromOther },
+                        onEdit: { task in
+                            addSheetToken += 1
+                            editingTask = task
+                        },
+                        onDelete: { taskToDelete = $0 },
+                        focusedCardId: $focusedCardId
+                    )
                 .padding(.horizontal, 24)
-                .padding(.top, 8)
-                .padding(.bottom, 140)
             }
-            .scrollIndicators(.hidden)
-            .overlay(alignment: .bottom) {
-                if progress.total > 0 {
-                    VStack(spacing: 6) {
-                        LinearGradient(
-                            colors: [Theme.Palette.canvas.opacity(0), Theme.Palette.canvas],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                        .frame(height: 56)
-                        ProgressPill(done: progress.done, total: progress.total)
-                    }
-                    .allowsHitTesting(false)
-                    .padding(.bottom, 88)
-                }
-            }
+            .scrollDisabled(focusedCardId != nil)
         }
     }
 
     private var bottomChrome: some View {
-        HomeBottomBar(selectedTab: $selectedTab, onAdd: { showAddTodo = true })
+        let day = Date.today.adding(days: dayOffset)
+        let progress = store.progress(on: day, tab: selectedTab)
+        return TodoListBottomChrome(
+            done: progress.done,
+            total: progress.total,
+            selectedTab: $selectedTab,
+            onAdd: {
+                addSheetToken += 1
+                showAddTodo = true
+            }
+        )
+    }
+
+    private func myTodoAvatarName(_ task: CheckmateTask) -> String? {
+        guard task.isIncomingFromOther else { return nil }
+        return FriendsStore.shared.displayName(forUserId: task.senderId) ?? "Friend"
+    }
+
+    private func myTodoAvatarData(_ task: CheckmateTask) -> Data? {
+        guard task.isIncomingFromOther else { return nil }
+        return FriendsStore.shared.friendLink(forUserId: task.senderId)?.avatarData
     }
 
     // MARK: - Save + flight

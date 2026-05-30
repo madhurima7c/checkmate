@@ -148,7 +148,7 @@ class TaskStore: ObservableObject {
             return result
         }
 
-        let wasFriend = findTask(id: id)?.isAssignedToFriend ?? false
+        let wasFriend = findTask(id: id)?.isOutgoingToFriend ?? false
         let assignment = localAssignment(for: assignee)
 
         guard var task = removeTask(id: id) else {
@@ -243,16 +243,7 @@ class TaskStore: ObservableObject {
     }
 
     private func placeholderId(for contact: String) -> UUID {
-        var bytes = [UInt8](repeating: 0, count: 16)
-        for (index, byte) in contact.utf8.enumerated() {
-            bytes[index % 16] ^= byte
-        }
-        return UUID(uuid: (
-            bytes[0], bytes[1], bytes[2], bytes[3],
-            bytes[4], bytes[5], bytes[6], bytes[7],
-            bytes[8], bytes[9], bytes[10], bytes[11],
-            bytes[12], bytes[13], bytes[14], bytes[15]
-        ))
+        ContactUserId.placeholder(from: contact)
     }
 
     // MARK: - Persistence
@@ -286,10 +277,10 @@ class TaskStore: ObservableObject {
         let pending = tasks.filter {
             $0.status == .pending
                 && $0.dueDate.startOfDay() <= today
-                && !$0.isAssignedToFriend
+                && !$0.isOutgoingToFriend
         }
         let doneToday = recentlyCompleted.filter {
-            $0.dueDate.startOfDay() == today && !$0.isAssignedToFriend
+            $0.dueDate.startOfDay() == today && !$0.isOutgoingToFriend
         }.count
         AppGroupStore.saveTasks(pending)
         AppGroupStore.setDoneCount(doneToday)
@@ -341,19 +332,19 @@ class TaskStore: ObservableObject {
     // MARK: - Derived
 
     func myTodoPending(on day: Date) -> [CheckmateTask] {
-        tasks(on: day).filter { !$0.isAssignedToFriend }
+        tasks(on: day).filter { !$0.isOutgoingToFriend }
     }
 
     func myTodoCompleted(on day: Date) -> [CheckmateTask] {
-        completedTasks(on: day).filter { !$0.isAssignedToFriend }
+        completedTasks(on: day).filter { !$0.isOutgoingToFriend }
     }
 
     func friendsPending(on day: Date) -> [CheckmateTask] {
-        tasks(on: day).filter(\.isAssignedToFriend)
+        tasks(on: day).filter(\.isOutgoingToFriend)
     }
 
     func friendsCompleted(on day: Date) -> [CheckmateTask] {
-        completedTasks(on: day).filter(\.isAssignedToFriend)
+        completedTasks(on: day).filter(\.isOutgoingToFriend)
     }
 
     func tasks(on day: Date) -> [CheckmateTask] {

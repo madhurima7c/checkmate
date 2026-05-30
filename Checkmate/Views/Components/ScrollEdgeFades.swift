@@ -1,84 +1,169 @@
 import SwiftUI
 
-/// Full-width edge fades for scroll content — top + bottom anchored to screen chrome.
-struct ScrollEdgeFades<Content: View>: View {
+// MARK: - Figma 571:10111 — edge fades + bottom chrome metrics
+
+enum TodoListChromeMetrics {
+    /// Gap from header row to first card row (~40pt per design).
+    static let headerToGridSpacing: CGFloat = 40
+    static let gridInnerTopPadding: CGFloat = 8
+    static var scrollContentTopPadding: CGFloat {
+        headerToGridSpacing - gridInnerTopPadding
+    }
+
+    /// Canvas wash height rising above bottom chrome.
+    static let fadeHeight: CGFloat = 140
+    static let topFadeHeight: CGFloat = 56
+    static let progressRowHeight: CGFloat = 32
+    static let progressToNavSpacing: CGFloat = 20
+    static let navBarHeight: CGFloat = 60
+    /// Home bar sits ~2pt lower than before (8 → 10).
+    static let navBottomInset: CGFloat = 10
+
+    static var scrollBottomInset: CGFloat {
+        fadeHeight + progressRowHeight + progressToNavSpacing + navBarHeight + navBottomInset
+    }
+}
+
+/// Figma 571:10111 — progressive canvas fade from the bottom.
+struct TodoBottomFadeGradient: View {
+    var body: some View {
+        LinearGradient(
+            stops: [
+                .init(color: Theme.Palette.canvas.opacity(0), location: 0),
+                .init(color: Theme.Palette.canvas.opacity(0.35), location: 0.32),
+                .init(color: Theme.Palette.canvas.opacity(0.72), location: 0.62),
+                .init(color: Theme.Palette.canvas.opacity(0.94), location: 0.88),
+                .init(color: Theme.Palette.canvas, location: 1)
+            ],
+            startPoint: .top,
+            endPoint: .bottom
+        )
+    }
+}
+
+/// Header zone — 100% canvas at top, 0% at bottom so cards dissolve when scrolling up.
+struct TodoTopFadeGradient: View {
+    var body: some View {
+        LinearGradient(
+            stops: [
+                .init(color: Theme.Palette.canvas, location: 0),
+                .init(color: Theme.Palette.canvas.opacity(0.55), location: 0.45),
+                .init(color: Theme.Palette.canvas.opacity(0), location: 1)
+            ],
+            startPoint: .top,
+            endPoint: .bottom
+        )
+    }
+}
+
+/// Bottom chrome: white fade, progress pill, then navigation (always above scrolling cards).
+struct TodoListBottomChrome: View {
     let done: Int
     let total: Int
-    let bottomInset: CGFloat
-    @ViewBuilder var content: () -> Content
+    @Binding var selectedTab: AppTab
+    var onAdd: () -> Void
 
     private var showProgress: Bool { total > 0 }
 
+    private var fadeStackHeight: CGFloat {
+        var height = TodoListChromeMetrics.fadeHeight + TodoListChromeMetrics.navBottomInset
+        if showProgress {
+            height += TodoListChromeMetrics.progressRowHeight + TodoListChromeMetrics.progressToNavSpacing
+        }
+        return height
+    }
+
     var body: some View {
         ZStack(alignment: .bottom) {
-            content()
+            TodoBottomFadeGradient()
+                .frame(height: fadeStackHeight)
+                .allowsHitTesting(false)
 
-            // Top fade — cards dissolve when scrolling up
-            VStack {
-                LinearGradient(
-                    stops: [
-                        .init(color: Theme.Palette.canvas, location: 0),
-                        .init(color: Theme.Palette.canvas.opacity(0.85), location: 0.35),
-                        .init(color: Theme.Palette.canvas.opacity(0), location: 1)
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                .frame(height: 48)
-                Spacer()
-            }
-            .allowsHitTesting(false)
-
-            // Bottom fade — continuous wash down to tab bar
             VStack(spacing: 0) {
-                Spacer()
                 if showProgress {
-                    LinearGradient(
-                        stops: [
-                            .init(color: Theme.Palette.canvas.opacity(0), location: 0),
-                            .init(color: Theme.Palette.canvas.opacity(0.55), location: 0.45),
-                            .init(color: Theme.Palette.canvas, location: 1)
-                        ],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                    .frame(height: 100)
-
                     ProgressPill(done: done, total: total)
-                        .padding(.bottom, 10)
+                        .frame(maxWidth: .infinity)
+                        .padding(.bottom, TodoListChromeMetrics.progressToNavSpacing)
                 }
-
-                LinearGradient(
-                    colors: [Theme.Palette.canvas.opacity(0), Theme.Palette.canvas],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                .frame(height: bottomInset)
+                HomeBottomBar(selectedTab: $selectedTab, onAdd: onAdd)
             }
-            .allowsHitTesting(false)
+            .padding(.bottom, TodoListChromeMetrics.navBottomInset)
         }
     }
 }
 
-/// White fade behind the add-todo confirm button (Figma).
+/// Scroll container — cards fade at top and bottom under fixed chrome.
+struct ScrollEdgeFades<Content: View>: View {
+    @ViewBuilder var content: () -> Content
+
+    var body: some View {
+        ScrollView {
+            content()
+                .padding(.top, TodoListChromeMetrics.scrollContentTopPadding)
+                .padding(.bottom, TodoListChromeMetrics.scrollBottomInset)
+        }
+        .scrollIndicators(.hidden)
+        .overlay(alignment: .top) {
+            TodoTopFadeGradient()
+                .frame(height: TodoListChromeMetrics.topFadeHeight)
+                .allowsHitTesting(false)
+        }
+        .mask {
+            VStack(spacing: 0) {
+                LinearGradient(
+                    stops: [
+                        .init(color: .clear, location: 0),
+                        .init(color: .black.opacity(0.85), location: 0.35),
+                        .init(color: .black, location: 1)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .frame(height: TodoListChromeMetrics.topFadeHeight)
+
+                Rectangle()
+                    .fill(Color.black)
+
+                LinearGradient(
+                    stops: [
+                        .init(color: .black, location: 0),
+                        .init(color: .black.opacity(0.88), location: 0.45),
+                        .init(color: .clear, location: 1)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .frame(height: 88)
+            }
+        }
+    }
+}
+
+/// Translucent footer behind the add-todo Confirm button (24pt vertical padding).
 struct ConfirmButtonChrome<Content: View>: View {
     @ViewBuilder var content: () -> Content
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            LinearGradient(
-                stops: [
-                    .init(color: Theme.Palette.canvas.opacity(0), location: 0),
-                    .init(color: Theme.Palette.canvas.opacity(0.92), location: 0.35),
-                    .init(color: Theme.Palette.canvas, location: 0.65)
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .frame(height: 120)
-            .allowsHitTesting(false)
-
-            content()
-        }
+        content()
+            .padding(.top, 24)
+            .padding(.bottom, 24)
+            .frame(maxWidth: .infinity)
+            .background {
+                ZStack {
+                    LinearGradient(
+                        stops: [
+                            .init(color: Theme.Palette.canvas.opacity(0), location: 0.007),
+                            .init(color: Theme.Palette.canvas.opacity(0.55), location: 0.35),
+                            .init(color: Theme.Palette.canvas, location: 0.99)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                    Rectangle()
+                        .fill(.ultraThinMaterial)
+                        .opacity(0.35)
+                }
+                .allowsHitTesting(false)
+            }
     }
 }

@@ -41,6 +41,18 @@
 		99DA44CAAB728454AD5B0BC5 /* CheckmateConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9E1F543A7B194091F9C2C3 /* CheckmateConfig.swift */; };
 		9C1DA8401D424292C243FF30 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EA10FD78C232BCCD3AE7E5 /* AuthView.swift */; };
 		A06E3F86CB16EDBD0A79B9C9 /* HomeBottomBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15953CD899FE32F8C207ED4C /* HomeBottomBar.swift */; };
+		A5B6C7D8E9F001122334456 /* AssigneeCarousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B6C7D8E9F001122334455 /* AssigneeCarousel.swift */; };
+		B1C2D3E4F5061728394A5B7 /* BottomAnchoredTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5061728394A5B6 /* BottomAnchoredTextEditor.swift */; };
+		E8F4A2012B3C4D5E6F70102 /* FigmaIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F4A2012B3C4D5E6F70101 /* FigmaIcon.swift */; };
+		F1A2B3C4D5E60718293A4C1 /* CardActionBubbles.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E60718293A4B1 /* CardActionBubbles.swift */; };
+		F1A2B3C4D5E60718293A4C2 /* StickyNoteGridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E60718293A4B2 /* StickyNoteGridCell.swift */; };
+		F1A2B3C4D5E60718293A4C3 /* ContactUserId.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E60718293A4B3 /* ContactUserId.swift */; };
+		F1A2B3C4D5E60718293A4C4 /* CheckmateTask+Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E60718293A4B4 /* CheckmateTask+Routing.swift */; };
+		F1A2B3C4D5E60718293A4D1 /* TodoDayLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E60718293A4D0 /* TodoDayLabel.swift */; };
+		F1A2B3C4D5E60718293A4D3 /* TodoEmptyDayPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E60718293A4D2 /* TodoEmptyDayPage.swift */; };
+		F1A2B3C4D5E60718293A4D5 /* KeyboardVisibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E60718293A4D4 /* KeyboardVisibility.swift */; };
+		F1A2B3C4D5E60718293A4D8 /* TodoTaskGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E60718293A4D7 /* TodoTaskGrid.swift */; };
+		C1D2E3F4A5B60718293A4B6 /* ScrollEdgeFades.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D2E3F4A5B60718293A4B5 /* ScrollEdgeFades.swift */; };
 		A404B525817350AABE35AD24 /* ProgressPill.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFCAA367E20C4D7546EED410 /* ProgressPill.swift */; };
 		B5CCE6285D9D1162FED956AA /* Assignee.swift in Sources */ = {isa = PBXBuildFile; fileRef = C207F400083E1A8EF29D1C7F /* Assignee.swift */; };
 		B7B4ED0194BD16A7126F88E1 /* AppGroupStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC613E02FD54F6BDFEFEEE24 /* AppGroupStore.swift */; };
@@ -91,6 +103,18 @@
 		13593B072FE59DB9585DF624 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
 		152B791773B171362BCAB551 /* CheckmateWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = CheckmateWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		15953CD899FE32F8C207ED4C /* HomeBottomBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeBottomBar.swift; sourceTree = "<group>"; };
+		A5B6C7D8E9F001122334455 /* AssigneeCarousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssigneeCarousel.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5061728394A5B6 /* BottomAnchoredTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomAnchoredTextEditor.swift; sourceTree = "<group>"; };
+		E8F4A2012B3C4D5E6F70101 /* FigmaIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FigmaIcon.swift; sourceTree = "<group>"; };
+		F1A2B3C4D5E60718293A4B1 /* CardActionBubbles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardActionBubbles.swift; sourceTree = "<group>"; };
+		F1A2B3C4D5E60718293A4B2 /* StickyNoteGridCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickyNoteGridCell.swift; sourceTree = "<group>"; };
+		F1A2B3C4D5E60718293A4B3 /* ContactUserId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactUserId.swift; sourceTree = "<group>"; };
+		F1A2B3C4D5E60718293A4B4 /* CheckmateTask+Routing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CheckmateTask+Routing.swift"; sourceTree = "<group>"; };
+		F1A2B3C4D5E60718293A4D0 /* TodoDayLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoDayLabel.swift; sourceTree = "<group>"; };
+		F1A2B3C4D5E60718293A4D2 /* TodoEmptyDayPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoEmptyDayPage.swift; sourceTree = "<group>"; };
+		F1A2B3C4D5E60718293A4D4 /* KeyboardVisibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardVisibility.swift; sourceTree = "<group>"; };
+		F1A2B3C4D5E60718293A4D7 /* TodoTaskGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoTaskGrid.swift; sourceTree = "<group>"; };
+		C1D2E3F4A5B60718293A4B5 /* ScrollEdgeFades.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollEdgeFades.swift; sourceTree = "<group>"; };
 		189C8AFECB8ADAECD6DC94E5 /* TaskStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskStore.swift; sourceTree = "<group>"; };
 		1C53110EB5A4042FF0E54882 /* ContactPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactPickerView.swift; sourceTree = "<group>"; };
 		21EA10FD78C232BCCD3AE7E5 /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
@@ -164,6 +188,7 @@
 			isa = PBXGroup;
 			children = (
 				C207F400083E1A8EF29D1C7F /* Assignee.swift */,
+				F1A2B3C4D5E60718293A4B3 /* ContactUserId.swift */,
 				F782E5B80040178756DBF97D /* AssignToken.swift */,
 				EA454A0ECDA828105D4BF2C1 /* FriendLink.swift */,
 				35510CE899357E7BBEB68595 /* Profile.swift */,
@@ -186,6 +211,7 @@
 				3621DEEEC9953A82A9FFC3D7 /* NotificationService.swift */,
 				580D1848DEE000BC565CAF26 /* RealtimeService.swift */,
 				DCED4B9897F2DFD97EC2387D /* SupabaseClient+Shared.swift */,
+				F1A2B3C4D5E60718293A4B4 /* CheckmateTask+Routing.swift */,
 				189C8AFECB8ADAECD6DC94E5 /* TaskStore.swift */,
 				737E969145A085F3EFE759A1 /* TaskStore+Cloud.swift */,
 			);
@@ -204,12 +230,22 @@
 		65074416B43EFEF9C4A4F773 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				A5B6C7D8E9F001122334455 /* AssigneeCarousel.swift */,
+				F1A2B3C4D5E60718293A4B1 /* CardActionBubbles.swift */,
 				A7C806C8D1BCDEEDF18C8D5D /* AssignFlightOverlay.swift */,
+				B1C2D3E4F5061728394A5B6 /* BottomAnchoredTextEditor.swift */,
 				CF16F3033B1664B2CBCA8C13 /* CheckBurstView.swift */,
 				13593B072FE59DB9585DF624 /* EmptyStateView.swift */,
+				E8F4A2012B3C4D5E6F70101 /* FigmaIcon.swift */,
 				15953CD899FE32F8C207ED4C /* HomeBottomBar.swift */,
 				029B5A83EC39AC884CC8D263 /* PersonAvatarView.swift */,
 				DFCAA367E20C4D7546EED410 /* ProgressPill.swift */,
+				C1D2E3F4A5B60718293A4B5 /* ScrollEdgeFades.swift */,
+				F1A2B3C4D5E60718293A4B2 /* StickyNoteGridCell.swift */,
+				F1A2B3C4D5E60718293A4D0 /* TodoDayLabel.swift */,
+				F1A2B3C4D5E60718293A4D2 /* TodoEmptyDayPage.swift */,
+				F1A2B3C4D5E60718293A4D4 /* KeyboardVisibility.swift */,
+				F1A2B3C4D5E60718293A4D7 /* TodoTaskGrid.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -359,6 +395,9 @@
 				E3FC2C4097F3AAED15E5E65B /* AssignFlightOverlay.swift in Sources */,
 				C9DF0BC143E7154414BFA6AD /* AssignToken.swift in Sources */,
 				B5CCE6285D9D1162FED956AA /* Assignee.swift in Sources */,
+				F1A2B3C4D5E60718293A4C1 /* CardActionBubbles.swift in Sources */,
+				F1A2B3C4D5E60718293A4C3 /* ContactUserId.swift in Sources */,
+				F1A2B3C4D5E60718293A4C4 /* CheckmateTask+Routing.swift in Sources */,
 				C186030F7CFC6007192B7320 /* AuthService.swift in Sources */,
 				9C1DA8401D424292C243FF30 /* AuthView.swift in Sources */,
 				77C8E6800FDC458E45F8AE14 /* CheckBurstView.swift in Sources */,
@@ -372,6 +411,15 @@
 				4CDDF7A6BE440B47DEED2E95 /* FriendsStore.swift in Sources */,
 				587D7C135BBF1FE35CAD55AE /* FriendsTabView.swift in Sources */,
 				A06E3F86CB16EDBD0A79B9C9 /* HomeBottomBar.swift in Sources */,
+				A5B6C7D8E9F001122334456 /* AssigneeCarousel.swift in Sources */,
+				B1C2D3E4F5061728394A5B7 /* BottomAnchoredTextEditor.swift in Sources */,
+				E8F4A2012B3C4D5E6F70102 /* FigmaIcon.swift in Sources */,
+				C1D2E3F4A5B60718293A4B6 /* ScrollEdgeFades.swift in Sources */,
+				F1A2B3C4D5E60718293A4C2 /* StickyNoteGridCell.swift in Sources */,
+				F1A2B3C4D5E60718293A4D1 /* TodoDayLabel.swift in Sources */,
+				F1A2B3C4D5E60718293A4D3 /* TodoEmptyDayPage.swift in Sources */,
+				F1A2B3C4D5E60718293A4D5 /* KeyboardVisibility.swift in Sources */,
+				F1A2B3C4D5E60718293A4D8 /* TodoTaskGrid.swift in Sources */,
 				E111FC8E2CE188D8100C0EAF /* InviteService.swift in Sources */,
 				14ACF24ABFA9E0CC136C1448 /* MyTodoView.swift in Sources */,
 				0CBAFC84B74388A3F94715D4 /* NotificationService.swift in Sources */,

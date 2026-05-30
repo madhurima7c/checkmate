@@ -4,56 +4,54 @@ import UIKit
 struct StickyNoteCardView: View {
     let task: CheckmateTask
     var isNewBadge: Bool = false
-    var namespace: Namespace.ID? = nil
-    var onEdit: (() -> Void)? = nil
-    var onDelete: (() -> Void)? = nil
+    var avatarName: String? = nil
+    var avatarImageData: Data? = nil
 
     @State private var checking = false
     @State private var checked = false
     @State private var showBurst = false
+    @State private var burstScale: CGFloat = 0.35
+    @State private var burstOpacity: Double = 1
     @State private var checkTrim: CGFloat = 0
+    @State private var checkFillScale: CGFloat = 0.15
+
+    private let cardShape = RoundedRectangle(cornerRadius: Theme.Radius.cardLarge, style: .continuous)
 
     var body: some View {
         GeometryReader { geo in
-            ZStack {
-                task.color.paper
-                content(in: geo.size)
+            ZStack(alignment: .topLeading) {
+                ZStack {
+                    task.color.paper
+                    content(in: geo.size)
+                }
+                .clipShape(cardShape)
+                .overlay(cardShape.strokeBorder(Color.white, lineWidth: Theme.Stroke.cardBorder))
+                .stickyShadow()
+                .scaleEffect(checking ? 0.95 : 1)
+
                 if showBurst {
-                    CheckBurstView()
-                        .frame(width: 44, height: 44)
-                        .position(x: 22, y: 22)
+                    Image("CheckBurst")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 56, height: 56)
+                        .scaleEffect(burstScale)
+                        .opacity(burstOpacity)
+                        .offset(x: -6, y: -6)
                         .allowsHitTesting(false)
                 }
             }
-            .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.cardLarge, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: Theme.Radius.cardLarge, style: .continuous)
-                    .strokeBorder(Color.white, lineWidth: Theme.Stroke.cardBorder)
-            )
-            .stickyShadow()
-            .scaleEffect(checking ? 0.95 : 1)
         }
         .aspectRatio(1, contentMode: .fit)
-        .contextMenu {
-            if let onEdit {
-                Button { onEdit() } label: {
-                    Label("Edit", systemImage: "pencil")
-                }
-            }
-            if let onDelete {
-                Button(role: .destructive) { onDelete() } label: {
-                    Label("Delete", systemImage: "trash")
-                }
-            }
-        }
-        .onAppear {
-            checked = task.status == .done
-            checkTrim = checked ? 1 : 0
-        }
-        .onChange(of: task.status) { _, status in
-            checked = status == .done
-            checkTrim = checked ? 1 : 0
-        }
+        .onAppear { syncFromTask() }
+        .onChange(of: task.status) { _, _ in syncFromTask() }
+    }
+
+    private func syncFromTask() {
+        checked = task.status == .done
+        checkTrim = checked ? 1 : 0
+        checkFillScale = checked ? 1 : 0.15
+        showBurst = false
+        burstOpacity = 1
     }
 
     private func content(in size: CGSize) -> some View {
@@ -61,29 +59,22 @@ struct StickyNoteCardView: View {
             HStack(alignment: .top) {
                 checkbox
                 Spacer()
-                if task.isAssignedToFriend {
-                    assigneePin
+                if let avatarName {
+                    PersonAvatarView(name: avatarName, imageData: avatarImageData, size: 24)
                 }
             }
 
             if isNewBadge {
+                Spacer(minLength: 4)
                 NewBadge()
-                    .padding(.top, 4)
+            } else {
+                Spacer(minLength: 0)
             }
-
-            Spacer(minLength: 0)
 
             taskText
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
-    }
-
-    private var assigneePin: some View {
-        PersonAvatarView(
-            name: task.assigneeName ?? "?",
-            size: 24
-        )
     }
 
     private var checkbox: some View {
@@ -98,6 +89,7 @@ struct StickyNoteCardView: View {
                     RoundedRectangle(cornerRadius: 6, style: .continuous)
                         .fill(Theme.Palette.blue)
                         .frame(width: 20, height: 20)
+                        .scaleEffect(checkFillScale)
                         .overlay(
                             CheckmarkShape()
                                 .trim(from: 0, to: checkTrim)
@@ -109,6 +101,7 @@ struct StickyNoteCardView: View {
                         )
                 }
             }
+            .frame(width: 20, height: 20)
         }
         .buttonStyle(BoopButtonStyle())
     }
@@ -125,25 +118,43 @@ struct StickyNoteCardView: View {
     }
 
     private func toggleCheck() {
-        if checked {
-            undoCheck()
-        } else {
-            completeCheck()
-        }
+        if checked { undoCheck() } else { completeCheck() }
     }
 
     private func completeCheck() {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         checking = true
         showBurst = true
-        withAnimation(Theme.snappy) {
+        burstScale = 0.25
+        burstOpacity = 1
+        checkFillScale = 0.2
+
+        withAnimation(Theme.checkPop) {
             checked = true
+            checkFillScale = 1
             checkTrim = 1
+            burstScale = 1.05
         }
-        TaskStore.shared.markDoneLocally(taskId: task.id)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.16) {
+            withAnimation(.spring(response: 0.24, dampingFraction: 0.58)) {
+                burstScale = 1.25
+            }
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.34) {
+            withAnimation(.easeOut(duration: 0.14)) {
+                burstScale = 0.2
+                burstOpacity = 0
+            }
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.48) {
+            TaskStore.shared.markDoneLocally(taskId: task.id)
             checking = false
             showBurst = false
+            burstOpacity = 1
+            burstScale = 0.35
         }
     }
 
@@ -152,7 +163,9 @@ struct StickyNoteCardView: View {
         withAnimation(Theme.snappy) {
             checked = false
             checkTrim = 0
+            checkFillScale = 0.15
             showBurst = false
+            burstOpacity = 1
         }
         TaskStore.shared.undoPendingLocally(taskId: task.id)
     }
@@ -170,27 +183,34 @@ struct CheckmarkShape: Shape {
 }
 
 struct NewBadge: View {
+    var compact: Bool = false
+
+    private var fontSize: CGFloat { compact ? 11 : 15 }
+    private var tracking: CGFloat { compact ? -2.5 : -3.3 }
+    private var ovalW: CGFloat { compact ? 38 : 48 }
+    private var ovalH: CGFloat { compact ? 17 : 22 }
+
     var body: some View {
         ZStack {
             Image("NewBadgeOval")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 48, height: 22)
+                .frame(width: ovalW, height: ovalH)
             Text("NEW")
-                .font(FigmaHandFont.badge)
+                .font(FigmaHandFont.badge(size: fontSize))
                 .foregroundStyle(Theme.Palette.newRed)
-                .tracking(-3.3)
+                .tracking(tracking)
         }
-        .frame(width: 48, height: 22)
+        .frame(width: ovalW + 2, height: ovalH)
         .rotationEffect(.degrees(-6))
     }
 }
 
 enum FigmaHandFont {
-    static let badge: Font = {
-        if UIFont(name: "FigmaHand-Regular", size: 15) != nil {
-            return .custom("FigmaHand-Regular", size: 15)
+    static func badge(size: CGFloat) -> Font {
+        if UIFont(name: "FigmaHand-Regular", size: size) != nil {
+            return .custom("FigmaHand-Regular", size: size)
         }
-        return .system(size: 15, weight: .bold, design: .rounded)
-    }()
+        return .system(size: size, weight: .bold, design: .rounded)
+    }
 }

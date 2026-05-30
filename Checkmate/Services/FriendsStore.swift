@@ -30,6 +30,20 @@ final class FriendsStore: ObservableObject {
         return list
     }
 
+    func displayName(forUserId userId: UUID) -> String? {
+        for link in assignablePeople(includeDemos: CheckmateConfig.isPrototype) {
+            let resolved = link.profileId ?? ContactUserId.placeholder(from: link.contact)
+            if resolved == userId { return link.name }
+        }
+        return nil
+    }
+
+    func friendLink(forUserId userId: UUID) -> FriendLink? {
+        assignablePeople(includeDemos: CheckmateConfig.isPrototype).first {
+            ($0.profileId ?? ContactUserId.placeholder(from: $0.contact)) == userId
+        }
+    }
+
     private func load() {
         guard let data = UserDefaults.standard.data(forKey: storageKey),
               let decoded = try? JSONDecoder().decode([FriendLink].self, from: data)
