@@ -6,12 +6,13 @@ struct StickyNoteCardView: View {
     var isNewBadge: Bool = false
     var avatarName: String? = nil
     var avatarImageData: Data? = nil
+    var showsCheckbox: Bool = true
 
     @State private var checking = false
     @State private var checked = false
     @State private var showBurst = false
-    @State private var burstScale: CGFloat = 0.35
     @State private var burstOpacity: Double = 1
+    @State private var burstToken = 0
     @State private var checkTrim: CGFloat = 0
     @State private var checkFillScale: CGFloat = 0.15
 
@@ -30,14 +31,12 @@ struct StickyNoteCardView: View {
                 .scaleEffect(checking ? 0.95 : 1)
 
                 if showBurst {
-                    Image("CheckBurst")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 56, height: 56)
-                        .scaleEffect(burstScale)
+                    CheckBurstView()
+                        .frame(width: 56, height: 45)
                         .opacity(burstOpacity)
                         .offset(x: -6, y: -6)
                         .allowsHitTesting(false)
+                        .id(burstToken)
                 }
             }
         }
@@ -57,7 +56,9 @@ struct StickyNoteCardView: View {
     private func content(in size: CGSize) -> some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(alignment: .top) {
-                checkbox
+                if showsCheckbox {
+                    checkbox
+                }
                 Spacer()
                 if let avatarName {
                     PersonAvatarView(name: avatarName, imageData: avatarImageData, size: 24)
@@ -124,8 +125,8 @@ struct StickyNoteCardView: View {
     private func completeCheck() {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         checking = true
+        burstToken += 1
         showBurst = true
-        burstScale = 0.25
         burstOpacity = 1
         checkFillScale = 0.2
 
@@ -133,28 +134,19 @@ struct StickyNoteCardView: View {
             checked = true
             checkFillScale = 1
             checkTrim = 1
-            burstScale = 1.05
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.16) {
-            withAnimation(.spring(response: 0.24, dampingFraction: 0.58)) {
-                burstScale = 1.25
-            }
-        }
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.34) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.38) {
             withAnimation(.easeOut(duration: 0.14)) {
-                burstScale = 0.2
                 burstOpacity = 0
             }
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.48) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.52) {
             TaskStore.shared.markDoneLocally(taskId: task.id)
             checking = false
             showBurst = false
             burstOpacity = 1
-            burstScale = 0.35
         }
     }
 

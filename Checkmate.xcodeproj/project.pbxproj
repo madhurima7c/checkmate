@@ -45,6 +45,7 @@
 		B1C2D3E4F5061728394A5B7 /* BottomAnchoredTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5061728394A5B6 /* BottomAnchoredTextEditor.swift */; };
 		E8F4A2012B3C4D5E6F70102 /* FigmaIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F4A2012B3C4D5E6F70101 /* FigmaIcon.swift */; };
 		F1A2B3C4D5E60718293A4C1 /* CardActionBubbles.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E60718293A4B1 /* CardActionBubbles.swift */; };
+		F1A2B3C4D5E60718293A4E1 /* CardFocusController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E60718293A4E0 /* CardFocusController.swift */; };
 		F1A2B3C4D5E60718293A4C2 /* StickyNoteGridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E60718293A4B2 /* StickyNoteGridCell.swift */; };
 		F1A2B3C4D5E60718293A4C3 /* ContactUserId.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E60718293A4B3 /* ContactUserId.swift */; };
 		F1A2B3C4D5E60718293A4C4 /* CheckmateTask+Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E60718293A4B4 /* CheckmateTask+Routing.swift */; };
@@ -107,6 +108,7 @@
 		B1C2D3E4F5061728394A5B6 /* BottomAnchoredTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomAnchoredTextEditor.swift; sourceTree = "<group>"; };
 		E8F4A2012B3C4D5E6F70101 /* FigmaIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FigmaIcon.swift; sourceTree = "<group>"; };
 		F1A2B3C4D5E60718293A4B1 /* CardActionBubbles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardActionBubbles.swift; sourceTree = "<group>"; };
+		F1A2B3C4D5E60718293A4E0 /* CardFocusController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardFocusController.swift; sourceTree = "<group>"; };
 		F1A2B3C4D5E60718293A4B2 /* StickyNoteGridCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickyNoteGridCell.swift; sourceTree = "<group>"; };
 		F1A2B3C4D5E60718293A4B3 /* ContactUserId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactUserId.swift; sourceTree = "<group>"; };
 		F1A2B3C4D5E60718293A4B4 /* CheckmateTask+Routing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CheckmateTask+Routing.swift"; sourceTree = "<group>"; };
@@ -232,6 +234,7 @@
 			children = (
 				A5B6C7D8E9F001122334455 /* AssigneeCarousel.swift */,
 				F1A2B3C4D5E60718293A4B1 /* CardActionBubbles.swift */,
+				F1A2B3C4D5E60718293A4E0 /* CardFocusController.swift */,
 				A7C806C8D1BCDEEDF18C8D5D /* AssignFlightOverlay.swift */,
 				B1C2D3E4F5061728394A5B6 /* BottomAnchoredTextEditor.swift */,
 				CF16F3033B1664B2CBCA8C13 /* CheckBurstView.swift */,
@@ -396,6 +399,7 @@
 				C9DF0BC143E7154414BFA6AD /* AssignToken.swift in Sources */,
 				B5CCE6285D9D1162FED956AA /* Assignee.swift in Sources */,
 				F1A2B3C4D5E60718293A4C1 /* CardActionBubbles.swift in Sources */,
+				F1A2B3C4D5E60718293A4E1 /* CardFocusController.swift in Sources */,
 				F1A2B3C4D5E60718293A4C3 /* ContactUserId.swift in Sources */,
 				F1A2B3C4D5E60718293A4C4 /* CheckmateTask+Routing.swift in Sources */,
 				C186030F7CFC6007192B7320 /* AuthService.swift in Sources */,

@@ -4,10 +4,9 @@ struct FriendsTabView: View {
     @StateObject private var store = TaskStore.shared
     @Binding var dayOffset: Int
     var namespace: Namespace.ID
+    @ObservedObject var controller: CardFocusController
     var onEdit: (CheckmateTask) -> Void
     var onDelete: (CheckmateTask) -> Void
-
-    @State private var focusedCardId: UUID?
 
     private let dayRange = 0...14
 
@@ -20,6 +19,7 @@ struct FriendsTabView: View {
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
         .animation(Theme.snappy, value: dayOffset)
+        .onChange(of: dayOffset) { _, _ in controller.clear() }
     }
 
     @ViewBuilder
@@ -43,11 +43,11 @@ struct FriendsTabView: View {
                         allowsEdit: { _ in true },
                         onEdit: onEdit,
                         onDelete: onDelete,
-                        focusedCardId: $focusedCardId
+                        controller: controller
                     )
                 .padding(.horizontal, 24)
             }
-            .scrollDisabled(focusedCardId != nil)
+            .scrollDisabled(controller.isActive)
         }
     }
 

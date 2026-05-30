@@ -12,7 +12,7 @@ struct MyTodoView: View {
     @State private var showAddTodo = false
     @State private var editingTask: CheckmateTask?
     @State private var taskToDelete: CheckmateTask?
-    @State private var focusedCardId: UUID?
+    @StateObject private var focusController = CardFocusController()
     @State private var selectedTab: AppTab = .myTodo
     @State private var addSheetToken = 0
     @Namespace private var stickyNamespace
@@ -25,6 +25,7 @@ struct MyTodoView: View {
 
             VStack(spacing: 0) {
                 header
+                    .allowsHitTesting(!focusController.isActive)
                 tabContent
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .transition(.opacity.combined(with: .move(edge: .trailing)))
@@ -32,16 +33,22 @@ struct MyTodoView: View {
             }
 
             bottomChrome
+                .allowsHitTesting(!focusController.isActive)
                 .zIndex(20)
             if shouldShowEmptyArrow {
                 EmptyStateArrowOverlay()
                     .zIndex(25)
                     .transition(.opacity)
             }
+            CardFocusOverlay(controller: focusController)
+                .zIndex(28)
             AssignFlightOverlay()
                 .zIndex(30)
         }
+        .coordinateSpace(name: CardFocusSpace.name)
         .animation(Theme.spring, value: selectedTab)
+        .onChange(of: selectedTab) { _, _ in focusController.clear() }
+        .onChange(of: dayOffset) { _, _ in focusController.clear() }
         .task {
             await store.fetchTasks()
             if !Self.didRecordLaunchWatch {
@@ -97,6 +104,7 @@ struct MyTodoView: View {
             FriendsTabView(
                 dayOffset: $dayOffset,
                 namespace: stickyNamespace,
+                controller: focusController,
                 onEdit: { editingTask = $0 },
                 onDelete: { taskToDelete = $0 }
             )
@@ -164,11 +172,11 @@ struct MyTodoView: View {
                             editingTask = task
                         },
                         onDelete: { taskToDelete = $0 },
-                        focusedCardId: $focusedCardId
+                        controller: focusController
                     )
                 .padding(.horizontal, 24)
             }
-            .scrollDisabled(focusedCardId != nil)
+            .scrollDisabled(focusController.isActive)
         }
     }
 

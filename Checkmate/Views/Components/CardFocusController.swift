@@ -1,0 +1,214 @@
+import SwiftUI
+
+/// Coordinate space shared by the grid cells and the focus overlay so frames line up.
+enum CardFocusSpace {
+    static let name = "cardFocusRoot"
+}
+
+/// Drives the Pinterest-style press-and-hold focus: the card stays in its grid
+/// position, the rest of the app is blocked by a full-screen dim, and releasing near
+/// an action bubble selects it.
+@MainActor
+final class CardFocusController: ObservableObject {
+    struct FocusedCard {
+        let id: UUID
+        let task: CheckmateTask
+        let isNewBadge: Bool
+        let avatarName: String?
+        let avatarImageData: Data?
+        let allowsEdit: Bool
+        let edge: StickyNoteGridCell.ActionEdge
+        let frame: CGRect
+        let onEdit: () -> Void
+        let onDelete: () -> Void
+    }
+
+    @Published private(set) var focused: FocusedCard?
+    @Published private(set) var highlighted: CardAction?
+    @Published private(set) var fingerLocation: CGPoint?
+    private var bubbleFrames: [CardAction: CGRect] = [:]
+    private var focusGeneration = 0
+    private let holdFeedback = UIImpactFeedbackGenerator(style: .medium)
+    private let selectionFeedback = UISelectionFeedbackGenerator()
+    private let actionFeedback = UIImpactFeedbackGenerator(style: .light)
+
+    var focusedId: UUID? { focused?.id }
+    var isActive: Bool { focused != nil }
+
+    func begin(_ card: FocusedCard) {
+        guard focused == nil else { return }
+        holdFeedback.prepare()
+        selectionFeedback.prepare()
+        actionFeedback.prepare()
+        holdFeedback.impactOccurred()
+        focusGeneration += 1
+        let generation = focusGeneration
+        bubbleFrames = actionFrames(for: card)
+        highlighted = nil
+        fingerLocation = nil
+        withAnimation(.easeOut(duration: 0.16)) {
+            focused = card
+        }
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 4_000_000_000)
+            if self.focusGeneration == generation {
+                self.clear()
+            }
+        }
+    }
+
+    func updateDrag(_ location: CGPoint) {
+        guard focused != nil else { return }
+        fingerLocation = location
+        let next = action(at: location)
+        if next != highlighted {
+            if next != nil {
+                selectionFeedback.selectionChanged()
+                selectionFeedback.prepare()
+            }
+            withAnimation(.easeOut(duration: 0.1)) {
+                highlighted = next
+            }
+        }
+    }
+
+    func end() {
+        guard let focused else {
+            clear()
+            return
+        }
+        let selected = fingerLocation.flatMap { action(at: $0) } ?? highlighted
+        clear()
+        guard let selected else { return }
+        actionFeedback.impactOccurred()
+        actionFeedback.prepare()
+        switch selected {
+        case .edit: focused.onEdit()
+        case .delete: focused.onDelete()
+        }
+    }
+
+    func clear() {
+        focusGeneration += 1
+        bubbleFrames = [:]
+        withAnimation(.easeOut(duration: 0.14)) {
+            focused = nil
+            highlighted = nil
+            fingerLocation = nil
+        }
+    }
+
+    func reportBubbleFrames(_ frames: [CardAction: CGRect]) {
+        // Keep this as a fallback for future visual changes, but do not let empty
+        // preference updates wipe out the deterministic hit targets.
+        guard !frames.isEmpty else { return }
+        bubbleFrames = frames
+    }
+
+    private func action(at location: CGPoint) -> CardAction? {
+        let magneticRadius: CGFloat = 38
+        var best: (action: CardAction, distance: CGFloat)?
+        for (action, frame) in bubbleFrames {
+            let center = CGPoint(x: frame.midX, y: frame.midY)
+            let distance = hypot(location.x - center.x, location.y - center.y)
+            let threshold = max(frame.width, frame.height) / 2 + magneticRadius
+            guard distance <= threshold else { continue }
+            if best == nil || distance < best!.distance {
+                best = (action, distance)
+            }
+        }
+        return best?.action
+    }
+
+    private func actionFrames(for card: FocusedCard) -> [CardAction: CGRect] {
+        let bubbleSize: CGFloat = 52
+        let editDelta = editDelta(for: card.edge)
+        let offset = bubbleOffset(for: card.edge)
+        let x: CGFloat
+
+        switch card.edge {
+        case .trailing:
+            x = card.frame.maxX - bubbleSize + offset.width
+        case .leading:
+            x = card.frame.minX + offset.width
+        }
+
+        let deleteFrame = CGRect(
+            x: x,
+            y: card.frame.minY + offset.height,
+            width: bubbleSize,
+            height: bubbleSize
+        )
+
+        guard card.allowsEdit else {
+            return [.delete: deleteFrame]
+        }
+
+        return [
+            .delete: deleteFrame,
+            .edit: deleteFrame.offsetBy(dx: editDelta.width, dy: editDelta.height)
+        ]
+    }
+
+    private func bubbleOffset(for edge: StickyNoteGridCell.ActionEdge) -> CGSize {
+        edge == .trailing ? CGSize(width: 26, height: -22) : CGSize(width: -26, height: -22)
+    }
+
+    private func editDelta(for edge: StickyNoteGridCell.ActionEdge) -> CGSize {
+        edge == .trailing ? CGSize(width: 54, height: 42) : CGSize(width: -54, height: 42)
+    }
+}
+
+// MARK: - Root overlay
+
+/// Full-screen overlay rendered above the app while a card is focused. The selected
+/// card is positioned at its captured screen frame so it does not visibly move.
+struct CardFocusOverlay: View {
+    @ObservedObject var controller: CardFocusController
+    private let holdTilt: Double = 3.34
+
+    var body: some View {
+        GeometryReader { _ in
+            if let card = controller.focused {
+                ZStack(alignment: .topLeading) {
+                    Color.white.opacity(0.86)
+                        .ignoresSafeArea()
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            controller.clear()
+                        }
+
+                    focusedCard(card)
+                        .frame(width: card.frame.width, height: card.frame.height)
+                        .offset(x: card.frame.minX, y: card.frame.minY)
+                }
+                .transition(.opacity)
+            }
+        }
+    }
+
+    private func focusedCard(_ card: CardFocusController.FocusedCard) -> some View {
+        StickyNoteCardView(
+            task: card.task,
+            isNewBadge: card.isNewBadge,
+            avatarName: card.avatarName,
+            avatarImageData: card.avatarImageData,
+            showsCheckbox: false
+        )
+        .rotationEffect(.degrees(holdTilt))
+        .allowsHitTesting(false)
+        .overlay(alignment: card.edge == .trailing ? .topTrailing : .topLeading) {
+            CardActionBubbles(
+                allowsEdit: card.allowsEdit,
+                highlighted: controller.highlighted,
+                editDirection: card.edge == .trailing ? .trailing : .leading
+            )
+            .offset(bubbleOffset(for: card.edge))
+            .allowsHitTesting(false)
+        }
+    }
+
+    private func bubbleOffset(for edge: StickyNoteGridCell.ActionEdge) -> CGSize {
+        edge == .trailing ? CGSize(width: 26, height: -22) : CGSize(width: -26, height: -22)
+    }
+}

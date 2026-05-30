@@ -15,12 +15,12 @@ struct HomeBottomBar: View {
     }
 
     private var tabPill: some View {
-        HStack(spacing: 0) {
+        HStack(spacing: 16) {
             tabIcon(.myTodo, asset: .noteTab)
             tabIcon(.friends, asset: .friendsTab)
         }
-        .padding(4)
-        .frame(width: 123, height: 52)
+        .padding(.horizontal, 20)
+        .frame(height: 56)
         .background(
             RoundedRectangle(cornerRadius: 19, style: .continuous)
                 .fill(Color.white)
@@ -45,14 +45,14 @@ struct HomeBottomBar: View {
                 Group {
                     switch asset {
                     case .noteTab:
-                        FigmaIcon.noteTab(size: 27)
+                        FigmaIcon.noteTab(size: 30)
                     case .friendsTab:
-                        FigmaIcon.friendsTab(size: 27)
+                        FigmaIcon.friendsTab(size: 30)
                     }
                 }
                 .opacity(selected ? 1 : 0.45)
             }
-            .frame(width: 57, height: 44)
+            .frame(width: 30, height: 56)
         }
         .buttonStyle(.plain)
     }
@@ -67,9 +67,9 @@ struct HomeBottomBar: View {
                         RoundedRectangle(cornerRadius: 19, style: .continuous)
                             .stroke(Color.black.opacity(0.03), lineWidth: 1)
                     )
-                FigmaIcon.addFAB(size: 25)
+                FigmaIcon.addFAB(size: 27)
             }
-            .frame(width: 52, height: 52)
+            .frame(width: 56, height: 56)
         }
         .buttonStyle(BoopButtonStyle())
     }

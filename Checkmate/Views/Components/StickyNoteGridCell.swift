@@ -1,6 +1,8 @@
 import SwiftUI
 
-/// Grid cell with pile dimming, tilt, and Pinterest-style hold → drag to edit/delete.
+/// Grid cell. Press-and-hold lifts the card into `CardFocusController`'s overlay; the
+/// finger then drags near an action bubble and release selects it. Quick swipes keep
+/// scrolling untouched.
 struct StickyNoteGridCell: View {
     enum ActionEdge {
         case leading
@@ -15,24 +17,13 @@ struct StickyNoteGridCell: View {
     var actionEdge: ActionEdge = .trailing
     var onEdit: () -> Void
     var onDelete: () -> Void
-    @Binding var focusedTaskId: UUID?
+    @ObservedObject var controller: CardFocusController
 
-    private let holdDuration: Double = 0.55
-    private let holdTilt: Double = 3.34
+    private let holdDuration: Double = 0.35
 
-    @State private var highlightedAction: CardAction?
-    @State private var bubbleFrames: [CardAction: CGRect] = [:]
+    @State private var cellFrame: CGRect = .zero
 
-    private var isFocused: Bool { focusedTaskId == task.id }
-    private var isDimmed: Bool { focusedTaskId != nil && !isFocused }
-    private var overlayAlignment: Alignment { actionEdge == .trailing ? .topTrailing : .topLeading }
-    private var bubbleOffset: CGSize {
-        if actionEdge == .trailing {
-            CGSize(width: 26, height: -20)
-        } else {
-            CGSize(width: -26, height: -20)
-        }
-    }
+    private var isFocused: Bool { controller.focusedId == task.id }
 
     var body: some View {
         StickyNoteCardView(
@@ -41,96 +32,64 @@ struct StickyNoteGridCell: View {
             avatarName: avatarName,
             avatarImageData: avatarImageData
         )
-        .opacity(isDimmed ? 0.14 : 1)
-        .overlay {
-            if isDimmed {
-                Color.white.opacity(0.72)
-                    .allowsHitTesting(false)
-                    .transition(.opacity)
-            }
-        }
-        .rotationEffect(.degrees(isFocused ? holdTilt : 0))
-        .animation(.easeOut(duration: 0.12), value: isFocused)
-        .zIndex(isFocused ? 5 : 0)
-        .overlay(alignment: overlayAlignment) {
+        .opacity(isFocused ? 0 : 1)
+        .background(frameReader)
+        .contentShape(Rectangle())
+        .simultaneousGesture(holdThenDragGesture)
+        .onDisappear {
             if isFocused {
-                CardActionBubbles(
-                    allowsEdit: allowsEdit,
-                    highlighted: highlightedAction,
-                    onFramesChange: { bubbleFrames = $0 }
-                )
-                .offset(bubbleOffset)
-                .transition(.scale(scale: 0.85).combined(with: .opacity))
-                .allowsHitTesting(false)
+                controller.clear()
             }
         }
-        .gesture(holdThenDragGesture)
     }
 
-    /// Long-press must finish before drag is recognized — quick swipes scroll normally.
+    private var frameReader: some View {
+        GeometryReader { geo in
+            Color.clear
+                .onAppear { cellFrame = geo.frame(in: .named(CardFocusSpace.name)) }
+                .onChange(of: geo.frame(in: .named(CardFocusSpace.name))) { _, newValue in
+                    cellFrame = newValue
+                }
+        }
+    }
+
+    /// Drag only begins after the long-press succeeds, so vertical swipes still scroll.
     private var holdThenDragGesture: some Gesture {
         LongPressGesture(minimumDuration: holdDuration, maximumDistance: 12)
-            .sequenced(before: DragGesture(minimumDistance: 0, coordinateSpace: .global))
+            .sequenced(before: DragGesture(minimumDistance: 0, coordinateSpace: .named(CardFocusSpace.name)))
             .onChanged { value in
                 switch value {
                 case .first(true):
-                    if !isFocused {
-                        activateFocus()
-                    }
+                    guard cellFrame != .zero, !controller.isActive else { return }
+                    controller.begin(focusedCard)
                 case .second(true, let drag?):
-                    if isFocused {
-                        highlightedAction = action(at: drag.location)
-                    }
+                    controller.updateDrag(drag.location)
                 default:
                     break
                 }
             }
             .onEnded { value in
-                switch value {
-                case .second(true, let drag?):
-                    guard isFocused else { return }
-                    if let action = action(at: drag.location) {
-                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                        dismissFocus()
-                        switch action {
-                        case .edit: onEdit()
-                        case .delete: onDelete()
-                        }
-                    } else {
-                        dismissFocus()
-                    }
-                case .first(true):
-                    dismissFocus()
-                default:
-                    if isFocused {
-                        dismissFocus()
-                    }
+                if case .second(true, let drag?) = value {
+                    controller.updateDrag(drag.location)
+                }
+                if controller.focusedId == task.id {
+                    controller.end()
                 }
             }
     }
 
-    private func action(at location: CGPoint) -> CardAction? {
-        let hitPadding: CGFloat = 10
-        for action in bubbleFrames.keys {
-            guard let frame = bubbleFrames[action] else { continue }
-            let hit = frame.insetBy(dx: -hitPadding, dy: -hitPadding)
-            if hit.contains(location) { return action }
-        }
-        return nil
-    }
-
-    private func activateFocus() {
-        guard focusedTaskId == nil || focusedTaskId == task.id else { return }
-        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-        withAnimation(.easeOut(duration: 0.15)) {
-            focusedTaskId = task.id
-        }
-    }
-
-    private func dismissFocus() {
-        withAnimation(.easeOut(duration: 0.12)) {
-            focusedTaskId = nil
-            highlightedAction = nil
-        }
+    private var focusedCard: CardFocusController.FocusedCard {
+        CardFocusController.FocusedCard(
+            id: task.id,
+            task: task,
+            isNewBadge: isNewBadge,
+            avatarName: avatarName,
+            avatarImageData: avatarImageData,
+            allowsEdit: allowsEdit,
+            edge: actionEdge,
+            frame: cellFrame,
+            onEdit: onEdit,
+            onDelete: onDelete
+        )
     }
 }

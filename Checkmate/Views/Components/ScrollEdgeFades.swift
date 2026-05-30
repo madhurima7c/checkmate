@@ -14,12 +14,16 @@ enum TodoListChromeMetrics {
     static let fadeHeight: CGFloat = 268
     static let topFadeHeight: CGFloat = 56
     static let progressRowHeight: CGFloat = 20
-    static let progressToNavSpacing: CGFloat = 40
-    static let navBarHeight: CGFloat = 52
-    static let navBottomInset: CGFloat = 20
+    /// Figma 664:3034 — 16pt frame gap + 20pt nav-row top padding.
+    static let progressToNavSpacing: CGFloat = 36
+    /// Figma 664:3034 — tab pill / add button are 56pt tall.
+    static let navBarHeight: CGFloat = 56
+    /// Figma 664:3034 — nav sits 40pt above the screen bottom; ~34pt is the
+    /// home-indicator safe area, leaving ~6pt of explicit inset above it.
+    static let navBottomInset: CGFloat = 6
 
     static var scrollBottomInset: CGFloat {
-        fadeHeight + progressRowHeight + progressToNavSpacing + navBarHeight + navBottomInset
+        progressRowHeight + progressToNavSpacing + navBarHeight + navBottomInset + 48
     }
 }
 

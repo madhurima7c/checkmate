@@ -6,32 +6,46 @@ enum CardAction: String, CaseIterable {
     case edit
 }
 
-/// Figma — 52pt white circles; delete above edit on the right, or delete alone on the left.
+enum CardActionEditDirection {
+    case leading
+    case trailing
+}
+
+/// Figma — 52pt circles arranged diagonally; selected action fills.
+/// Purely visual: selection is driven by the drag location in `CardFocusController`.
 struct CardActionBubbles: View {
     var allowsEdit: Bool
     var highlighted: CardAction?
+    var editDirection: CardActionEditDirection = .trailing
     var onFramesChange: (([CardAction: CGRect]) -> Void)? = nil
 
     private let bubbleSize: CGFloat = 52
     private let iconSize: CGFloat = 24
-    private let stackSpacing: CGFloat = 4
-
-    private var actions: [CardAction] {
-        allowsEdit ? [.delete, .edit] : [.delete]
+    private let selectedScale: CGFloat = 1.04
+    private var editOffset: CGSize {
+        editDirection == .trailing ? CGSize(width: 54, height: 42) : CGSize(width: -54, height: 42)
+    }
+    private var deleteBaseOffset: CGSize {
+        editDirection == .trailing ? .zero : CGSize(width: 54, height: 0)
     }
 
     var body: some View {
-        Group {
+        ZStack(alignment: .topLeading) {
+            bubble(for: .delete)
+                .offset(deleteBaseOffset)
             if allowsEdit {
-                VStack(spacing: stackSpacing) {
-                    ForEach(actions, id: \.self) { action in
-                        bubble(for: action)
-                    }
-                }
-            } else {
-                bubble(for: .delete)
+                bubble(for: .edit)
+                    .offset(
+                        x: deleteBaseOffset.width + editOffset.width,
+                        y: editOffset.height
+                    )
             }
         }
+        .frame(
+            width: allowsEdit ? bubbleSize + abs(editOffset.width) : bubbleSize,
+            height: allowsEdit ? bubbleSize + editOffset.height : bubbleSize,
+            alignment: editDirection == .trailing ? .topLeading : .topTrailing
+        )
         .onPreferenceChange(BubbleFrameKey.self) { frames in
             onFramesChange?(frames)
         }
@@ -41,24 +55,52 @@ struct CardActionBubbles: View {
         let isHighlighted = highlighted == action
         return ZStack {
             Circle()
-                .fill(Color.white)
+                .fill(backgroundColor(for: action, isHighlighted: isHighlighted))
                 .shadow(color: .black.opacity(0.07), radius: 4.5, x: 0, y: 2)
                 .shadow(color: .black.opacity(0.03), radius: 0.5, x: 0, y: 0)
 
-            Image(systemName: action == .delete ? "trash" : "pencil")
-                .font(.system(size: iconSize * 0.58, weight: .semibold))
-                .foregroundStyle(action == .delete ? Color(hex: 0xFF3B30) : Theme.Palette.ink)
+            actionIcon(for: action, isHighlighted: isHighlighted)
         }
         .frame(width: bubbleSize, height: bubbleSize)
-        .scaleEffect(isHighlighted ? 1.08 : 1)
-        .animation(Theme.snappy, value: isHighlighted)
+        .scaleEffect(isHighlighted ? selectedScale : 1)
+        .animation(.spring(response: 0.2, dampingFraction: 0.72), value: isHighlighted)
         .background {
             GeometryReader { geo in
                 Color.clear.preference(
                     key: BubbleFrameKey.self,
-                    value: [action: geo.frame(in: .global)]
+                    value: [action: geo.frame(in: .named(CardFocusSpace.name))]
                 )
             }
+        }
+    }
+
+    private func backgroundColor(for action: CardAction, isHighlighted: Bool) -> Color {
+        guard isHighlighted else { return .white }
+        switch action {
+        case .delete:
+            return Color(hex: 0xFA3E3E)
+        case .edit:
+            return Color(hex: 0x393834)
+        }
+    }
+
+    @ViewBuilder
+    private func actionIcon(for action: CardAction, isHighlighted: Bool) -> some View {
+        switch action {
+        case .delete:
+            FigmaIcon(
+                name: "ActionTrash",
+                size: iconSize,
+                renderingMode: .template,
+                tint: isHighlighted ? .white : Color(hex: 0xFF3B30)
+            )
+        case .edit:
+            FigmaIcon(
+                name: "ActionPencil",
+                size: iconSize,
+                renderingMode: .template,
+                tint: isHighlighted ? .white : Color(hex: 0x393834)
+            )
         }
     }
 }

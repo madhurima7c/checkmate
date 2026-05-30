@@ -11,7 +11,7 @@ struct TodoTaskGrid: View {
     var allowsEdit: (CheckmateTask) -> Bool
     var onEdit: (CheckmateTask) -> Void
     var onDelete: (CheckmateTask) -> Void
-    @Binding var focusedCardId: UUID?
+    @ObservedObject var controller: CardFocusController
 
     private let columns = [
         GridItem(.flexible(), spacing: 10),
@@ -31,7 +31,6 @@ struct TodoTaskGrid: View {
             }
         }
         .padding(.top, 8)
-        .animation(.easeOut(duration: 0.14), value: focusedCardId)
     }
 
     @ViewBuilder
@@ -47,14 +46,13 @@ struct TodoTaskGrid: View {
             actionEdge: actionEdge,
             onEdit: { onEdit(task) },
             onDelete: { onDelete(task) },
-            focusedTaskId: $focusedCardId
+            controller: controller
         )
         .background {
             if showLanding {
                 GridLandingAnchor(tab: tab)
             }
         }
-        .zIndex(focusedCardId == task.id ? 3 : 1)
     }
 
     private func columnIndex(for task: CheckmateTask) -> Int {
