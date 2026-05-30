@@ -31,16 +31,20 @@ struct TodoTaskGrid: View {
             }
         }
         .padding(.top, 8)
+        .animation(.easeOut(duration: 0.14), value: focusedCardId)
     }
 
     @ViewBuilder
     private func gridCell(task: CheckmateTask, showLanding: Bool) -> some View {
+        let actionEdge: StickyNoteGridCell.ActionEdge = columnIndex(for: task) == 0 ? .trailing : .leading
+
         StickyNoteGridCell(
             task: task,
             isNewBadge: isNew(task),
             avatarName: avatarName(task),
             avatarImageData: avatarData(task),
             allowsEdit: allowsEdit(task),
+            actionEdge: actionEdge,
             onEdit: { onEdit(task) },
             onDelete: { onDelete(task) },
             focusedTaskId: $focusedCardId
@@ -50,5 +54,14 @@ struct TodoTaskGrid: View {
                 GridLandingAnchor(tab: tab)
             }
         }
+        .zIndex(focusedCardId == task.id ? 3 : 1)
+    }
+
+    private func columnIndex(for task: CheckmateTask) -> Int {
+        let orderedTasks = pending + completed
+        guard let index = orderedTasks.firstIndex(where: { $0.id == task.id }) else {
+            return 0
+        }
+        return index % 2
     }
 }

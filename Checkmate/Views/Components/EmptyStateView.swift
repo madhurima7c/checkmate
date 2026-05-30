@@ -45,19 +45,26 @@ struct EmptyStateView: View {
                     Spacer(minLength: 0)
                 }
 
-                // Shortened curved arrow toward + FAB.
-                EmptyStateArrow()
-                    .stroke(Color(hex: 0xD5D5D5), style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
-                    .frame(width: 70, height: 118)
-                    .rotationEffect(.degrees(1.82))
-                    .position(
-                        x: geo.size.width * 0.57,
-                        y: geo.size.height - 150
-                    )
-                    .allowsHitTesting(false)
+                EmptyView()
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
+
+struct EmptyStateArrowOverlay: View {
+    var body: some View {
+        GeometryReader { geo in
+            EmptyStateArrow()
+                .stroke(Color(hex: 0xD5D5D5), style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
+                .frame(width: 70, height: 118)
+                .rotationEffect(.degrees(1.82))
+                .position(
+                    x: geo.size.width * 0.57,
+                    y: geo.size.height - 150
+                )
+                .allowsHitTesting(false)
+        }
     }
 }
 

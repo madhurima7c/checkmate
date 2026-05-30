@@ -11,13 +11,12 @@ enum TodoListChromeMetrics {
     }
 
     /// Canvas wash height rising above bottom chrome.
-    static let fadeHeight: CGFloat = 140
+    static let fadeHeight: CGFloat = 268
     static let topFadeHeight: CGFloat = 56
-    static let progressRowHeight: CGFloat = 32
-    static let progressToNavSpacing: CGFloat = 20
-    static let navBarHeight: CGFloat = 60
-    /// Home bar sits ~2pt lower than before (8 → 10).
-    static let navBottomInset: CGFloat = 10
+    static let progressRowHeight: CGFloat = 20
+    static let progressToNavSpacing: CGFloat = 40
+    static let navBarHeight: CGFloat = 52
+    static let navBottomInset: CGFloat = 20
 
     static var scrollBottomInset: CGFloat {
         fadeHeight + progressRowHeight + progressToNavSpacing + navBarHeight + navBottomInset
@@ -66,7 +65,7 @@ struct TodoListBottomChrome: View {
     private var showProgress: Bool { total > 0 }
 
     private var fadeStackHeight: CGFloat {
-        var height = TodoListChromeMetrics.fadeHeight + TodoListChromeMetrics.navBottomInset
+        var height = TodoListChromeMetrics.fadeHeight
         if showProgress {
             height += TodoListChromeMetrics.progressRowHeight + TodoListChromeMetrics.progressToNavSpacing
         }
@@ -83,9 +82,11 @@ struct TodoListBottomChrome: View {
                 if showProgress {
                     ProgressPill(done: done, total: total)
                         .frame(maxWidth: .infinity)
+                        .frame(height: TodoListChromeMetrics.progressRowHeight)
                         .padding(.bottom, TodoListChromeMetrics.progressToNavSpacing)
                 }
                 HomeBottomBar(selectedTab: $selectedTab, onAdd: onAdd)
+                    .frame(height: TodoListChromeMetrics.navBarHeight)
             }
             .padding(.bottom, TodoListChromeMetrics.navBottomInset)
         }

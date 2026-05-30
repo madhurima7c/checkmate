@@ -2,26 +2,37 @@ import SwiftUI
 
 /// Grid cell with pile dimming, tilt, and Pinterest-style hold → drag to edit/delete.
 struct StickyNoteGridCell: View {
+    enum ActionEdge {
+        case leading
+        case trailing
+    }
+
     let task: CheckmateTask
     var isNewBadge: Bool = false
     var avatarName: String?
     var avatarImageData: Data? = nil
     var allowsEdit: Bool = true
+    var actionEdge: ActionEdge = .trailing
     var onEdit: () -> Void
     var onDelete: () -> Void
     @Binding var focusedTaskId: UUID?
 
     private let holdDuration: Double = 0.55
     private let holdTilt: Double = 3.34
-    private let activationMoveLimit: CGFloat = 14
 
-    @State private var isPressing = false
-    @State private var pressBeganAt: Date?
     @State private var highlightedAction: CardAction?
     @State private var bubbleFrames: [CardAction: CGRect] = [:]
 
     private var isFocused: Bool { focusedTaskId == task.id }
     private var isDimmed: Bool { focusedTaskId != nil && !isFocused }
+    private var overlayAlignment: Alignment { actionEdge == .trailing ? .topTrailing : .topLeading }
+    private var bubbleOffset: CGSize {
+        if actionEdge == .trailing {
+            CGSize(width: 26, height: -20)
+        } else {
+            CGSize(width: -26, height: -20)
+        }
+    }
 
     var body: some View {
         StickyNoteCardView(
@@ -30,65 +41,70 @@ struct StickyNoteGridCell: View {
             avatarName: avatarName,
             avatarImageData: avatarImageData
         )
-        .opacity(isDimmed ? 0.26 : 1)
-        .rotationEffect(.degrees(isFocused || isPressing ? holdTilt : 0))
-        .scaleEffect(isPressing && !isFocused ? 0.99 : 1)
+        .opacity(isDimmed ? 0.14 : 1)
+        .overlay {
+            if isDimmed {
+                Color.white.opacity(0.72)
+                    .allowsHitTesting(false)
+                    .transition(.opacity)
+            }
+        }
+        .rotationEffect(.degrees(isFocused ? holdTilt : 0))
         .animation(.easeOut(duration: 0.12), value: isFocused)
-        .animation(.easeOut(duration: 0.08), value: isPressing)
         .zIndex(isFocused ? 5 : 0)
-        .overlay(alignment: allowsEdit ? .topTrailing : .topLeading) {
+        .overlay(alignment: overlayAlignment) {
             if isFocused {
                 CardActionBubbles(
                     allowsEdit: allowsEdit,
                     highlighted: highlightedAction,
                     onFramesChange: { bubbleFrames = $0 }
                 )
-                .offset(x: allowsEdit ? 10 : -44, y: allowsEdit ? -18 : -22)
+                .offset(bubbleOffset)
                 .transition(.scale(scale: 0.85).combined(with: .opacity))
                 .allowsHitTesting(false)
             }
         }
-        .gesture(holdAndDragGesture, including: .subviews)
+        .gesture(holdThenDragGesture)
     }
 
-    private var holdAndDragGesture: some Gesture {
-        DragGesture(minimumDistance: 0, coordinateSpace: .global)
+    /// Long-press must finish before drag is recognized — quick swipes scroll normally.
+    private var holdThenDragGesture: some Gesture {
+        LongPressGesture(minimumDuration: holdDuration, maximumDistance: 12)
+            .sequenced(before: DragGesture(minimumDistance: 0, coordinateSpace: .global))
             .onChanged { value in
-                if pressBeganAt == nil {
-                    pressBeganAt = Date()
-                    isPressing = true
-                }
-
-                let elapsed = Date().timeIntervalSince(pressBeganAt ?? Date())
-                let moved = hypot(value.translation.width, value.translation.height)
-
-                if !isFocused {
-                    if moved > activationMoveLimit {
-                        cancelPress()
-                        return
-                    }
-                    if elapsed >= holdDuration {
+                switch value {
+                case .first(true):
+                    if !isFocused {
                         activateFocus()
                     }
-                } else {
-                    highlightedAction = action(at: value.location)
+                case .second(true, let drag?):
+                    if isFocused {
+                        highlightedAction = action(at: drag.location)
+                    }
+                default:
+                    break
                 }
             }
             .onEnded { value in
-                isPressing = false
-                pressBeganAt = nil
-
-                guard isFocused else { return }
-
-                if let action = action(at: value.location) {
-                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                    dismissFocus()
-                    switch action {
-                    case .edit: onEdit()
-                    case .delete: onDelete()
+                switch value {
+                case .second(true, let drag?):
+                    guard isFocused else { return }
+                    if let action = action(at: drag.location) {
+                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                        dismissFocus()
+                        switch action {
+                        case .edit: onEdit()
+                        case .delete: onDelete()
+                        }
+                    } else {
+                        dismissFocus()
                     }
-                } else {
+                case .first(true):
                     dismissFocus()
+                default:
+                    if isFocused {
+                        dismissFocus()
+                    }
                 }
             }
     }
@@ -116,10 +132,5 @@ struct StickyNoteGridCell: View {
             focusedTaskId = nil
             highlightedAction = nil
         }
-    }
-
-    private func cancelPress() {
-        isPressing = false
-        pressBeganAt = nil
     }
 }

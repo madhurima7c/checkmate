@@ -33,6 +33,11 @@ struct MyTodoView: View {
 
             bottomChrome
                 .zIndex(20)
+            if shouldShowEmptyArrow {
+                EmptyStateArrowOverlay()
+                    .zIndex(25)
+                    .transition(.opacity)
+            }
             AssignFlightOverlay()
                 .zIndex(30)
         }
@@ -179,6 +184,16 @@ struct MyTodoView: View {
                 showAddTodo = true
             }
         )
+    }
+
+    private var shouldShowEmptyArrow: Bool {
+        let day = Date.today.adding(days: dayOffset)
+        switch selectedTab {
+        case .myTodo:
+            return store.myTodoPending(on: day).isEmpty && store.myTodoCompleted(on: day).isEmpty
+        case .friends:
+            return store.friendsPending(on: day).isEmpty && store.friendsCompleted(on: day).isEmpty
+        }
     }
 
     private func myTodoAvatarName(_ task: CheckmateTask) -> String? {
