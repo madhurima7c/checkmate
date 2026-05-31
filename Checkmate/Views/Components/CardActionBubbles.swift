@@ -21,7 +21,7 @@ struct CardActionBubbles: View {
 
     private let bubbleSize: CGFloat = 52
     private let iconSize: CGFloat = 24
-    private let selectedScale: CGFloat = 1.04
+    private let selectedScale: CGFloat = 1.1
     private var editOffset: CGSize {
         editDirection == .trailing ? CGSize(width: 54, height: 42) : CGSize(width: -54, height: 42)
     }
@@ -86,21 +86,20 @@ struct CardActionBubbles: View {
 
     @ViewBuilder
     private func actionIcon(for action: CardAction, isHighlighted: Bool) -> some View {
-        switch action {
-        case .delete:
-            FigmaIcon(
-                name: "ActionTrash",
-                size: iconSize,
-                renderingMode: .template,
-                tint: isHighlighted ? .white : Color(hex: 0xFF3B30)
-            )
-        case .edit:
-            FigmaIcon(
-                name: "ActionPencil",
-                size: iconSize,
-                renderingMode: .template,
-                tint: isHighlighted ? .white : Color(hex: 0x393834)
-            )
+        let name = action == .delete ? "ActionTrash" : "ActionPencil"
+        if isHighlighted {
+            Image(name)
+                .renderingMode(.template)
+                .resizable()
+                .scaledToFit()
+                .foregroundStyle(.white)
+                .frame(width: iconSize, height: iconSize)
+        } else {
+            Image(name)
+                .renderingMode(.original)
+                .resizable()
+                .scaledToFit()
+                .frame(width: iconSize, height: iconSize)
         }
     }
 }

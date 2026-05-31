@@ -7,6 +7,8 @@ struct StickyNoteCardView: View {
     var avatarName: String? = nil
     var avatarImageData: Data? = nil
     var showsCheckbox: Bool = true
+    /// When false, the checkbox ignores touches (e.g. during press-and-hold on the card).
+    var allowsCheckboxTap: Bool = true
 
     @State private var checking = false
     @State private var checked = false
@@ -73,6 +75,7 @@ struct StickyNoteCardView: View {
             }
 
             taskText
+                .padding(.top, isNewBadge ? 12 : 0)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
@@ -105,6 +108,7 @@ struct StickyNoteCardView: View {
             .frame(width: 20, height: 20)
         }
         .buttonStyle(BoopButtonStyle())
+        .allowsHitTesting(allowsCheckboxTap)
     }
 
     private var taskText: some View {
@@ -174,35 +178,17 @@ struct CheckmarkShape: Shape {
     }
 }
 
+/// Figma 670:3064 — hand-drawn “NEW” label (oval stroke + letterforms, #F83A00).
 struct NewBadge: View {
-    var compact: Bool = false
-
-    private var fontSize: CGFloat { compact ? 11 : 15 }
-    private var tracking: CGFloat { compact ? -2.5 : -3.3 }
-    private var ovalW: CGFloat { compact ? 38 : 48 }
-    private var ovalH: CGFloat { compact ? 17 : 22 }
+    /// Artboard size from Figma (49.11 × 22.47pt).
+    private static let artboard = CGSize(width: 49.1131, height: 22.4651)
 
     var body: some View {
-        ZStack {
-            Image("NewBadgeOval")
-                .resizable()
-                .scaledToFit()
-                .frame(width: ovalW, height: ovalH)
-            Text("NEW")
-                .font(FigmaHandFont.badge(size: fontSize))
-                .foregroundStyle(Theme.Palette.newRed)
-                .tracking(tracking)
-        }
-        .frame(width: ovalW + 2, height: ovalH)
-        .rotationEffect(.degrees(-6))
-    }
-}
-
-enum FigmaHandFont {
-    static func badge(size: CGFloat) -> Font {
-        if UIFont(name: "FigmaHand-Regular", size: size) != nil {
-            return .custom("FigmaHand-Regular", size: size)
-        }
-        return .system(size: size, weight: .bold, design: .rounded)
+        Image("NewBadge")
+            .resizable()
+            .renderingMode(.original)
+            .scaledToFit()
+            .frame(width: Self.artboard.width, height: Self.artboard.height)
+            .accessibilityLabel("New")
     }
 }

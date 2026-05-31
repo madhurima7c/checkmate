@@ -18,8 +18,9 @@ struct FigmaIcon: View {
 }
 
 extension FigmaIcon {
+    /// Figma 670:3070 — header settings control (28×28, #8C8C8C).
     static func gear(size: CGFloat = 28) -> FigmaIcon {
-        FigmaIcon(name: "GearSix", size: size)
+        FigmaIcon(name: "GearSix", size: size, renderingMode: .original)
     }
 
     static func noteTab(size: CGFloat = 27) -> FigmaIcon {
@@ -32,5 +33,13 @@ extension FigmaIcon {
 
     static func addFAB(size: CGFloat = 25) -> FigmaIcon {
         FigmaIcon(name: "PlusFab", size: size)
+    }
+
+    static func actionTrash(size: CGFloat = 24) -> FigmaIcon {
+        FigmaIcon(name: "ActionTrash", size: size)
+    }
+
+    static func actionPencil(size: CGFloat = 24) -> FigmaIcon {
+        FigmaIcon(name: "ActionPencil", size: size)
     }
 }

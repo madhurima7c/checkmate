@@ -13,7 +13,7 @@ enum TodoListChromeMetrics {
     /// Canvas wash height rising above bottom chrome.
     static let fadeHeight: CGFloat = 268
     static let topFadeHeight: CGFloat = 56
-    static let progressRowHeight: CGFloat = 20
+    static let progressRowHeight: CGFloat = 24
     /// Figma 664:3034 — 16pt frame gap + 20pt nav-row top padding.
     static let progressToNavSpacing: CGFloat = 36
     /// Figma 664:3034 — tab pill / add button are 56pt tall.
@@ -85,8 +85,7 @@ struct TodoListBottomChrome: View {
             VStack(spacing: 0) {
                 if showProgress {
                     ProgressPill(done: done, total: total)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: TodoListChromeMetrics.progressRowHeight)
+                        .frame(maxWidth: .infinity, minHeight: TodoListChromeMetrics.progressRowHeight)
                         .padding(.bottom, TodoListChromeMetrics.progressToNavSpacing)
                 }
                 HomeBottomBar(selectedTab: $selectedTab, onAdd: onAdd)
@@ -97,15 +96,38 @@ struct TodoListBottomChrome: View {
     }
 }
 
+private struct TodoScrollOffsetKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) { value = nextValue() }
+}
+
 /// Scroll container — cards fade at top and bottom under fixed chrome.
 struct ScrollEdgeFades<Content: View>: View {
+    var onScroll: (() -> Void)? = nil
     @ViewBuilder var content: () -> Content
+
+    @State private var lastOffset: CGFloat?
 
     var body: some View {
         ScrollView {
             content()
                 .padding(.top, TodoListChromeMetrics.scrollContentTopPadding)
                 .padding(.bottom, TodoListChromeMetrics.scrollBottomInset)
+                .background(
+                    GeometryReader { geo in
+                        Color.clear.preference(
+                            key: TodoScrollOffsetKey.self,
+                            value: geo.frame(in: .named("todoScroll")).minY
+                        )
+                    }
+                )
+        }
+        .coordinateSpace(name: "todoScroll")
+        .onPreferenceChange(TodoScrollOffsetKey.self) { offset in
+            defer { lastOffset = offset }
+            guard let lastOffset else { return }
+            guard abs(offset - lastOffset) > 2 else { return }
+            onScroll?()
         }
         .scrollIndicators(.hidden)
         .overlay(alignment: .top) {

@@ -158,7 +158,9 @@ struct MyTodoView: View {
         if all.isEmpty {
             TodoEmptyDayPage(tab: .myTodo, showLandingAnchor: offset == 0)
         } else {
-            ScrollEdgeFades {
+            ScrollEdgeFades(onScroll: {
+                if focusController.isActive { focusController.clear() }
+            }) {
                 TodoTaskGrid(
                         pending: pending,
                         completed: completed,

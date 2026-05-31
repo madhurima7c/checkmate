@@ -40,8 +40,8 @@ enum Theme {
     enum Stroke {
         static let cardBorder: CGFloat = 4
         static let cardBorderLarge: CGFloat = 6
-        /// Progress dial track + arc (Figma — same weight for both).
-        static let progressRing: CGFloat = 6
+        /// Progress dial track + arc (same weight; scaled down with 16pt dial).
+        static let progressRing: CGFloat = 5
     }
 }
 

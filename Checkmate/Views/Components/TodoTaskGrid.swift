@@ -21,12 +21,18 @@ struct TodoTaskGrid: View {
     var body: some View {
         LazyVGrid(columns: columns, spacing: 10) {
             ForEach(Array(pending.enumerated()), id: \.element.id) { index, task in
-                gridCell(task: task, showLanding: index == 0)
-            }
-            ForEach(Array(completed.enumerated()), id: \.element.id) { index, task in
                 gridCell(
                     task: task,
-                    showLanding: pending.isEmpty && index == 0
+                    showLanding: index == 0,
+                    isRightColumn: index % 2 == 1
+                )
+            }
+            ForEach(Array(completed.enumerated()), id: \.element.id) { index, task in
+                let globalIndex = pending.count + index
+                gridCell(
+                    task: task,
+                    showLanding: pending.isEmpty && index == 0,
+                    isRightColumn: globalIndex % 2 == 1
                 )
             }
         }
@@ -34,32 +40,23 @@ struct TodoTaskGrid: View {
     }
 
     @ViewBuilder
-    private func gridCell(task: CheckmateTask, showLanding: Bool) -> some View {
-        let actionEdge: StickyNoteGridCell.ActionEdge = columnIndex(for: task) == 0 ? .trailing : .leading
-
+    private func gridCell(task: CheckmateTask, showLanding: Bool, isRightColumn: Bool) -> some View {
         StickyNoteGridCell(
             task: task,
             isNewBadge: isNew(task),
             avatarName: avatarName(task),
             avatarImageData: avatarData(task),
             allowsEdit: allowsEdit(task),
-            actionEdge: actionEdge,
+            isRightColumn: isRightColumn,
             onEdit: { onEdit(task) },
             onDelete: { onDelete(task) },
             controller: controller
         )
+        .zIndex(isRightColumn ? 1 : 0)
         .background {
             if showLanding {
                 GridLandingAnchor(tab: tab)
             }
         }
-    }
-
-    private func columnIndex(for task: CheckmateTask) -> Int {
-        let orderedTasks = pending + completed
-        guard let index = orderedTasks.firstIndex(where: { $0.id == task.id }) else {
-            return 0
-        }
-        return index % 2
     }
 }

@@ -32,7 +32,9 @@ struct FriendsTabView: View {
         if all.isEmpty {
             TodoEmptyDayPage(tab: .friends, showLandingAnchor: offset == 0)
         } else {
-            ScrollEdgeFades {
+            ScrollEdgeFades(onScroll: {
+                if controller.isActive { controller.clear() }
+            }) {
                 TodoTaskGrid(
                         pending: pending,
                         completed: completed,
