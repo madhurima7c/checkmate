@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Figma 573:2469 / 650:2514 — horizontal assignee row (Add → Myself → friends).
+/// Figma 650:2514 — horizontal assignee row (Add → Myself → friends).
 struct AssigneeCarousel: View {
     @Binding var assignee: TaskAssignee
     let people: [FriendLink]
@@ -8,6 +8,7 @@ struct AssigneeCarousel: View {
     var onInteract: (() -> Void)? = nil
 
     private let avatarSize: CGFloat = 48
+    private let ringSize: CGFloat = 54
     private let itemWidth: CGFloat = 48
 
     var body: some View {
@@ -37,7 +38,12 @@ struct AssigneeCarousel: View {
                     }
                 }
             }
-            .padding(.horizontal, 20)
+            .padding(.leading, 20)
+            .padding(.trailing, 20)
+            .frame(height: ringSize + 24, alignment: .top)
+        }
+        .task {
+            await FriendsStore.shared.refreshContactPhotos()
         }
     }
 
@@ -51,15 +57,19 @@ struct AssigneeCarousel: View {
                     Circle()
                         .fill(Color.white)
                         .frame(width: avatarSize, height: avatarSize)
-                        .shadow(color: .black.opacity(0.12), radius: 0, x: 0, y: 0)
-                    FigmaIcon(name: "AssignAdd", size: 20)
+                        .overlay(
+                            Circle().strokeBorder(Color.black.opacity(0.12), lineWidth: 1)
+                        )
+                    FigmaIcon(name: "AssignAdd", size: 19.3)
                 }
+                .frame(width: ringSize, height: ringSize)
+
                 Text("Add")
                     .font(.system(size: 12, weight: .medium))
                     .foregroundStyle(Theme.Palette.body)
                     .lineLimit(1)
+                    .frame(width: itemWidth)
             }
-            .frame(width: itemWidth)
         }
         .buttonStyle(BoopButtonStyle())
     }
@@ -75,41 +85,58 @@ struct AssigneeCarousel: View {
             onInteract?()
             action()
         } label: {
-            VStack(spacing: selected ? 2 : 4) {
-                ZStack(alignment: .bottomTrailing) {
-                    if selected {
-                        Circle()
-                            .strokeBorder(Theme.Palette.selectionBlue, lineWidth: 1.5)
-                            .frame(width: 50, height: 50)
-                            .overlay {
-                                PersonAvatarView(name: name, imageData: imageData, size: avatarSize)
-                            }
-                    } else {
-                        PersonAvatarView(name: name, imageData: imageData, size: avatarSize)
+            VStack(spacing: 4) {
+                ZStack {
+                    PersonAvatarView(
+                        name: name,
+                        imageData: imageData,
+                        size: avatarSize,
+                        showsBorder: false
+                    )
+                    .overlay(
+                        Circle().strokeBorder(Color.black.opacity(0.04), lineWidth: 1)
+                    )
+                    .overlay(alignment: .bottomTrailing) {
+                        AssigneeSelectionBadge(selected: selected)
+                            .offset(x: 1, y: 1)
                     }
 
-                    ZStack {
+                    if selected {
                         Circle()
-                            .fill(selected ? Theme.Palette.selectionBlue : .white)
-                            .frame(width: 14, height: 14)
-                            .shadow(color: .black.opacity(selected ? 0.06 : 0.12), radius: 0, x: 0, y: 0)
-                        if selected {
-                            Image(systemName: "checkmark")
-                                .font(.system(size: 7, weight: .bold))
-                                .foregroundStyle(.white)
-                        }
+                            .strokeBorder(Theme.Palette.selectionBlue, lineWidth: 2)
+                            .frame(width: ringSize, height: ringSize)
                     }
-                    .offset(x: selected ? 2 : -1, y: selected ? 2 : -1)
                 }
-                .frame(width: 50, height: 50)
+                .frame(width: ringSize, height: ringSize)
 
                 Text(title)
                     .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(selected ? Theme.Palette.assignLabelMuted : Theme.Palette.body)
+                    .foregroundStyle(Theme.Palette.assignLabelMuted)
                     .lineLimit(1)
                     .frame(width: itemWidth)
             }
         }
         .buttonStyle(.plain)
+    }
+}
+
+/// Figma 650:2518 / 650:2524 — 14pt badge: blue check when selected, empty white dot otherwise.
+private struct AssigneeSelectionBadge: View {
+    let selected: Bool
+
+    var body: some View {
+        ZStack {
+            Circle()
+                .fill(selected ? Theme.Palette.selectionBlue : .white)
+                .frame(width: 14, height: 14)
+                .overlay(
+                    Circle().strokeBorder(Color.black.opacity(selected ? 0.06 : 0.12), lineWidth: 1)
+                )
+            if selected {
+                Image(systemName: "checkmark")
+                    .font(.system(size: 7, weight: .bold))
+                    .foregroundStyle(.white)
+            }
+        }
     }
 }

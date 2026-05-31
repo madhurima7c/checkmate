@@ -21,8 +21,9 @@ enum FriendLookupService {
     }
 
     static func enrich(_ link: FriendLink) async -> FriendLink {
-        guard let profile = await profile(for: link.contact) else { return link }
-        var updated = link
+        let withPhoto = ContactsService.linkWithContactPhoto(link)
+        guard let profile = await profile(for: withPhoto.contact) else { return withPhoto }
+        var updated = withPhoto
         updated.profileId = profile.id
         updated.name = profile.name
         return updated

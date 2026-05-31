@@ -175,15 +175,14 @@ private struct BottomAnchoredTextViewRepresentable: UIViewRepresentable {
             if textView.text.isEmpty {
                 contentHeight = lineHeight
             } else {
-                let size = textView.sizeThatFits(
-                    CGSize(width: max(usableWidth, 1), height: .greatestFiniteMagnitude)
-                )
-                contentHeight = max(size.height, lineHeight)
+                let measured = textView.layoutManager.usedRect(for: textView.textContainer).height
+                contentHeight = max(ceil(measured), lineHeight)
             }
 
+            let anchoredHeight = min(contentHeight, lineHeight * 2)
             let topInset = max(
                 verticalPadding,
-                textView.bounds.height - contentHeight - verticalPadding
+                textView.bounds.height - anchoredHeight - verticalPadding
             )
             textView.textContainerInset = UIEdgeInsets(
                 top: topInset,

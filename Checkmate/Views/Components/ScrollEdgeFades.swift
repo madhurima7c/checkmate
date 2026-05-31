@@ -166,31 +166,60 @@ struct ScrollEdgeFades<Content: View>: View {
     }
 }
 
-/// Translucent footer behind the add-todo Confirm button (24pt vertical padding).
+/// Figma 573:2458–2461 — progressive blur footer behind Confirm (118pt wash).
 struct ConfirmButtonChrome<Content: View>: View {
     @ViewBuilder var content: () -> Content
+
+    private let washHeight: CGFloat = 118
 
     var body: some View {
         content()
             .padding(.top, 24)
-            .padding(.bottom, 24)
+            .padding(.bottom, 8)
             .frame(maxWidth: .infinity)
-            .background {
-                ZStack {
-                    LinearGradient(
-                        stops: [
-                            .init(color: Theme.Palette.canvas.opacity(0), location: 0.007),
-                            .init(color: Theme.Palette.canvas.opacity(0.55), location: 0.35),
-                            .init(color: Theme.Palette.canvas, location: 0.99)
-                        ],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                    Rectangle()
-                        .fill(.ultraThinMaterial)
-                        .opacity(0.35)
-                }
+            .background(alignment: .bottom) {
+                LinearGradient(
+                    stops: [
+                        .init(color: Theme.Palette.canvas.opacity(0), location: 0),
+                        .init(color: Theme.Palette.canvas, location: 1)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .frame(height: washHeight)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
                 .allowsHitTesting(false)
             }
+    }
+}
+
+// MARK: - Figma 573:2517 — compact all-day switch (39×22pt)
+
+struct FigmaSwitch: View {
+    @Binding var isOn: Bool
+
+    private let trackWidth: CGFloat = 39
+    private let trackHeight: CGFloat = 22
+    private let knobSize: CGFloat = 19
+    private let trackPadding: CGFloat = 1.5
+
+    var body: some View {
+        Button {
+            withAnimation(.spring(response: 0.28, dampingFraction: 0.85)) {
+                isOn.toggle()
+            }
+        } label: {
+            ZStack(alignment: isOn ? .trailing : .leading) {
+                Capsule()
+                    .fill(isOn ? Color(hex: 0x34C759) : Color(hex: 0xE3E3E3))
+                Circle()
+                    .fill(.white)
+                    .frame(width: knobSize, height: knobSize)
+                    .padding(trackPadding)
+            }
+            .frame(width: trackWidth, height: trackHeight)
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(isOn ? [.isSelected] : [])
     }
 }

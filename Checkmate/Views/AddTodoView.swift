@@ -48,6 +48,10 @@ struct AddTodoView: View {
 
     private var isEditing: Bool { editingTask != nil }
 
+    private var canConfirm: Bool {
+        !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+
     var body: some View {
         ZStack {
             Theme.Palette.canvas.ignoresSafeArea()
@@ -61,19 +65,17 @@ struct AddTodoView: View {
                             .padding(.top, 28)
 
                         colorRow
-                            .padding(.top, 22)
+                            .padding(.top, 20)
 
                         assignScheduleCard
-                            .padding(.top, 58)
+                            .padding(.top, 29)
                             .padding(.horizontal, 24)
                     }
-                    .padding(.bottom, keyboardVisible ? 24 : 108)
+                    .padding(.bottom, 32)
                 }
                 .scrollDismissesKeyboard(.interactively)
-
-                if !keyboardVisible, !text.trimmingCharacters(in: .whitespaces).isEmpty {
+                .safeAreaInset(edge: .bottom, spacing: 0) {
                     ConfirmButtonChrome { confirmButton }
-                        .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
             }
 
@@ -83,6 +85,9 @@ struct AddTodoView: View {
                     .foregroundStyle(.red)
                     .padding()
             }
+        }
+        .dismissKeyboardOnTap {
+            if keyboardVisible { dismissComposer() }
         }
         .sheet(isPresented: $showCustomDatePicker) {
             customDateSheet
@@ -99,11 +104,14 @@ struct AddTodoView: View {
                 .ignoresSafeArea()
             }
         }
-        .animation(Theme.snappy, value: keyboardVisible)
         .tracksKeyboardVisibility($keyboardVisible)
         .onAppear {
+            friendsStore.cleanAddTodoAssigneesOnce()
             loadEditingState()
             KeyboardDismiss.resign()
+        }
+        .task {
+            await friendsStore.refreshContactPhotos()
         }
         .onChange(of: resetToken) { _, _ in
             text = editingTask?.text ?? ""
@@ -170,24 +178,26 @@ struct AddTodoView: View {
     // MARK: - Color dots (573:2462–2468)
 
     private var colorRow: some View {
-        HStack(spacing: 6.5) {
+        HStack(spacing: 6.52) {
             ForEach(StickyColor.allCases) { c in
                 Button {
                     dismissComposer()
                     withAnimation(Theme.colorFlip) { color = c }
                 } label: {
                     ZStack {
-                        if c == color {
-                            Circle()
-                                .stroke(Color(hex: 0x32312F), lineWidth: 1.63)
-                                .frame(width: 31.8, height: 31.8)
-                        }
                         Circle()
                             .fill(c.dot)
-                            .overlay(Circle().strokeBorder(.white, lineWidth: 2.45))
-                            .frame(width: 30.2, height: 30.2)
+                            .overlay(Circle().strokeBorder(.white, lineWidth: 2.445))
+                            .frame(width: 30.156, height: 30.156)
                             .modalColorDotShadow()
+
+                        if c == color {
+                            Circle()
+                                .stroke(Theme.Palette.selectionBlue, lineWidth: 1.63)
+                                .frame(width: 31.786, height: 31.786)
+                        }
                     }
+                    .frame(width: 33.4, height: 33.4)
                 }
                 .buttonStyle(BoopButtonStyle())
             }
@@ -201,9 +211,10 @@ struct AddTodoView: View {
         VStack(alignment: .leading, spacing: 0) {
             VStack(alignment: .leading, spacing: 16) {
                 sectionLabel("Assign to")
+                    .padding(.horizontal, 20)
                 AssigneeCarousel(
                     assignee: $assignee,
-                    people: friendsStore.assignablePeople(includeDemos: CheckmateConfig.isPrototype),
+                    people: friendsStore.assignablePeople(includeDemos: false),
                     onAdd: {
                         dismissComposer()
                         Task {
@@ -215,50 +226,62 @@ struct AddTodoView: View {
                     onInteract: dismissComposer
                 )
             }
-            .padding(.horizontal, 20)
             .padding(.top, 23)
             .padding(.bottom, 20)
 
             Rectangle()
-                .fill(Color(hex: 0xE8E8E8))
+                .fill(Color(hex: 0xEDEDED))
                 .frame(height: 1)
 
             VStack(alignment: .leading, spacing: 16) {
                 sectionLabel("By when")
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 12) {
-                        dueChip(option: .today, label: "Today", day: Date.today)
-                        dueChip(option: .tomorrow, label: "Tomorrow", day: Date.today.adding(days: 1))
-                        customDueChip
-                    }
-                }
-                HStack(spacing: 12) {
-                    Text("All day")
-                        .font(.system(size: 16, weight: .medium))
-                        .foregroundStyle(Theme.Palette.body)
-                    Toggle("", isOn: $allDay.animation(Theme.spring))
-                        .onChange(of: allDay) { _, _ in dismissComposer() }
-                        .labelsHidden()
-                        .tint(Color(hex: 0x34C759))
-                    if !allDay {
-                        DatePicker("", selection: $dueAt, displayedComponents: .hourAndMinute)
-                            .labelsHidden()
-                    }
-                    Spacer(minLength: 0)
-                }
+                    .padding(.horizontal, 20)
+                dueDateRow
+                allDayRow
+                    .padding(.horizontal, 20)
             }
-            .padding(.horizontal, 20)
             .padding(.top, 20)
             .padding(.bottom, 23)
         }
-        .background(
+        .background {
             RoundedRectangle(cornerRadius: 20, style: .continuous)
                 .fill(Color.white)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 20, style: .continuous)
-                        .stroke(Color.black.opacity(0.03), lineWidth: 1)
-                )
-        )
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                .strokeBorder(Color.black.opacity(0.06), lineWidth: 1)
+        }
+    }
+
+    /// Horizontal chips scroll inside the white card (clipped at the card’s right edge).
+    private var dueDateRow: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 12) {
+                dueChip(option: .today, label: "Today", day: Date.today)
+                dueChip(option: .tomorrow, label: "Tomorrow", day: Date.today.adding(days: 1))
+                customDueChip
+            }
+            .padding(.leading, 20)
+            .padding(.trailing, 20)
+            .padding(.vertical, 1)
+        }
+    }
+
+    private var allDayRow: some View {
+        HStack(spacing: 12) {
+            Text("All day")
+                .font(.system(size: 16, weight: .medium))
+                .foregroundStyle(Theme.Palette.body)
+            FigmaSwitch(isOn: $allDay)
+                .onChange(of: allDay) { _, _ in dismissComposer() }
+            if !allDay {
+                DatePicker("", selection: $dueAt, displayedComponents: .hourAndMinute)
+                    .labelsHidden()
+                    .tint(Theme.Palette.selectionBlue)
+            }
+            Spacer(minLength: 0)
+        }
     }
 
     private func sectionLabel(_ title: String) -> some View {
@@ -268,7 +291,8 @@ struct AddTodoView: View {
     }
 
     private var customDueChip: some View {
-        Button {
+        let isSelected = dueOption == .custom
+        return Button {
             dismissComposer()
             showCustomDatePicker = true
         } label: {
@@ -280,21 +304,19 @@ struct AddTodoView: View {
             .foregroundStyle(Theme.Palette.body)
             .padding(.horizontal, 12)
             .padding(.vertical, 8)
-            .background(chipBackground(selected: dueOption == .custom))
+            .background(chipBackground(selected: isSelected))
         }
         .buttonStyle(BoopButtonStyle())
     }
 
     private func dueChip(option: DueOption, label: String, day: Date) -> some View {
         let isSelected = dueOption == option
-        let formatter = DateFormatter()
-        formatter.dateFormat = "d"
         return Button {
             dismissComposer()
             withAnimation(Theme.snappy) { dueOption = option }
         } label: {
             HStack(spacing: 4) {
-                CalendarGlyph(dayNumber: formatter.string(from: day), selected: isSelected)
+                CalendarGlyph(dayNumber: dayOfMonth(day), selected: isSelected)
                 Text(label)
                     .font(.system(size: 16, weight: .medium))
             }
@@ -306,12 +328,16 @@ struct AddTodoView: View {
         .buttonStyle(BoopButtonStyle())
     }
 
+    private func dayOfMonth(_ date: Date) -> String {
+        String(Calendar.current.component(.day, from: date))
+    }
+
     private func chipBackground(selected: Bool) -> some View {
         RoundedRectangle(cornerRadius: 12, style: .continuous)
             .fill(selected ? Theme.Palette.selectionFill : .white)
             .overlay(
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .stroke(selected ? Theme.Palette.selectionBlue : Theme.Palette.chipBorder, lineWidth: 1)
+                    .strokeBorder(selected ? Theme.Palette.selectionBlue : Theme.Palette.chipBorder, lineWidth: 1)
             )
     }
 
@@ -327,21 +353,21 @@ struct AddTodoView: View {
                 } else {
                     Text("Confirm")
                         .font(.system(size: 20, weight: .semibold))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(canConfirm ? .white : Color.white.opacity(0.72))
                 }
             }
             .frame(maxWidth: .infinity)
             .frame(height: 62)
             .background(
                 RoundedRectangle(cornerRadius: 19, style: .continuous)
-                    .fill(Theme.Palette.dark)
+                    .fill(canConfirm ? Theme.Palette.dark : Color(hex: 0xB5B5B5))
                     .tabBarShadow()
             )
         }
         .buttonStyle(BoopButtonStyle())
-        .disabled(isSubmitting)
+        .disabled(!canConfirm || isSubmitting)
         .padding(.horizontal, 24)
-        .padding(.bottom, 12)
+        .accessibilityHint(canConfirm ? "" : "Enter todo text to enable")
     }
 
     private var customDateSheet: some View {
@@ -366,7 +392,9 @@ struct AddTodoView: View {
     }
 
     private func selectContact(_ link: FriendLink) async {
-        let enriched = await FriendLookupService.enrich(link)
+        let enriched = ContactsService.linkWithContactPhoto(
+            await FriendLookupService.enrich(link)
+        )
         withAnimation(Theme.snappy) { assignee = .person(enriched) }
         friendsStore.remember(enriched)
     }
@@ -375,7 +403,11 @@ struct AddTodoView: View {
         guard let task = editingTask else { return }
         text = task.text
         color = task.color
-        assignee = TaskAssignee.from(task: task)
+        var resolvedAssignee = TaskAssignee.from(task: task)
+        if case .person(let link) = resolvedAssignee {
+            resolvedAssignee = .person(ContactsService.linkWithContactPhoto(link))
+        }
+        assignee = resolvedAssignee
         allDay = task.allDay
         dueAt = task.dueAt ?? Date()
         let today = Date.today
@@ -422,7 +454,7 @@ struct ColorFlipCard: View {
         shape
             .fill(displayed.paper)
             .overlay(shape.strokeBorder(.white, lineWidth: 6))
-            .modalStickyShadow()
+            .stickyShadow()
             .onChange(of: color) { _, new in
                 withAnimation(Theme.colorFlip) { displayed = new }
             }
@@ -431,32 +463,38 @@ struct ColorFlipCard: View {
 }
 
 extension View {
+    /// Figma 573:2465 dot shadow: 0 1.63 7.335 0.815 rgba(0,0,0,0.07) + crisp 1px 3% outline.
     fileprivate func modalColorDotShadow() -> some View {
-        shadow(color: .black.opacity(0.07), radius: 7.3, x: 0, y: 1.6)
-            .shadow(color: .black.opacity(0.03), radius: 0.5, x: 0, y: 0)
+        shadow(color: .black.opacity(0.07), radius: 3.67, x: 0, y: 1.63)
+            .shadow(color: .black.opacity(0.03), radius: 0.4, x: 0, y: 0)
     }
 }
 
+/// Figma 573:2476 due-chip calendar (18.6pt): filled body + binder nubs + white day number.
 struct CalendarGlyph: View {
     let dayNumber: String
     var selected: Bool = false
 
+    private let size: CGFloat = 18.601
     private var ink: Color { selected ? Theme.Palette.selectionBlue : Theme.Palette.body }
 
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 3)
-                .stroke(ink, lineWidth: 1.4)
-                .frame(width: 16, height: 16)
-            Rectangle()
+        ZStack(alignment: .top) {
+            RoundedRectangle(cornerRadius: 3.5, style: .continuous)
                 .fill(ink)
-                .frame(width: 16, height: 5)
-                .offset(y: -5.5)
+                .frame(width: size, height: size)
+
+            HStack(spacing: 5) {
+                Capsule().fill(.white).frame(width: 1.6, height: 3)
+                Capsule().fill(.white).frame(width: 1.6, height: 3)
+            }
+            .offset(y: -1.4)
+
             Text(dayNumber)
                 .font(.system(size: 7, weight: .bold))
-                .foregroundStyle(selected ? .white : ink)
-                .offset(y: 2)
+                .foregroundStyle(.white)
+                .padding(.top, 6.5)
         }
-        .frame(width: 18, height: 18)
+        .frame(width: size, height: size)
     }
 }

@@ -27,9 +27,9 @@ enum Theme {
         static let strike = Color(white: 0, opacity: 0.38)
         static let checkboxStroke = Color(white: 0, opacity: 0.39)
         static let blue = Color(hex: 0x4A8FFF)
-        /// Figma #08f — modal chip + assign ring.
-        static let selectionBlue = Color(hex: 0x0088FF)
-        static let selectionFill = Color(hex: 0x0088FF).opacity(0.07)
+        /// Figma selected blue — modal chips, assign ring, color selector.
+        static let selectionBlue = Color(hex: 0x0A84FF)
+        static let selectionFill = Color(hex: 0x0A84FF).opacity(0.07)
         static let assignLabelMuted = Color(hex: 0x888888)
         static let newRed = Color(hex: 0xF83A00)
         static let dark = Color(hex: 0x2F3231)
@@ -50,25 +50,16 @@ extension Color {
 }
 
 extension View {
-    /// Figma sticky shadow (empty + grid cards).
+    /// Figma todo card shadow (573:2419): 0px 2px 9px 1px rgba(0,0,0,0.07) + crisp 1px 3% outline.
     func stickyShadow() -> some View {
         self
-            .shadow(color: .black.opacity(0.03), radius: 3.4, x: 1.5, y: -5.3)
-            .shadow(color: .black.opacity(0.03), radius: 1.4, x: 0, y: 1.5)
+            .shadow(color: .black.opacity(0.07), radius: 4.5, x: 0, y: 2)
             .shadow(color: .black.opacity(0.03), radius: 0.5, x: 0, y: 0)
     }
 
     func tabBarShadow() -> some View {
         self
             .shadow(color: .black.opacity(0.07), radius: 4.5, x: 0, y: 2)
-            .shadow(color: .black.opacity(0.03), radius: 0.5, x: 0, y: 0)
-    }
-
-    /// Figma 573:2513 add-todo sticky preview shadow.
-    func modalStickyShadow() -> some View {
-        self
-            .shadow(color: .black.opacity(0.03), radius: 4.5, x: 2, y: -7)
-            .shadow(color: .black.opacity(0.03), radius: 1.9, x: 0, y: 2)
             .shadow(color: .black.opacity(0.03), radius: 0.5, x: 0, y: 0)
     }
 }

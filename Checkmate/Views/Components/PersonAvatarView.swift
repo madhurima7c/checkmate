@@ -5,11 +5,18 @@ struct PersonAvatarView: View {
     let name: String
     var imageData: Data? = nil
     var size: CGFloat = 22
+    var showsBorder: Bool = true
 
     private var initials: String {
-        let parts = name.split(separator: " ")
+        let parts = name
+            .split(separator: " ")
+            .map { String($0).trimmingCharacters(in: .whitespaces) }
+            .filter { !$0.isEmpty }
         if parts.count >= 2 {
             return String(parts[0].prefix(1) + parts[1].prefix(1)).uppercased()
+        }
+        if let first = parts.first {
+            return String(first.prefix(1)).uppercased()
         }
         return String(name.prefix(1)).uppercased()
     }
@@ -41,6 +48,10 @@ struct PersonAvatarView: View {
         }
         .frame(width: size, height: size)
         .clipShape(Circle())
-        .overlay(Circle().stroke(Color.white, lineWidth: max(1.5, size * 0.08)))
+        .overlay {
+            if showsBorder {
+                Circle().stroke(Color.white, lineWidth: max(1.5, size * 0.08))
+            }
+        }
     }
 }
