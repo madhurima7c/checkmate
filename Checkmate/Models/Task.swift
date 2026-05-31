@@ -16,6 +16,9 @@ struct CheckmateTask: Identifiable, Codable, Equatable {
     var assigneeName: String?
     /// Normalized email/phone when assigned before they have an account.
     var inviteContact: String?
+    /// Populated in App Group snapshot for widget avatars (not synced to cloud).
+    var widgetAvatarName: String?
+    var widgetAvatarImageData: Data?
 
     var isPersonal: Bool { receiverId == nil || receiverId == senderId }
 
@@ -58,6 +61,8 @@ struct CheckmateTask: Identifiable, Codable, Equatable {
         case createdAt = "created_at"
         case assigneeName = "assignee_name"
         case inviteContact = "invite_contact"
+        case widgetAvatarName = "widget_avatar_name"
+        case widgetAvatarImageData = "widget_avatar_image_data"
     }
 }
 

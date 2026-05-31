@@ -1,9 +1,10 @@
 import AppIntents
 import WidgetKit
 
-struct MarkDoneIntent: AppIntent {
-    static var title: LocalizedStringResource = "Mark Task Done"
-    static var description = IntentDescription("Marks a Checkmate task as done from the widget.")
+/// Toggles a today task done ↔ pending from the home-screen widget.
+struct ToggleTaskIntent: AppIntent {
+    static var title: LocalizedStringResource = "Toggle Task"
+    static var description = IntentDescription("Checks or unchecks a Checkmate task from the widget.")
 
     @Parameter(title: "Task ID")
     var taskId: String

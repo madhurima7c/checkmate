@@ -36,6 +36,7 @@
 		805E797A9B1829BBBACC6F31 /* TaskWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B35A0A993FFC8894137EF0 /* TaskWidget.swift */; };
 		87C1ED4F3DCAA7AB098F677C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9629FF8B89372E5272459202 /* Assets.xcassets */; };
 		90D01B5FF295E6CAB66B4A21 /* MarkDoneIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745E013478049914C8C19F07 /* MarkDoneIntent.swift */; };
+		A1B2C3D4E5F60718293A501 /* ToggleTaskIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A500 /* ToggleTaskIntent.swift */; };
 		9448E0EB38C2E073879356E3 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BCC0D0D799B5FA79DC7F0F /* Task.swift */; };
 		980B93609BF1558E838A6400 /* StickyColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6451EC1662B40727029ABBC2 /* StickyColor.swift */; };
 		99DA44CAAB728454AD5B0BC5 /* CheckmateConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9E1F543A7B194091F9C2C3 /* CheckmateConfig.swift */; };
@@ -127,6 +128,7 @@
 		6451EC1662B40727029ABBC2 /* StickyColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickyColor.swift; sourceTree = "<group>"; };
 		737E969145A085F3EFE759A1 /* TaskStore+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskStore+Cloud.swift"; sourceTree = "<group>"; };
 		745E013478049914C8C19F07 /* MarkDoneIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkDoneIntent.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60718293A500 /* ToggleTaskIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleTaskIntent.swift; sourceTree = "<group>"; };
 		74FF84A62EAAA0622F487C3E /* AddTodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTodoView.swift; sourceTree = "<group>"; };
 		76D44E3B347C69121EEA66E8 /* Checkmate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Checkmate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		81BCC0D0D799B5FA79DC7F0F /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
@@ -268,6 +270,7 @@
 				A6BDA4D22B2B6FE0BDF56C9C /* CheckmateWidget.entitlements */,
 				F3B4F3BB8241308F8369D307 /* Info.plist */,
 				745E013478049914C8C19F07 /* MarkDoneIntent.swift */,
+				A1B2C3D4E5F60718293A500 /* ToggleTaskIntent.swift */,
 				A5480EC867E109710725730E /* TaskEntry.swift */,
 				D0B35A0A993FFC8894137EF0 /* TaskWidget.swift */,
 				CFCBD7D3368C2E12AFE82340 /* TaskWidgetView.swift */,
@@ -449,6 +452,7 @@
 			files = (
 				01D8BC02CF5D1390B9AC51E8 /* AppGroupStore.swift in Sources */,
 				90D01B5FF295E6CAB66B4A21 /* MarkDoneIntent.swift in Sources */,
+				A1B2C3D4E5F60718293A501 /* ToggleTaskIntent.swift in Sources */,
 				52901B2C1E03AA85D2847059 /* StickyColor.swift in Sources */,
 				5152AFCFBC2CECB405E6FF41 /* Task.swift in Sources */,
 				454BC2A0DB412941FA39F6F1 /* TaskEntry.swift in Sources */,

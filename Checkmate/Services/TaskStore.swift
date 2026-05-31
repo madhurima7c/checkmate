@@ -271,20 +271,66 @@ class TaskStore: ObservableObject {
         syncWidgetSnapshot()
     }
 
-    /// Pushes today's My-todo tasks into the App Group for the home-screen widget.
+    /// Pushes today's home-screen tasks (My Todo + Friends) into the App Group for the widget.
     func syncWidgetSnapshot() {
         let today = Date.today
-        let pending = tasks.filter {
-            $0.status == .pending
-                && $0.dueDate.startOfDay() <= today
-                && !$0.isOutgoingToFriend
-        }
-        let doneToday = recentlyCompleted.filter {
-            $0.dueDate.startOfDay() == today && !$0.isOutgoingToFriend
-        }.count
-        AppGroupStore.saveTasks(pending)
-        AppGroupStore.setDoneCount(doneToday)
+        let pending = myTodoPending(on: today) + friendsPending(on: today)
+        let completed = myTodoCompleted(on: today) + friendsCompleted(on: today)
+        let snapshot = (pending + completed).map { taskWithWidgetAvatar($0) }
+        AppGroupStore.saveTodayWidgetTasks(snapshot)
+        AppGroupStore.setDoneCount(completed.count)
+        AppGroupStore.saveNewTaskIds(newTaskIds)
         WidgetCenter.shared.reloadAllTimelines()
+    }
+
+    private func taskWithWidgetAvatar(_ task: CheckmateTask) -> CheckmateTask {
+        var copy = task
+        let avatar = widgetAvatarFields(for: task)
+        copy.widgetAvatarName = avatar.name
+        copy.widgetAvatarImageData = avatar.imageData
+        return copy
+    }
+
+    private func widgetAvatarFields(for task: CheckmateTask) -> (name: String?, imageData: Data?) {
+        if task.isIncomingFromOther {
+            let name = FriendsStore.shared.displayName(forUserId: task.senderId) ?? "Friend"
+            let data = FriendsStore.shared.friendLink(forUserId: task.senderId)?.avatarData
+            return (name, data)
+        }
+        if task.isOutgoingToFriend {
+            if let contact = task.inviteContact,
+               let link = FriendsStore.shared.recent.first(where: { $0.contact == contact }) {
+                return (task.assigneeName ?? link.name, link.avatarData)
+            }
+            if let receiverId = task.receiverId,
+               let link = FriendsStore.shared.friendLink(forUserId: receiverId) {
+                return (task.assigneeName ?? link.name, link.avatarData)
+            }
+            if let name = task.assigneeName, !name.isEmpty {
+                return (name, nil)
+            }
+        }
+        return (nil, nil)
+    }
+
+    /// Applies checkbox changes made on the widget while the app was closed.
+    func applyWidgetSnapshotIfNeeded() {
+        let snapshot = AppGroupStore.loadTodayWidgetTasks()
+        guard !snapshot.isEmpty else { return }
+
+        for task in snapshot where task.dueDate.startOfDay() <= Date.today {
+            let isPendingLocally = tasks.contains { $0.id == task.id }
+            let isDoneLocally = recentlyCompleted.contains { $0.id == task.id }
+
+            switch task.status {
+            case .done where isPendingLocally:
+                markDoneLocally(taskId: task.id)
+            case .pending where isDoneLocally:
+                undoPendingLocally(taskId: task.id)
+            default:
+                break
+            }
+        }
     }
 
     func registerNewBadge(for id: UUID) {
