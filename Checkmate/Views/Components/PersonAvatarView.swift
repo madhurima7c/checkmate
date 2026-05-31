@@ -21,13 +21,21 @@ struct PersonAvatarView: View {
         return String(name.prefix(1)).uppercased()
     }
 
+    private static let avatarTints: [(bg: UInt32, ink: UInt32)] = [
+        (0xFFEEAE, 0xB38C00), // Figma 671:3078 / 671:3089
+        (0xC7F0FF, 0x4A8FA8),
+        (0xFFC7EC, 0xC45E9E),
+        (0xFFDEC7, 0xC98A52)
+    ]
+
     private var tint: Color {
-        let palette: [Color] = [
-            Color(hex: 0xFFEEAE), Color(hex: 0xC7F0FF),
-            Color(hex: 0xFFC7EC), Color(hex: 0xFFDEC7)
-        ]
-        let index = abs(name.hashValue) % palette.count
-        return palette[index]
+        let pair = Self.avatarTints[abs(name.hashValue) % Self.avatarTints.count]
+        return Color(hex: pair.bg)
+    }
+
+    private var initialsColor: Color {
+        let pair = Self.avatarTints[abs(name.hashValue) % Self.avatarTints.count]
+        return Color(hex: pair.ink)
     }
 
     var body: some View {
@@ -41,8 +49,8 @@ struct PersonAvatarView: View {
                     .fill(tint)
                     .overlay(
                         Text(initials)
-                            .font(.system(size: size * 0.42, weight: .semibold))
-                            .foregroundStyle(Theme.Palette.body)
+                            .font(.system(size: size * 0.35, weight: .medium))
+                            .foregroundStyle(initialsColor)
                     )
             }
         }

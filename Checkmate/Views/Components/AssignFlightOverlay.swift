@@ -89,5 +89,6 @@ struct FlyingStickyCard: View {
                 .lineLimit(4)
                 .padding(14)
         }
+        .stickyShadow()
     }
 }

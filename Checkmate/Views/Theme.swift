@@ -27,9 +27,9 @@ enum Theme {
         static let strike = Color(white: 0, opacity: 0.38)
         static let checkboxStroke = Color(white: 0, opacity: 0.39)
         static let blue = Color(hex: 0x4A8FFF)
-        /// Figma selected blue — modal chips, assign ring, color selector.
-        static let selectionBlue = Color(hex: 0x0A84FF)
-        static let selectionFill = Color(hex: 0x0A84FF).opacity(0.07)
+        /// Figma #08f — modal chips, assign ring, color selector (573:2463, 650:2522).
+        static let selectionBlue = Color(hex: 0x0088FF)
+        static let selectionFill = Color(hex: 0x0088FF).opacity(0.07)
         static let assignLabelMuted = Color(hex: 0x888888)
         static let newRed = Color(hex: 0xF83A00)
         static let dark = Color(hex: 0x2F3231)
@@ -50,7 +50,14 @@ extension Color {
 }
 
 extension View {
-    /// Figma todo card shadow (573:2419): 0px 2px 9px 1px rgba(0,0,0,0.07) + crisp 1px 3% outline.
+    /// Figma white panel (573:2469): `box-shadow: 0 0 0 1px rgba(0,0,0,0.03)` — zero blur, no drop shadow.
+    func figmaPanelChrome(cornerRadius: CGFloat = Theme.Radius.panel) -> some View {
+        let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+        return background(Color.white, in: shape)
+            .overlay(shape.stroke(Color.black.opacity(0.03), lineWidth: 1))
+    }
+
+    /// Previous sticky-note card shadow: soft 7% lift plus faint 3% outline blur.
     func stickyShadow() -> some View {
         self
             .shadow(color: .black.opacity(0.07), radius: 4.5, x: 0, y: 2)

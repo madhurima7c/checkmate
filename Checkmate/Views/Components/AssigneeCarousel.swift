@@ -7,9 +7,16 @@ struct AssigneeCarousel: View {
     var onAdd: () -> Void
     var onInteract: (() -> Void)? = nil
 
-    private let avatarSize: CGFloat = 48
-    private let ringSize: CGFloat = 54
-    private let itemWidth: CGFloat = 48
+    /// Figma 650:2517 — inner avatar; 650:2522 — outer ring with white gap before blue stroke.
+    private let avatarSize: CGFloat = 53.739
+    /// White space between photo circle and blue ring (Figma ~1.12pt per side).
+    private let selectionGap: CGFloat = 2.24
+    /// Figma 650:2522 border 2.239pt; drawn outside the white halo via `.stroke`.
+    private let selectionStrokeWidth: CGFloat = 3.5
+    private var whiteHaloSize: CGFloat { avatarSize + selectionGap * 2 }
+    private var selectedOuterSize: CGFloat { whiteHaloSize + selectionStrokeWidth * 2 }
+    private let itemWidth: CGFloat = 64
+    private let labelHeight: CGFloat = 22.391
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -40,10 +47,8 @@ struct AssigneeCarousel: View {
             }
             .padding(.leading, 20)
             .padding(.trailing, 20)
-            .frame(height: ringSize + 24, alignment: .top)
-        }
-        .task {
-            await FriendsStore.shared.refreshContactPhotos()
+            .padding(.vertical, 4)
+            .frame(height: selectedOuterSize + labelHeight + 12, alignment: .top)
         }
     }
 
@@ -52,23 +57,23 @@ struct AssigneeCarousel: View {
             onInteract?()
             onAdd()
         } label: {
-            VStack(spacing: 4) {
+            VStack(spacing: 6) {
                 ZStack {
                     Circle()
                         .fill(Color.white)
                         .frame(width: avatarSize, height: avatarSize)
                         .overlay(
-                            Circle().strokeBorder(Color.black.opacity(0.12), lineWidth: 1)
+                            Circle().stroke(Color.black.opacity(0.12), lineWidth: 1.12)
                         )
-                    FigmaIcon(name: "AssignAdd", size: 19.3)
+                    FigmaIcon(name: "AssignPlus", size: 21.608)
                 }
-                .frame(width: ringSize, height: ringSize)
+                .frame(width: avatarSize, height: avatarSize)
 
                 Text("Add")
-                    .font(.system(size: 12, weight: .medium))
+                    .font(.system(size: 14, weight: .medium))
                     .foregroundStyle(Theme.Palette.body)
                     .lineLimit(1)
-                    .frame(width: itemWidth)
+                    .frame(width: itemWidth, height: labelHeight)
             }
         }
         .buttonStyle(BoopButtonStyle())
@@ -85,58 +90,62 @@ struct AssigneeCarousel: View {
             onInteract?()
             action()
         } label: {
-            VStack(spacing: 4) {
+            VStack(spacing: 6) {
                 ZStack {
+                    if selected {
+                        Circle()
+                            .fill(Color.white)
+                            .frame(width: whiteHaloSize, height: whiteHaloSize)
+                        Circle()
+                            .stroke(Theme.Palette.selectionBlue, lineWidth: selectionStrokeWidth)
+                            .frame(width: selectedOuterSize, height: selectedOuterSize)
+                    }
+
                     PersonAvatarView(
                         name: name,
                         imageData: imageData,
                         size: avatarSize,
                         showsBorder: false
                     )
-                    .overlay(
-                        Circle().strokeBorder(Color.black.opacity(0.04), lineWidth: 1)
-                    )
                     .overlay(alignment: .bottomTrailing) {
                         AssigneeSelectionBadge(selected: selected)
-                            .offset(x: 1, y: 1)
-                    }
-
-                    if selected {
-                        Circle()
-                            .strokeBorder(Theme.Palette.selectionBlue, lineWidth: 2)
-                            .frame(width: ringSize, height: ringSize)
+                            .offset(x: selected ? 2 : 0.2, y: selected ? 2 : 0.2)
                     }
                 }
-                .frame(width: ringSize, height: ringSize)
+                .frame(
+                    width: selected ? selectedOuterSize : avatarSize,
+                    height: selected ? selectedOuterSize : avatarSize
+                )
 
                 Text(title)
-                    .font(.system(size: 12, weight: .medium))
+                    .font(.system(size: 14, weight: .medium))
                     .foregroundStyle(Theme.Palette.assignLabelMuted)
                     .lineLimit(1)
-                    .frame(width: itemWidth)
+                    .frame(width: itemWidth, height: labelHeight)
             }
         }
         .buttonStyle(.plain)
     }
 }
 
-/// Figma 650:2518 / 650:2524 — 14pt badge: blue check when selected, empty white dot otherwise.
+/// Figma 650:2518 / 650:2524 — circular badge; selected state includes the check glyph.
 private struct AssigneeSelectionBadge: View {
     let selected: Bool
+
+    private let size: CGFloat = 15.674
 
     var body: some View {
         ZStack {
             Circle()
                 .fill(selected ? Theme.Palette.selectionBlue : .white)
-                .frame(width: 14, height: 14)
                 .overlay(
-                    Circle().strokeBorder(Color.black.opacity(selected ? 0.06 : 0.12), lineWidth: 1)
+                    Circle()
+                        .stroke(Color.black.opacity(selected ? 0.06 : 0.12), lineWidth: 1.12)
                 )
             if selected {
-                Image(systemName: "checkmark")
-                    .font(.system(size: 7, weight: .bold))
-                    .foregroundStyle(.white)
+                FigmaIcon(name: "AssignCheck", size: 6.158)
             }
         }
+        .frame(width: size, height: size)
     }
 }

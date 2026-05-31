@@ -177,6 +177,7 @@ struct AddTodoView: View {
 
     // MARK: - Color dots (573:2462–2468)
 
+    /// Figma 573:2464 — four dots, 6.52pt gap; selection ring 31.786 / 1.63pt #08f (573:2463).
     private var colorRow: some View {
         HStack(spacing: 6.52) {
             ForEach(StickyColor.allCases) { c in
@@ -197,7 +198,7 @@ struct AddTodoView: View {
                                 .frame(width: 31.786, height: 31.786)
                         }
                     }
-                    .frame(width: 33.4, height: 33.4)
+                    .frame(width: 31.786, height: 31.786)
                 }
                 .buttonStyle(BoopButtonStyle())
             }
@@ -243,28 +244,19 @@ struct AddTodoView: View {
             .padding(.top, 20)
             .padding(.bottom, 23)
         }
-        .background {
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(Color.white)
-        }
-        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-        .overlay {
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .strokeBorder(Color.black.opacity(0.06), lineWidth: 1)
-        }
+        .figmaPanelChrome()
     }
 
-    /// Horizontal chips scroll inside the white card (clipped at the card’s right edge).
+    /// Figma 573:2473 — Today / Tomorrow / Custom pill row.
     private var dueDateRow: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 12) {
+            HStack(spacing: DueDateChipMetrics.pillSpacing) {
                 dueChip(option: .today, label: "Today", day: Date.today)
                 dueChip(option: .tomorrow, label: "Tomorrow", day: Date.today.adding(days: 1))
                 customDueChip
             }
-            .padding(.leading, 20)
-            .padding(.trailing, 20)
-            .padding(.vertical, 1)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 2)
         }
     }
 
@@ -296,15 +288,13 @@ struct AddTodoView: View {
             dismissComposer()
             showCustomDatePicker = true
         } label: {
-            HStack(spacing: 2) {
-                Text("Custom")
-                    .font(.system(size: 16, weight: .medium))
-                FigmaIcon(name: "CaretRight", size: 16)
+            dueChipLabel(isSelected: isSelected) {
+                HStack(spacing: DueDateChipMetrics.customCaretGap) {
+                    Text("Custom")
+                        .font(DueDateChipMetrics.labelFont)
+                    FigmaIcon(name: "CaretRight", size: 16)
+                }
             }
-            .foregroundStyle(Theme.Palette.body)
-            .padding(.horizontal, 12)
-            .padding(.vertical, 8)
-            .background(chipBackground(selected: isSelected))
         }
         .buttonStyle(BoopButtonStyle())
     }
@@ -315,17 +305,31 @@ struct AddTodoView: View {
             dismissComposer()
             withAnimation(Theme.snappy) { dueOption = option }
         } label: {
-            HStack(spacing: 4) {
-                CalendarGlyph(dayNumber: dayOfMonth(day), selected: isSelected)
-                Text(label)
-                    .font(.system(size: 16, weight: .medium))
+            dueChipLabel(isSelected: isSelected) {
+                HStack(spacing: DueDateChipMetrics.iconTextGap) {
+                    CalendarGlyph(dayNumber: dayOfMonth(day))
+                    Text(label)
+                        .font(DueDateChipMetrics.labelFont)
+                }
             }
-            .foregroundStyle(Theme.Palette.body)
-            .padding(.horizontal, 12)
-            .padding(.vertical, 8)
-            .background(chipBackground(selected: isSelected))
         }
         .buttonStyle(BoopButtonStyle())
+    }
+
+    private func dueChipLabel<Content: View>(
+        isSelected: Bool,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        content()
+            .foregroundStyle(Theme.Palette.body)
+            .padding(.horizontal, DueDateChipMetrics.paddingX)
+            .padding(.vertical, DueDateChipMetrics.paddingY)
+            .frame(minHeight: DueDateChipMetrics.minHeight, alignment: .center)
+            .background(chipBackground(selected: isSelected))
+            .fixedSize(horizontal: true, vertical: false)
+            .contentShape(
+                RoundedRectangle(cornerRadius: DueDateChipMetrics.cornerRadius, style: .continuous)
+            )
     }
 
     private func dayOfMonth(_ date: Date) -> String {
@@ -333,10 +337,10 @@ struct AddTodoView: View {
     }
 
     private func chipBackground(selected: Bool) -> some View {
-        RoundedRectangle(cornerRadius: 12, style: .continuous)
+        RoundedRectangle(cornerRadius: DueDateChipMetrics.cornerRadius, style: .continuous)
             .fill(selected ? Theme.Palette.selectionFill : .white)
             .overlay(
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                RoundedRectangle(cornerRadius: DueDateChipMetrics.cornerRadius, style: .continuous)
                     .strokeBorder(selected ? Theme.Palette.selectionBlue : Theme.Palette.chipBorder, lineWidth: 1)
             )
     }
@@ -470,30 +474,34 @@ extension View {
     }
 }
 
-/// Figma 573:2476 due-chip calendar (18.6pt): filled body + binder nubs + white day number.
+// MARK: - Figma 573:2473 due-date pills
+
+private enum DueDateChipMetrics {
+    /// Figma 573:2473 — 12pt between pills; each chip 573:2474/2480/2486 uses px 12, py 8.
+    static let pillSpacing: CGFloat = 12
+    static let paddingX: CGFloat = 12
+    static let paddingY: CGFloat = 8
+    static let iconTextGap: CGFloat = 4
+    static let customCaretGap: CGFloat = 2
+    static let cornerRadius: CGFloat = 12
+    static let calendarSize: CGFloat = 18.601
+    static var minHeight: CGFloat { calendarSize + paddingY * 2 }
+    static let labelFont = Font.system(size: 16, weight: .medium)
+}
+
+/// Figma 573:2476 CalendarBlank — dark icon (#2f2f2f) + white day number; chip border shows selection.
 struct CalendarGlyph: View {
     let dayNumber: String
-    var selected: Bool = false
 
-    private let size: CGFloat = 18.601
-    private var ink: Color { selected ? Theme.Palette.selectionBlue : Theme.Palette.body }
+    private let size: CGFloat = DueDateChipMetrics.calendarSize
 
     var body: some View {
-        ZStack(alignment: .top) {
-            RoundedRectangle(cornerRadius: 3.5, style: .continuous)
-                .fill(ink)
-                .frame(width: size, height: size)
-
-            HStack(spacing: 5) {
-                Capsule().fill(.white).frame(width: 1.6, height: 3)
-                Capsule().fill(.white).frame(width: 1.6, height: 3)
-            }
-            .offset(y: -1.4)
-
+        ZStack {
+            FigmaIcon(name: "CalendarBlank", size: size)
             Text(dayNumber)
-                .font(.system(size: 7, weight: .bold))
+                .font(.system(size: 6.975, weight: .bold))
                 .foregroundStyle(.white)
-                .padding(.top, 6.5)
+                .offset(y: 2.5)
         }
         .frame(width: size, height: size)
     }

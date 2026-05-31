@@ -150,11 +150,8 @@ struct FigmaEmptyIllustration: View {
 }
 
 extension View {
-    /// Figma empty-state card shadow (571:10178).
     fileprivate func emptyStickyShadow() -> some View {
-        shadow(color: .black.opacity(0.03), radius: 3.4, x: 1.5, y: -5.3)
-            .shadow(color: .black.opacity(0.03), radius: 1.4, x: 0, y: 1.5)
-            .shadow(color: .black.opacity(0.03), radius: 0.5, x: 0, y: 0)
+        stickyShadow()
     }
 }
 

@@ -42,15 +42,20 @@ final class FriendsStore: ObservableObject {
     /// Pulls contact-card photos for recent assignees when Contacts access is granted.
     func refreshContactPhotos() async {
         guard ContactsService.canReadContacts else { return }
-        var list = recent
-        var changed = false
-        for index in list.indices where list[index].avatarData == nil {
-            if let data = ContactsService.avatarData(matching: list[index].contact) {
-                list[index].avatarData = data
-                changed = true
+        let snapshot = recent
+        let updates = await Task.detached(priority: .utility) {
+            snapshot.enumerated().compactMap { index, link -> (Int, Data)? in
+                guard link.avatarData == nil,
+                      let data = ContactsService.avatarData(matching: link.contact)
+                else { return nil }
+                return (index, data)
             }
+        }.value
+        guard !updates.isEmpty else { return }
+        var list = snapshot
+        for (index, data) in updates {
+            list[index].avatarData = data
         }
-        guard changed else { return }
         recent = list
         save()
     }
