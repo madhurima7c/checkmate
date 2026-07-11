@@ -18,7 +18,14 @@ struct ComposerTrayView: View {
                         )
                 }
 
-                // Icon -> wordmark -> tagline lockup (spacing per Figma).
+                // Tagline pinned near the top of the tray (Figma 798:2730).
+                Image("TrayTagline")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 13.5)
+                    .position(x: size.width / 2, y: size.height * 0.153)
+
+                // Icon -> wordmark cluster (spacing per Figma).
                 VStack(spacing: 0) {
                     Image("TrayIcon")
                         .resizable()
@@ -27,14 +34,9 @@ struct ComposerTrayView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(height: 13.3)
-                        .padding(.top, 12.4)
-                    Image("TrayTagline")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 13.3)
-                        .padding(.top, 16.8)
+                        .padding(.top, 15.4)
                 }
-                .position(x: size.width / 2, y: size.height * 0.418)
+                .position(x: size.width / 2, y: size.height * 0.455)
 
                 createButton
                     .frame(width: size.width - 50, height: 62)
