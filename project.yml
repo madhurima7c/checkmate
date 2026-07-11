@@ -32,14 +32,22 @@ targets:
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
         NSContactsUsageDescription: Checkmate uses contacts so you can assign todos to people you know.
+        CFBundleURLTypes:
+          - CFBundleURLSchemes:
+              - checkmate
     entitlements:
       path: Checkmate/Checkmate.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.madhurima.checkmate
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.madhurima.checkmate
     dependencies:
       - package: Supabase
       - target: CheckmateWidget
+        embed: true
+      - target: CheckmateMessages
         embed: true
 
   CheckmateWidget:
@@ -62,11 +70,56 @@ targets:
           NSExtensionPointIdentifier: com.apple.widgetkit-extension
     entitlements:
       path: CheckmateWidget/CheckmateWidget.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.madhurima.checkmate
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.madhurima.checkmate.widget
         SKIP_INSTALL: YES
         LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks"
+
+  CheckmateMessages:
+    type: app-extension.messages
+    platform: iOS
+    sources:
+      - path: CheckmateMessages
+      - path: Checkmate/Models
+        includes:
+          - StickyColor.swift
+      - path: Checkmate/Views
+        includes:
+          - Theme.swift
+    info:
+      path: CheckmateMessages/Info.plist
+      properties:
+        CFBundleDisplayName: Checkmate
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.message-payload-provider
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).MessagesViewController
+    entitlements:
+      path: CheckmateMessages/CheckmateMessages.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.madhurima.checkmate
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.madhurima.checkmate.messages
+        SKIP_INSTALL: YES
+        LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks"
+
+  CheckmateUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: CheckmateUITests
+    dependencies:
+      - target: Checkmate
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.madhurima.checkmate.uitests
+        TEST_TARGET_NAME: Checkmate
+        GENERATE_INFOPLIST_FILE: YES
 
 schemes:
   Checkmate:
@@ -74,5 +127,9 @@ schemes:
       targets:
         Checkmate: all
         CheckmateWidget: all
+        CheckmateMessages: all
     run:
       config: Debug
+    test:
+      targets:
+        - CheckmateUITests
