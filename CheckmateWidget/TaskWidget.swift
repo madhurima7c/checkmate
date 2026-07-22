@@ -28,7 +28,7 @@ struct TaskTimelineProvider: TimelineProvider {
         let todayTasks = AppGroupStore.loadTodayWidgetTasks()
         let doneCount = todayTasks.filter { $0.status == .done }.count
         let totalCount = todayTasks.count
-        let display = Array(todayTasks.prefix(5))
+        let display = Self.orderedForWidget(todayTasks, limit: 5)
 
         return TaskEntry(
             date: Date(),
@@ -36,6 +36,13 @@ struct TaskTimelineProvider: TimelineProvider {
             doneCount: doneCount,
             totalCount: totalCount
         )
+    }
+
+    /// Pending first, completed last — matches home grid + Figma 684:3486.
+    private static func orderedForWidget(_ tasks: [CheckmateTask], limit: Int) -> [CheckmateTask] {
+        let pending = tasks.filter { $0.status == .pending }
+        let done = tasks.filter { $0.status == .done }
+        return Array((pending + done).prefix(limit))
     }
 }
 
@@ -47,6 +54,7 @@ struct CheckmateWidget: Widget {
             TaskWidgetView(entry: entry)
                 .containerBackground(Color(hex: 0xF7F7F7), for: .widget)
         }
+        .contentMarginsDisabled()
         .configurationDisplayName("Checkmate")
         .description("Today's todos at a glance.")
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])

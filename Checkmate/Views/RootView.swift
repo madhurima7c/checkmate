@@ -23,12 +23,9 @@ struct RootView: View {
                 }
             }
         }
-        .onAppear {
-            TaskStore.shared.applyWidgetSnapshotIfNeeded()
-            TaskStore.shared.syncWidgetSnapshot()
-        }
         .onChange(of: scenePhase) { _, phase in
-            if phase == .active {
+            guard phase == .active else { return }
+            Task { @MainActor in
                 TaskStore.shared.applyWidgetSnapshotIfNeeded()
                 TaskStore.shared.syncWidgetSnapshot()
             }

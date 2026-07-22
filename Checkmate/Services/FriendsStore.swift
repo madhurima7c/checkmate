@@ -74,16 +74,28 @@ final class FriendsStore: ObservableObject {
         }
     }
 
+    /// Contact photos are re-fetched from the address book; persisting them bloats launch memory.
+    private static let maxPersistedStoreBytes = 256_000
+
     private func load() {
-        guard let data = UserDefaults.standard.data(forKey: storageKey),
-              let decoded = try? JSONDecoder().decode([FriendLink].self, from: data)
-        else { return }
-        recent = decoded
+        guard let data = UserDefaults.standard.data(forKey: storageKey) else { return }
+        if data.count > Self.maxPersistedStoreBytes {
+            UserDefaults.standard.removeObject(forKey: storageKey)
+            return
+        }
+        guard let decoded = try? JSONDecoder().decode([FriendLink].self, from: data) else { return }
+        recent = decoded.map(stripAvatarDataForPersistence)
     }
 
     private func save() {
-        if let data = try? JSONEncoder().encode(recent) {
-            UserDefaults.standard.set(data, forKey: storageKey)
-        }
+        let payload = recent.map(stripAvatarDataForPersistence)
+        guard let data = try? JSONEncoder().encode(payload) else { return }
+        UserDefaults.standard.set(data, forKey: storageKey)
+    }
+
+    private func stripAvatarDataForPersistence(_ link: FriendLink) -> FriendLink {
+        var copy = link
+        copy.avatarData = nil
+        return copy
     }
 }

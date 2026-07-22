@@ -7,20 +7,26 @@ struct AssigneeCarousel: View {
     var onAdd: () -> Void
     var onInteract: (() -> Void)? = nil
 
-    /// Figma 650:2517 — inner avatar; 650:2522 — outer ring with white gap before blue stroke.
+    /// Figma 650:2517 / 650:2523 — avatar diameter.
     private let avatarSize: CGFloat = 53.739
-    /// White gap between avatar and blue ring (reference shows more air than inset math alone).
-    private let selectionGap: CGFloat = 3.5
-    /// Figma 650:2522 — 2.239pt #08f stroke (thinner than prior 3.5pt build).
-    private let selectionStrokeWidth: CGFloat = 2.239
-    private let figmaFrameSize: CGFloat = 55.978
-    private var whiteHaloSize: CGFloat { avatarSize + selectionGap * 2 }
-    private var selectedOuterSize: CGFloat { whiteHaloSize + selectionStrokeWidth * 2 }
-    /// Fixed avatar slot so labels never shift between selected and unselected.
-    private var slotSize: CGFloat { selectedOuterSize }
-    /// Figma 650:2524 — 15.674pt; slightly larger for legibility.
-    private let badgeSize: CGFloat = 17
+    /// Figma 650:2522/2523 — 1.119pt white gap between avatar edge and blue ring inner edge.
+    private let selectionGap: CGFloat = 1.119
+    /// White halo diameter (avatar + gap on both sides).
+    private var whiteRingDiameter: CGFloat { avatarSize + selectionGap * 2 }
+    /// Figma 650:2522 — 2pt blue ring; matches the color selector ring weight.
+    private let selectionStrokeWidth: CGFloat = 2
+    /// Frame sized so `.stroke` centers on the white-ring outer edge, extending outward.
+    private var selectionRingDiameter: CGFloat { whiteRingDiameter + selectionStrokeWidth }
+    private var selectedOuterDiameter: CGFloat { selectionRingDiameter }
+    /// Fixed slot so labels never shift between selected and unselected.
+    private var slotSize: CGFloat { selectedOuterDiameter }
+    /// Figma 650:2524 / 650:2518 — status badge.
+    private let badgeSize: CGFloat = 15.674
     private var checkIconSize: CGFloat { badgeSize * (6.158 / 15.674) }
+    /// Figma 650:2518 — badge on avatar rim (~4:30), not on the outer blue stroke.
+    private var assigneeBadgeOffset: CGSize {
+        CGSize(width: -1.119, height: 1.119)
+    }
     private let itemWidth: CGFloat = 64
     private let labelHeight: CGFloat = 22.391
     private let labelGap: CGFloat = 6
@@ -102,10 +108,13 @@ struct AssigneeCarousel: View {
                     if selected {
                         Circle()
                             .fill(Color.white)
-                            .frame(width: whiteHaloSize, height: whiteHaloSize)
+                            .frame(width: whiteRingDiameter, height: whiteRingDiameter)
                         Circle()
-                            .stroke(Theme.Palette.selectionBlue, lineWidth: selectionStrokeWidth)
-                            .frame(width: selectedOuterSize, height: selectedOuterSize)
+                            .stroke(
+                                Theme.Palette.selectionBlue,
+                                style: StrokeStyle(lineWidth: selectionStrokeWidth, lineCap: .round)
+                            )
+                            .frame(width: selectionRingDiameter, height: selectionRingDiameter)
                     }
 
                     PersonAvatarView(
@@ -114,16 +123,16 @@ struct AssigneeCarousel: View {
                         size: avatarSize,
                         showsBorder: false
                     )
+                    .overlay(alignment: .bottomTrailing) {
+                        AssigneeSelectionBadge(
+                            selected: selected,
+                            size: badgeSize,
+                            checkSize: checkIconSize
+                        )
+                        .offset(assigneeBadgeOffset)
+                    }
                 }
                 .frame(width: slotSize, height: slotSize)
-                .overlay(alignment: .center) {
-                    AssigneeSelectionBadge(
-                        selected: selected,
-                        size: badgeSize,
-                        checkSize: checkIconSize
-                    )
-                    .offset(badgeOffset)
-                }
 
                 Text(title)
                     .font(.system(size: 14, weight: .medium))
@@ -133,18 +142,6 @@ struct AssigneeCarousel: View {
             }
         }
         .buttonStyle(.plain)
-    }
-
-    /// Figma 650:2524 — badge center ~(47, 49) on 55.978 frame (4:30 on ring).
-    private var badgeOffset: CGSize {
-        let scale = slotSize / figmaFrameSize
-        let frameCenter = figmaFrameSize / 2
-        let badgeCenterX: CGFloat = 47.02
-        let badgeCenterY: CGFloat = 49.25
-        return CGSize(
-            width: (badgeCenterX - frameCenter) * scale,
-            height: (badgeCenterY - frameCenter) * scale
-        )
     }
 }
 

@@ -141,9 +141,12 @@ private struct BottomAnchoredTextViewRepresentable: UIViewRepresentable {
         if focusRequest > 0, context.coordinator.handledFocusRequest != focusRequest {
             context.coordinator.handledFocusRequest = focusRequest
             context.coordinator.focusTextView(uiView)
+            return
         }
 
-        context.coordinator.applyBottomAnchor(to: uiView)
+        if uiView.bounds.width > 1, uiView.bounds.height > 1 {
+            context.coordinator.applyBottomAnchor(to: uiView)
+        }
     }
 
     static func dismantleUIView(_ uiView: BottomAnchoredTextView, coordinator: Coordinator) {

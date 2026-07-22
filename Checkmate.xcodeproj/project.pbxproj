@@ -124,13 +124,13 @@
 		04025A958DC8123D66B06C19 /* CheckmateMessages.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CheckmateMessages.entitlements; sourceTree = "<group>"; };
 		04166502A9BB82D2C43CBFB2 /* CardActionBubbles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardActionBubbles.swift; sourceTree = "<group>"; };
 		078705B3E813C703E4BA8925 /* Checkmate.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Checkmate.entitlements; sourceTree = "<group>"; };
-		09120A290AD3A5DB17691CE7 /* FigmaHand-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FigmaHand-Regular.ttf"; sourceTree = "<group>"; };
+		09120A290AD3A5DB17691CE7 /* FigmaHand-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = text; path = "FigmaHand-Regular.ttf"; sourceTree = "<group>"; };
 		0A88D0D57E6FBFA20FCA318B /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		0BFE143B366E147516F54699 /* InviteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteService.swift; sourceTree = "<group>"; };
 		0CAD697D50785D63916E226B /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		0D0BDDCE4EB9B9A8D724B1DD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		13593B072FE59DB9585DF624 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
-		152B791773B171362BCAB551 /* CheckmateWidget.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = CheckmateWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		152B791773B171362BCAB551 /* CheckmateWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = CheckmateWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		15953CD899FE32F8C207ED4C /* HomeBottomBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeBottomBar.swift; sourceTree = "<group>"; };
 		189C8AFECB8ADAECD6DC94E5 /* TaskStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskStore.swift; sourceTree = "<group>"; };
 		1C53110EB5A4042FF0E54882 /* ContactPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactPickerView.swift; sourceTree = "<group>"; };
@@ -148,7 +148,7 @@
 		74277328907116BCFE8B8445 /* StickyNoteGridCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickyNoteGridCell.swift; sourceTree = "<group>"; };
 		745E013478049914C8C19F07 /* MarkDoneIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkDoneIntent.swift; sourceTree = "<group>"; };
 		74FF84A62EAAA0622F487C3E /* AddTodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTodoView.swift; sourceTree = "<group>"; };
-		76D44E3B347C69121EEA66E8 /* Checkmate.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Checkmate.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		76D44E3B347C69121EEA66E8 /* Checkmate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Checkmate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DE930EE684A616216C78294 /* ComposerTrayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposerTrayView.swift; sourceTree = "<group>"; };
 		81BCC0D0D799B5FA79DC7F0F /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		8A9E1F543A7B194091F9C2C3 /* CheckmateConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckmateConfig.swift; sourceTree = "<group>"; };
@@ -179,7 +179,7 @@
 		D506C61503D5F5CB2423E005 /* AssigneeCarousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssigneeCarousel.swift; sourceTree = "<group>"; };
 		D52138A8B2BFE2B75CB9394E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D6340FA8D4437B3C006EBAED /* Secrets.example.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Secrets.example.plist; sourceTree = "<group>"; };
-		DAB78F9BB350AF1643AF7625 /* CheckmateMessages.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = CheckmateMessages.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		DAB78F9BB350AF1643AF7625 /* CheckmateMessages.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = CheckmateMessages.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCED4B9897F2DFD97EC2387D /* SupabaseClient+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SupabaseClient+Shared.swift"; sourceTree = "<group>"; };
 		DFCAA367E20C4D7546EED410 /* ProgressPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressPill.swift; sourceTree = "<group>"; };
 		E01480FDD78221CDF3CD0A5E /* MessagesTrayTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesTrayTests.swift; sourceTree = "<group>"; };
@@ -771,6 +771,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Checkmate/Checkmate.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = X342WVSJ3T;
 				INFOPLIST_FILE = Checkmate/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -804,8 +805,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "iMessage App Icon";
 				CODE_SIGN_ENTITLEMENTS = CheckmateMessages/CheckmateMessages.entitlements;
+				DEVELOPMENT_TEAM = X342WVSJ3T;
 				INFOPLIST_FILE = CheckmateMessages/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.madhurima.checkmate.messages;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -819,6 +825,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Checkmate/Checkmate.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = X342WVSJ3T;
 				INFOPLIST_FILE = Checkmate/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -835,8 +842,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "iMessage App Icon";
 				CODE_SIGN_ENTITLEMENTS = CheckmateMessages/CheckmateMessages.entitlements;
+				DEVELOPMENT_TEAM = X342WVSJ3T;
 				INFOPLIST_FILE = CheckmateMessages/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.madhurima.checkmate.messages;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -848,8 +860,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = CheckmateWidget/CheckmateWidget.entitlements;
+				DEVELOPMENT_TEAM = X342WVSJ3T;
 				INFOPLIST_FILE = CheckmateWidget/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.madhurima.checkmate.widget;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -861,8 +878,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = CheckmateWidget/CheckmateWidget.entitlements;
+				DEVELOPMENT_TEAM = X342WVSJ3T;
 				INFOPLIST_FILE = CheckmateWidget/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.madhurima.checkmate.widget;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;

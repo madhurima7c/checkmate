@@ -18,6 +18,9 @@ class TaskStore: ObservableObject {
 
     /// How many app opens have counted toward clearing the NEW badge (clears at 2).
     private var newExposureCounts: [UUID: Int] = [:]
+    private var isApplyingWidgetSnapshot = false
+    private var widgetReloadTask: Task<Void, Never>?
+    private var lastWidgetSnapshotData: Data?
 
     var usesCloud: Bool {
         !CheckmateConfig.isPrototype && AuthService.shared.isAuthenticated
@@ -35,6 +38,9 @@ class TaskStore: ObservableObject {
                     return (id, value)
                 }
             )
+        }
+        if CheckmateConfig.isPrototype {
+            loadLocal()
         }
     }
 
@@ -252,12 +258,18 @@ class TaskStore: ObservableObject {
         let decoder = JSONDecoder()
         if let data = UserDefaults.standard.data(forKey: pendingKey),
            let decoded = try? decoder.decode([CheckmateTask].self, from: data) {
-            tasks = decoded
+            tasks = decoded.map(stripWidgetAvatarImageData)
         }
         if let data = UserDefaults.standard.data(forKey: completedKey),
            let decoded = try? decoder.decode([CheckmateTask].self, from: data) {
-            recentlyCompleted = decoded
+            recentlyCompleted = decoded.map(stripWidgetAvatarImageData)
         }
+    }
+
+    private func stripWidgetAvatarImageData(_ task: CheckmateTask) -> CheckmateTask {
+        var copy = task
+        copy.widgetAvatarImageData = nil
+        return copy
     }
 
     private func saveLocal() {
@@ -268,26 +280,46 @@ class TaskStore: ObservableObject {
         if let data = try? encoder.encode(recentlyCompleted) {
             UserDefaults.standard.set(data, forKey: completedKey)
         }
-        syncWidgetSnapshot()
+        if !isApplyingWidgetSnapshot {
+            syncWidgetSnapshot()
+        }
     }
 
-    /// Pushes today's home-screen tasks (My Todo + Friends) into the App Group for the widget.
+    /// Pushes today's home-screen tasks into the App Group for the widget.
     func syncWidgetSnapshot() {
         let today = Date.today
         let pending = myTodoPending(on: today) + friendsPending(on: today)
         let completed = myTodoCompleted(on: today) + friendsCompleted(on: today)
-        let snapshot = (pending + completed).map { taskWithWidgetAvatar($0) }
+        let snapshot = widgetDisplayOrder(pending + completed).map { taskWithWidgetAvatar($0) }
+
+        guard let encoded = try? JSONEncoder().encode(snapshot) else { return }
+        guard encoded != lastWidgetSnapshotData else { return }
+        lastWidgetSnapshotData = encoded
+
         AppGroupStore.saveTodayWidgetTasks(snapshot)
         AppGroupStore.setDoneCount(completed.count)
         AppGroupStore.saveNewTaskIds(newTaskIds)
-        WidgetCenter.shared.reloadAllTimelines()
+        scheduleWidgetReload()
+    }
+
+    private func widgetDisplayOrder(_ tasks: [CheckmateTask]) -> [CheckmateTask] {
+        tasks.filter { $0.status == .pending } + tasks.filter { $0.status == .done }
+    }
+
+    private func scheduleWidgetReload() {
+        widgetReloadTask?.cancel()
+        widgetReloadTask = Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 400_000_000)
+            WidgetCenter.shared.reloadAllTimelines()
+        }
     }
 
     private func taskWithWidgetAvatar(_ task: CheckmateTask) -> CheckmateTask {
         var copy = task
         let avatar = widgetAvatarFields(for: task)
         copy.widgetAvatarName = avatar.name
-        copy.widgetAvatarImageData = avatar.imageData
+        // Keep App Group payload small — full contact photos can be multi‑MB and trigger jetsam.
+        copy.widgetAvatarImageData = nil
         return copy
     }
 
@@ -318,17 +350,27 @@ class TaskStore: ObservableObject {
         let snapshot = AppGroupStore.loadTodayWidgetTasks()
         guard !snapshot.isEmpty else { return }
 
-        for task in snapshot where task.dueDate.startOfDay() <= Date.today {
-            let isPendingLocally = tasks.contains { $0.id == task.id }
-            let isDoneLocally = recentlyCompleted.contains { $0.id == task.id }
+        var changed = false
+        isApplyingWidgetSnapshot = true
+        defer {
+            isApplyingWidgetSnapshot = false
+            if changed { saveLocal() }
+        }
 
+        for task in snapshot where task.dueDate.startOfDay() <= Date.today {
             switch task.status {
-            case .done where isPendingLocally:
-                markDoneLocally(taskId: task.id)
-            case .pending where isDoneLocally:
-                undoPendingLocally(taskId: task.id)
-            default:
-                break
+            case .done:
+                guard let index = tasks.firstIndex(where: { $0.id == task.id }) else { continue }
+                var updated = tasks.remove(at: index)
+                updated.status = .done
+                recentlyCompleted.insert(updated, at: 0)
+                changed = true
+            case .pending:
+                guard let index = recentlyCompleted.firstIndex(where: { $0.id == task.id }) else { continue }
+                var updated = recentlyCompleted.remove(at: index)
+                updated.status = .pending
+                tasks.insert(updated, at: 0)
+                changed = true
             }
         }
     }

@@ -34,10 +34,22 @@ enum AppGroupStore {
         loadNewTaskIds().contains(id)
     }
 
+    /// Drop corrupt or legacy multi‑MB widget snapshots that can jetsam the app on launch.
+    private static let maxWidgetSnapshotBytes = 512_000
+
     static func loadTodayWidgetTasks() -> [CheckmateTask] {
-        if let data = suite.data(forKey: todayTasksKey),
-           let decoded = try? JSONDecoder().decode([CheckmateTask].self, from: data) {
-            return decoded
+        if let data = suite.data(forKey: todayTasksKey) {
+            if data.count > maxWidgetSnapshotBytes {
+                suite.removeObject(forKey: todayTasksKey)
+                return []
+            }
+            if let decoded = try? JSONDecoder().decode([CheckmateTask].self, from: data) {
+                return decoded.map { task in
+                    var copy = task
+                    copy.widgetAvatarImageData = nil
+                    return copy
+                }
+            }
         }
         // Legacy: pending-only list.
         return loadLegacyPendingTasks()
@@ -47,8 +59,14 @@ enum AppGroupStore {
         var tasks = loadTodayWidgetTasks()
         guard let index = tasks.firstIndex(where: { $0.id.uuidString == id }) else { return }
         tasks[index].status = tasks[index].status == .done ? .pending : .done
+        tasks = widgetDisplayOrder(tasks)
         saveTodayWidgetTasks(tasks)
         setDoneCount(tasks.filter { $0.status == .done }.count)
+    }
+
+    /// Keeps pending rows above done rows after widget toggles.
+    private static func widgetDisplayOrder(_ tasks: [CheckmateTask]) -> [CheckmateTask] {
+        tasks.filter { $0.status == .pending } + tasks.filter { $0.status == .done }
     }
 
     // MARK: - Legacy pending list (kept for older widget builds)
@@ -67,7 +85,16 @@ enum AppGroupStore {
 
     private static func loadLegacyPendingTasks() -> [CheckmateTask] {
         guard let data = suite.data(forKey: legacyTasksKey) else { return [] }
-        return (try? JSONDecoder().decode([CheckmateTask].self, from: data)) ?? []
+        if data.count > maxWidgetSnapshotBytes {
+            suite.removeObject(forKey: legacyTasksKey)
+            return []
+        }
+        guard let decoded = try? JSONDecoder().decode([CheckmateTask].self, from: data) else { return [] }
+        return decoded.map { task in
+            var copy = task
+            copy.widgetAvatarImageData = nil
+            return copy
+        }
     }
 
     // MARK: - Done count

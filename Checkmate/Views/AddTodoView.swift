@@ -177,7 +177,8 @@ struct AddTodoView: View {
 
     // MARK: - Color dots (573:2462–2468)
 
-    /// Figma 573:2464 — four dots, 6.52pt gap; selection ring 31.786 / 1.63pt #08f (573:2463).
+    /// Figma 573:2464 — four 30.156 dots, 6.52pt gap; selection ring 2pt #08f (573:2463),
+    /// drawn just outside the dot so its inner edge meets the dot rim cleanly.
     private var colorRow: some View {
         HStack(spacing: 6.52) {
             ForEach(StickyColor.allCases) { c in
@@ -194,11 +195,11 @@ struct AddTodoView: View {
 
                         if c == color {
                             Circle()
-                                .stroke(Theme.Palette.selectionBlue, lineWidth: 1.63)
-                                .frame(width: 31.786, height: 31.786)
+                                .stroke(Theme.Palette.selectionBlue, lineWidth: 2)
+                                .frame(width: 32.156, height: 32.156)
                         }
                     }
-                    .frame(width: 31.786, height: 31.786)
+                    .frame(width: 32.156, height: 32.156)
                 }
                 .buttonStyle(BoopButtonStyle())
             }
@@ -336,12 +337,16 @@ struct AddTodoView: View {
         String(Calendar.current.component(.day, from: date))
     }
 
+    /// Figma 573:2474 selected — 1.6pt #08f; 573:2480/2486 unselected — 1pt #e3e3e3.
     private func chipBackground(selected: Bool) -> some View {
         RoundedRectangle(cornerRadius: DueDateChipMetrics.cornerRadius, style: .continuous)
             .fill(selected ? Theme.Palette.selectionFill : .white)
             .overlay(
                 RoundedRectangle(cornerRadius: DueDateChipMetrics.cornerRadius, style: .continuous)
-                    .strokeBorder(selected ? Theme.Palette.selectionBlue : Theme.Palette.chipBorder, lineWidth: 1)
+                    .strokeBorder(
+                        selected ? Theme.Palette.selectionBlue : Theme.Palette.chipBorder,
+                        lineWidth: selected ? 1.6 : 1
+                    )
             )
     }
 
