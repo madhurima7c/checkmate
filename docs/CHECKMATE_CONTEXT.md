@@ -2,7 +2,7 @@
 
 > **Source of truth for product thinking, design system, and implementation decisions.**  
 > Agents and humans must update this file when Checkmate behavior, tokens, Figma mapping, or architecture changes.  
-> Last reviewed: 2026-07-22
+> Last reviewed: 2026-07-25
 
 ## Product
 
@@ -136,6 +136,32 @@ Widget dial: same recipe as home (track @ 22% blue opacity, solid `#0088FF` arc,
 
 Padding 16; left column 118; task column 188; rows 38 / spacing 6; task font 13; progress block ~41.8; pending rows first, done last; strikethrough via AttributedString; no NEW badge on medium.
 
+## Location map
+
+| Task / area | Primary files |
+|-------------|---------------|
+| Design tokens | `Checkmate/Views/Theme.swift`, `Models/StickyColor.swift` |
+| My todo grid | `MyTodoView.swift`, `StickyNoteCardView.swift`, `StickyNoteGridCell.swift`, `TodoTaskGrid.swift` |
+| Progress dial (home) | `Components/ProgressPill.swift` |
+| Add todo sheet | `AddTodoView.swift`, `Components/BottomAnchoredTextEditor.swift`, `ColorFlipCard` |
+| Assignee carousel | `Components/AssigneeCarousel.swift`, `Components/PersonAvatarView.swift` |
+| By-when chips | `AddTodoView.swift` (`DueDateChipMetrics`, `chipBackground`) |
+| Friends tab | `FriendsTabView.swift`, `Services/FriendsStore.swift` |
+| Task data + widget sync | `Services/TaskStore.swift`, `Services/AppGroupStore.swift` |
+| Medium/large widget | `CheckmateWidget/TaskWidgetView.swift`, `TaskWidget.swift`, `TaskEntry.swift` |
+| Config / modes | `CheckmateConfig.swift`, `SETUP.md` |
+
+## Common tasks
+
+| Task | Where to edit | Context section |
+|------|---------------|-----------------|
+| Change selection stroke weights | `AddTodoView.swift`, `AssigneeCarousel.swift` | Add todo selection strokes |
+| Resize progress dial (keep stroke) | `ProgressPill.swift`, `TaskWidgetView.swift` (`mediumDialSize`, `dialStrokeWidth`) | Progress dials |
+| Fix widget not syncing | `TaskStore.syncWidgetSnapshot`, entitlements, `AppGroupStore` | Hard-won notes |
+| Add sticky color | `StickyColor.swift` + context token table | Sticky colors |
+| New Figma screen | Figma MCP → implement → add node to table below | Figma file |
+| Launch SIGKILL / jetsam | Strip avatar data in stores; delete app; clean build | Hard-won notes |
+
 ## Hard-won implementation notes
 
 1. **Assignee ring:** Use white fill halo + `.stroke` on a larger diameter. Avoid `strokeBorder` on the same diameter as the halo (eats the white gap).
@@ -149,7 +175,7 @@ Padding 16; left column 118; task column 188; rows 38 / spacing 6; task font 13;
 - [ ] Confirm Add todo strokes still match Figma after device QA
 - [ ] Widget medium dial 17pt + 5pt stroke visual QA on device
 - [ ] Friends tab final design
-- [ ] Plan file in `~/.cursor/plans/` is stale vs current product (see skill)
+- [ ] Ignore stale `~/.cursor/plans/checkmate_mvp_rebuild_*.plan.md` — this file is truth
 
 ## Changelog (context)
 
@@ -157,3 +183,4 @@ Padding 16; left column 118; task column 188; rows 38 / spacing 6; task font 13;
 |------|--------|
 | 2026-07-22 | Initial living context: tokens, Figma nodes, dials, selection strokes, architecture |
 | 2026-07-22 | Skill enriched with Madhurima design taste; taste summary mirrored here |
+| 2026-07-25 | Skill workflow restructure; location map + common tasks added |

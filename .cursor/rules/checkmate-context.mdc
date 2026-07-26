@@ -1,15 +1,14 @@
 ---
-description: Keep Checkmate living context and skill updated on every durable product/design/architecture change.
+description: Keep Checkmate living context updated on git commit when durable product/design truth changes.
 alwaysApply: true
 ---
 
 # Checkmate context maintenance
 
-This is the Checkmate repo. For product, UI, widget, tokens, Figma, or architecture work:
+Repo: `/Users/madhurima/AI Repo/checkmate`
 
-1. **Load** `.cursor/skills/checkmate/SKILL.md` and `docs/CHECKMATE_CONTEXT.md` before implementing.
-2. **Update both** when the change alters durable truth (tokens, Figma node mapping, selection strokes, dial sizes, sync/memory rules, product principles, open decisions).
-3. Append a one-line entry to the context **Changelog** with today’s date.
-4. Do not invent a parallel `plan.md` in-repo unless the user asks; the old Cursor plan under `~/.cursor/plans/checkmate_mvp_rebuild_*.plan.md` is historical and often stale.
+1. **Before work:** read `.cursor/skills/checkmate/SKILL.md` and `docs/CHECKMATE_CONTEXT.md`.
+2. **Before commit:** if tokens, Figma nodes, strokes, dials, sync rules, architecture, or taste changed → update `docs/CHECKMATE_CONTEXT.md` (+ skill if workflow/taste rule changed) **in the same commit**; append Changelog line.
+3. Ignore stale `~/.cursor/plans/checkmate_mvp_rebuild_*.plan.md`.
 
-Skip context/skill edits for trivial non-product diffs (typos, formatting-only, temporary debug).
+Skip for typos, formatting-only, or reverted debug.
