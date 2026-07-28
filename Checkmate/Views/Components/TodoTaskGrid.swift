@@ -12,14 +12,18 @@ struct TodoTaskGrid: View {
     var onEdit: (CheckmateTask) -> Void
     var onDelete: (CheckmateTask) -> Void
     @ObservedObject var controller: CardFocusController
+    @Environment(\.homePageTuning) private var tuning
 
-    private let columns = [
-        GridItem(.flexible(), spacing: 10),
-        GridItem(.flexible(), spacing: 10)
-    ]
+    private var columns: [GridItem] {
+        let spacing = CGFloat(tuning.gridSpacing)
+        return [
+            GridItem(.flexible(), spacing: spacing),
+            GridItem(.flexible(), spacing: spacing)
+        ]
+    }
 
     var body: some View {
-        LazyVGrid(columns: columns, spacing: 10) {
+        LazyVGrid(columns: columns, spacing: CGFloat(tuning.gridSpacing)) {
             ForEach(Array(pending.enumerated()), id: \.element.id) { index, task in
                 gridCell(
                     task: task,
@@ -52,7 +56,6 @@ struct TodoTaskGrid: View {
             onDelete: { onDelete(task) },
             controller: controller
         )
-        .zIndex(isRightColumn ? 1 : 0)
         .background {
             if showLanding {
                 GridLandingAnchor(tab: tab)

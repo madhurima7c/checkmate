@@ -8,74 +8,167 @@
 
 /* Begin PBXBuildFile section */
 		01D8BC02CF5D1390B9AC51E8 /* AppGroupStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC613E02FD54F6BDFEFEEE24 /* AppGroupStore.swift */; };
+		067F062633DDF8469C7A9FF2 /* MyTodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C993E303F97886ABC7A5F41 /* MyTodoView.swift */; };
+		07AF7ABE6F040FE575440545 /* CheckmateConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9E1F543A7B194091F9C2C3 /* CheckmateConfig.swift */; };
+		09C852A7A436D993E92013E8 /* BottomAnchoredTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B781784D70B297060B411FE9 /* BottomAnchoredTextEditor.swift */; };
+		0A62C25217A3FB6A543BEFD5 /* ScrollEdgeFades.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE226A28022C8CB65008346 /* ScrollEdgeFades.swift */; };
+		0AEBAF6C46BBFC83DF8B5199 /* ProgressPill.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFCAA367E20C4D7546EED410 /* ProgressPill.swift */; };
 		0CBAFC84B74388A3F94715D4 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3621DEEEC9953A82A9FFC3D7 /* NotificationService.swift */; };
+		0E2B653B8D87974A0E75A000 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3621DEEEC9953A82A9FFC3D7 /* NotificationService.swift */; };
 		0E95F92878BB5DBBE9DBD345 /* ContactPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C53110EB5A4042FF0E54882 /* ContactPickerView.swift */; };
+		0FF1C6A6C9B9F5CC52AE399F /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EA10FD78C232BCCD3AE7E5 /* AuthView.swift */; };
+		110B6744096811A2B5588899 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13593B072FE59DB9585DF624 /* EmptyStateView.swift */; };
 		11B6AF01D381647864D129B9 /* FriendLookupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2BCB8A25D5A96921D75E1 /* FriendLookupService.swift */; };
+		121E863535AE939D2C5553A2 /* CheckmateComponentPreviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D7C68671174F988FB561E04 /* CheckmateComponentPreviews.swift */; };
 		14ACF24ABFA9E0CC136C1448 /* MyTodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C993E303F97886ABC7A5F41 /* MyTodoView.swift */; };
 		1536681F4276B7453F5CC375 /* ComposerTrayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DE930EE684A616216C78294 /* ComposerTrayView.swift */; };
 		16658CE19962A439BBB683AF /* TaskStore+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737E969145A085F3EFE759A1 /* TaskStore+Cloud.swift */; };
 		189A32C8BC3F9C4761C18E40 /* TaskWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCBD7D3368C2E12AFE82340 /* TaskWidgetView.swift */; };
+		1EBEEF2AA1F3008C07163DCD /* DialKit in Frameworks */ = {isa = PBXBuildFile; productRef = 404DB9C6CEB68B508FB2AB7A /* DialKit */; };
 		212C6EBD75B5036F3FD59A8F /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A88D0D57E6FBFA20FCA318B /* RootView.swift */; };
+		228AF01D850B6E4588759918 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D0BDDCE4EB9B9A8D724B1DD /* AppDelegate.swift */; };
+		23BA9E6F9AFF55EE5D806E87 /* AssigneeCarousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D506C61503D5F5CB2423E005 /* AssigneeCarousel.swift */; };
 		26F207568AC8506373D3CB8C /* CardActionBubbles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04166502A9BB82D2C43CBFB2 /* CardActionBubbles.swift */; };
+		295F530A316A26089B564CCA /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CAD697D50785D63916E226B /* Theme.swift */; };
 		29AC79F6814DC1867E224CF1 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CAD697D50785D63916E226B /* Theme.swift */; };
+		3166690E1AC570D0254D8F14 /* CheckmateComponentPreviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D7C68671174F988FB561E04 /* CheckmateComponentPreviews.swift */; };
+		351869DB2F6E152D6D30E404 /* CardFocusDialKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8201996ACA64BC5494B769E /* CardFocusDialKit.swift */; };
+		A0B00000000000000000C0B1 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B00000000000000000C0A1 /* OnboardingView.swift */; };
+		A0B00000000000000000C0B2 /* OnboardingStickiesPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B00000000000000000C0A2 /* OnboardingStickiesPage.swift */; };
+		A0B00000000000000000C0B3 /* OnboardingConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B00000000000000000C0A3 /* OnboardingConfettiView.swift */; };
+		A0B00000000000000000C2B1 /* OnboardingDialKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B00000000000000000C2A1 /* OnboardingDialKit.swift */; };
+		A0B00000000000000000C2B2 /* OnboardingDialKitTuning.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B00000000000000000C2A2 /* OnboardingDialKitTuning.swift */; };
+		A0B00000000000000000C2C1 /* OnboardingDialKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B00000000000000000C2A1 /* OnboardingDialKit.swift */; };
+		A0B00000000000000000C2C2 /* OnboardingDialKitTuning.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B00000000000000000C2A2 /* OnboardingDialKitTuning.swift */; };
+		A0B00000000000000000C0B4 /* OnboardingAssignPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B00000000000000000C0A4 /* OnboardingAssignPage.swift */; };
+		A0B00000000000000000C0B5 /* OnboardingWidgetPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B00000000000000000C0A5 /* OnboardingWidgetPage.swift */; };
+		A0B00000000000000000C1B1 /* ConfettiBurst.json in Resources */ = {isa = PBXBuildFile; fileRef = A0B00000000000000000C1A1 /* ConfettiBurst.json */; };
+		A0B00000000000000000C1B2 /* ConfettiSoundEffect.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A0B00000000000000000C1A2 /* ConfettiSoundEffect.m4a */; };
+		A0B00000000000000000C1B3 /* CheckConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B00000000000000000C1A3 /* CheckConfettiView.swift */; };
+		A0B00000000000000000C1B4 /* ConfettiCelebration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B00000000000000000C1A4 /* ConfettiCelebration.swift */; };
+		A0B00000000000000000C1C1 /* ConfettiBurst.json in Resources */ = {isa = PBXBuildFile; fileRef = A0B00000000000000000C1A1 /* ConfettiBurst.json */; };
+		A0B00000000000000000C1C2 /* ConfettiSoundEffect.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A0B00000000000000000C1A2 /* ConfettiSoundEffect.m4a */; };
+		A0B00000000000000000C1C3 /* CheckConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B00000000000000000C1A3 /* CheckConfettiView.swift */; };
+		A0B00000000000000000C1C4 /* ConfettiCelebration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B00000000000000000C1A4 /* ConfettiCelebration.swift */; };
+		A0B00000000000000000C1F1 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = A0B00000000000000000C1E1 /* Lottie */; };
+		A0B00000000000000000C1F2 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = A0B00000000000000000C1E2 /* Lottie */; };
+		A0B00000000000000000C0C1 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B00000000000000000C0A1 /* OnboardingView.swift */; };
+		A0B00000000000000000C0C2 /* OnboardingStickiesPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B00000000000000000C0A2 /* OnboardingStickiesPage.swift */; };
+		A0B00000000000000000C0C3 /* OnboardingConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B00000000000000000C0A3 /* OnboardingConfettiView.swift */; };
+		A0B00000000000000000C0C4 /* OnboardingAssignPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B00000000000000000C0A4 /* OnboardingAssignPage.swift */; };
+		A0B00000000000000000C0C5 /* OnboardingWidgetPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B00000000000000000C0A5 /* OnboardingWidgetPage.swift */; };
+		D1A1C0DE0000000000000001 /* DialKitTuning.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A1C0DE0000000000000011 /* DialKitTuning.swift */; };
+		D1A1C0DE0000000000000002 /* DialKitTuning.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A1C0DE0000000000000011 /* DialKitTuning.swift */; };
+		D1A1C0DE0000000000000003 /* CheckmateDialKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A1C0DE0000000000000012 /* CheckmateDialKit.swift */; };
+		D1A1C0DE0000000000000004 /* CheckmateDialKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A1C0DE0000000000000012 /* CheckmateDialKit.swift */; };
+		3634BD1CEF66810BA229EE32 /* TodoEmptyDayPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62156498D30044EBC7E39D9A /* TodoEmptyDayPage.swift */; };
+		37F745F4353E729A4DFDB70F /* TaskStore+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737E969145A085F3EFE759A1 /* TaskStore+Cloud.swift */; };
 		3AC90D3701A3A93702658F34 /* ToggleTaskIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E826DBF2E149F132BB9F5B72 /* ToggleTaskIntent.swift */; };
 		3B98C415EECDA76F0511B2CC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D0BDDCE4EB9B9A8D724B1DD /* AppDelegate.swift */; };
 		3E5A175711F12F193DA88036 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20F16E3D7A0F8BC06C9697B /* SettingsView.swift */; };
+		40C16DE20059DE21579206A9 /* CardFocusTuning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE1E571BA2EF1EBD9679C65 /* CardFocusTuning.swift */; };
 		41208C1452BE1F386E331977 /* AssignFlightCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0262AE3355AFB9CB25371D1F /* AssignFlightCoordinator.swift */; };
 		435940781F4D0B39BD5E4D61 /* AddTodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FF84A62EAAA0622F487C3E /* AddTodoView.swift */; };
 		454BC2A0DB412941FA39F6F1 /* TaskEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5480EC867E109710725730E /* TaskEntry.swift */; };
 		4681DF58B34DCB18935AEDA9 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13593B072FE59DB9585DF624 /* EmptyStateView.swift */; };
+		4838BB750CDA30ED533022F0 /* StickyColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6451EC1662B40727029ABBC2 /* StickyColor.swift */; };
+		48A2D690D0D0B026F00A2E5A /* CardFocusTuning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE1E571BA2EF1EBD9679C65 /* CardFocusTuning.swift */; };
+		4A4758DA102F9E16636D8C34 /* AssignFlightOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C806C8D1BCDEEDF18C8D5D /* AssignFlightOverlay.swift */; };
 		4CDDF7A6BE440B47DEED2E95 /* FriendsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988D734D9B820B4762B07131 /* FriendsStore.swift */; };
 		4D4788D3A61ACA1B18EBC201 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 32D6EA40522676B011FA9DA9 /* Supabase */; };
+		4E25C7FD9EB67B09D2594476 /* TaskStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 189C8AFECB8ADAECD6DC94E5 /* TaskStore.swift */; };
+		511A97BAE21493E0847FE4CC /* CheckBurstView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF16F3033B1664B2CBCA8C13 /* CheckBurstView.swift */; };
 		5152AFCFBC2CECB405E6FF41 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BCC0D0D799B5FA79DC7F0F /* Task.swift */; };
+		52609B70E0A822EACCEA1083 /* CheckmateTask+Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9CA42DB038078A1DCC3BA2 /* CheckmateTask+Routing.swift */; };
 		52901B2C1E03AA85D2847059 /* StickyColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6451EC1662B40727029ABBC2 /* StickyColor.swift */; };
+		53B4AE5D0BB34D0FEFCFDCCE /* AddTodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FF84A62EAAA0622F487C3E /* AddTodoView.swift */; };
+		559CF9C4E1096A7F4B366644 /* DialKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8BF8D790C1FE5D5E2DD6FC5F /* DialKit */; };
 		587D7C135BBF1FE35CAD55AE /* FriendsTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F91D3B31327D0A80FF2C5D /* FriendsTabView.swift */; };
 		5900AA7902A2EB8AB50FFCC8 /* PersonAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029B5A83EC39AC884CC8D263 /* PersonAvatarView.swift */; };
+		5E393262B3447FFB76B3F793 /* FriendsTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F91D3B31327D0A80FF2C5D /* FriendsTabView.swift */; };
+		5F55FF109010C21AE7E157CE /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20F16E3D7A0F8BC06C9697B /* SettingsView.swift */; };
+		6018FAA7A6E43B1958AB445D /* PersonAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029B5A83EC39AC884CC8D263 /* PersonAvatarView.swift */; };
+		618FD3ABF2C0255B6429BEB8 /* figma.zip in Resources */ = {isa = PBXBuildFile; fileRef = C5CDAC8277563FE79AD59909 /* figma.zip */; };
 		643B36D1A430123555FDA462 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D537FEE4DBFDCC754DA4651 /* MessagesViewController.swift */; };
 		651215433A7ED3CB69CBFC23 /* FigmaHand-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 09120A290AD3A5DB17691CE7 /* FigmaHand-Regular.ttf */; };
 		65626D30B915C0792D6586CB /* CheckmateWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 152B791773B171362BCAB551 /* CheckmateWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		66076A34E31ED1908D219295 /* CheckmateTask+Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9CA42DB038078A1DCC3BA2 /* CheckmateTask+Routing.swift */; };
 		6AAB268F3ACF3F122C92886A /* ContactsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932FD0A835541FB8A924C7F4 /* ContactsService.swift */; };
+		6F9FC40ACFB378F917892900 /* FriendLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA454A0ECDA828105D4BF2C1 /* FriendLink.swift */; };
 		702F4C314A1EBCD5CF21FAA2 /* AssigneeCarousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D506C61503D5F5CB2423E005 /* AssigneeCarousel.swift */; };
 		72A740DFA4A0976C5730C528 /* ContactUserId.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F71D833131ED63F9A0140A /* ContactUserId.swift */; };
 		72B79EDB469B0F7717CF6E09 /* MessagesTrayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E01480FDD78221CDF3CD0A5E /* MessagesTrayTests.swift */; };
+		A0B00000000000000000C0D6 /* OnboardingDriverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B00000000000000000C0A6 /* OnboardingDriverTests.swift */; };
+		A0B00000000000000000C1D7 /* HomeConfettiDriverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B00000000000000000C1A7 /* HomeConfettiDriverTests.swift */; };
 		74CFDA01D6BFCDEE429619C4 /* KeyboardVisibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4D1947A2E413DB6E7FFBC2C /* KeyboardVisibility.swift */; };
 		77C8E6800FDC458E45F8AE14 /* CheckBurstView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF16F3033B1664B2CBCA8C13 /* CheckBurstView.swift */; };
 		77D6C78F74DADA9C6A5BA011 /* TaskStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 189C8AFECB8ADAECD6DC94E5 /* TaskStore.swift */; };
 		7C8D5C6D9960EC3ED9E00041 /* Secrets.example.plist in Resources */ = {isa = PBXBuildFile; fileRef = D6340FA8D4437B3C006EBAED /* Secrets.example.plist */; };
+		7DCFB9C64D90EE88FF198D16 /* CardFocusDialKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8201996ACA64BC5494B769E /* CardFocusDialKit.swift */; };
+		7ECEAC055D3DE3FD47090AF5 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 8805155F74359DCC6E10D85A /* Supabase */; };
+		7EFFB2DD15DEE00E24072134 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35510CE899357E7BBEB68595 /* Profile.swift */; };
 		805E797A9B1829BBBACC6F31 /* TaskWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B35A0A993FFC8894137EF0 /* TaskWidget.swift */; };
 		8536E98DD0EE008FFE949FCE /* BottomAnchoredTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B781784D70B297060B411FE9 /* BottomAnchoredTextEditor.swift */; };
+		858E8A482768AB5BA00ACAC9 /* Prefire in Frameworks */ = {isa = PBXBuildFile; productRef = DA3D0E82F7D16C744E8A8621 /* Prefire */; };
 		87C1ED4F3DCAA7AB098F677C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9629FF8B89372E5272459202 /* Assets.xcassets */; };
 		89E0C6ED86668B062EEDBF03 /* StickyNoteGridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74277328907116BCFE8B8445 /* StickyNoteGridCell.swift */; };
+		8F7ADC80206DD813275BCE29 /* RealtimeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580D1848DEE000BC565CAF26 /* RealtimeService.swift */; };
 		90D01B5FF295E6CAB66B4A21 /* MarkDoneIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745E013478049914C8C19F07 /* MarkDoneIntent.swift */; };
 		934EBCD4D00B367834CED5AF /* TodoEmptyDayPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62156498D30044EBC7E39D9A /* TodoEmptyDayPage.swift */; };
 		9448E0EB38C2E073879356E3 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BCC0D0D799B5FA79DC7F0F /* Task.swift */; };
 		9551D33499C206B4A8886B86 /* FigmaIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45D006C26566FD6338BE283 /* FigmaIcon.swift */; };
+		95F5F61A196FBA198255ED53 /* TodoTaskGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF34C03A72DD58688BC1DBD /* TodoTaskGrid.swift */; };
+		9600798277F9C62913A02636 /* CardFocusController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABED372453A8ACDCFF004F1 /* CardFocusController.swift */; };
 		980B93609BF1558E838A6400 /* StickyColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6451EC1662B40727029ABBC2 /* StickyColor.swift */; };
 		99DA44CAAB728454AD5B0BC5 /* CheckmateConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9E1F543A7B194091F9C2C3 /* CheckmateConfig.swift */; };
 		9A77FC88A9BE1CE851805EBC /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CAD697D50785D63916E226B /* Theme.swift */; };
 		9C1DA8401D424292C243FF30 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EA10FD78C232BCCD3AE7E5 /* AuthView.swift */; };
 		A06E3F86CB16EDBD0A79B9C9 /* HomeBottomBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15953CD899FE32F8C207ED4C /* HomeBottomBar.swift */; };
+		A2FEA7252EC443CA17E92B9C /* FigmaIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45D006C26566FD6338BE283 /* FigmaIcon.swift */; };
 		A404B525817350AABE35AD24 /* ProgressPill.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFCAA367E20C4D7546EED410 /* ProgressPill.swift */; };
 		A47C3A9AEB2369B92307E0D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D52138A8B2BFE2B75CB9394E /* Assets.xcassets */; };
+		ABDC9372AA04E3DAE3EAE017 /* FriendsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988D734D9B820B4762B07131 /* FriendsStore.swift */; };
+		B010C34C2E6BEADD8E339241 /* InviteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BFE143B366E147516F54699 /* InviteService.swift */; };
 		B4678D877E3767EBB22813EE /* TodoDayLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F04BE08BC2D62696C2655C /* TodoDayLabel.swift */; };
 		B5CCE6285D9D1162FED956AA /* Assignee.swift in Sources */ = {isa = PBXBuildFile; fileRef = C207F400083E1A8EF29D1C7F /* Assignee.swift */; };
 		B7B4ED0194BD16A7126F88E1 /* AppGroupStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC613E02FD54F6BDFEFEEE24 /* AppGroupStore.swift */; };
+		B98CC63FAA939C7991C5084E /* AssignToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = F782E5B80040178756DBF97D /* AssignToken.swift */; };
+		BA27A41A6B545DDB858FDFD3 /* KeyboardVisibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4D1947A2E413DB6E7FFBC2C /* KeyboardVisibility.swift */; };
 		BCE7AC101A12B629B399EF30 /* FriendLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA454A0ECDA828105D4BF2C1 /* FriendLink.swift */; };
+		BE2E7B5C8DAF24B5FF2F225A /* StickyNoteCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03B574970CEE345A2E65A0A /* StickyNoteCardView.swift */; };
 		C186030F7CFC6007192B7320 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 448CC6FC4908B6DD93EDAD47 /* AuthService.swift */; };
+		C21CE664E86BD6F5434F5AA6 /* ContactPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C53110EB5A4042FF0E54882 /* ContactPickerView.swift */; };
+		C7DA4EB5B3410F96F5A0BDF7 /* Secrets.example.plist in Resources */ = {isa = PBXBuildFile; fileRef = D6340FA8D4437B3C006EBAED /* Secrets.example.plist */; };
 		C874343041001D35048E35F5 /* CheckmateApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D91384C10F55CEAD352F7C8 /* CheckmateApp.swift */; };
 		C8E980231CF312ABA5A33D20 /* SupabaseClient+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCED4B9897F2DFD97EC2387D /* SupabaseClient+Shared.swift */; };
+		C8E9C7A762CA5CDA98496F1E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9629FF8B89372E5272459202 /* Assets.xcassets */; };
+		C93596E0C41773B51D804D90 /* ContactUserId.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F71D833131ED63F9A0140A /* ContactUserId.swift */; };
 		C9DF0BC143E7154414BFA6AD /* AssignToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = F782E5B80040178756DBF97D /* AssignToken.swift */; };
 		CCE19021C09D0084E9AE788A /* RealtimeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580D1848DEE000BC565CAF26 /* RealtimeService.swift */; };
+		D0079E5B93C90EE526EDD1AA /* CardActionBubbles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04166502A9BB82D2C43CBFB2 /* CardActionBubbles.swift */; };
 		D05DBC7874425761FBF4D1F1 /* figma.zip in Resources */ = {isa = PBXBuildFile; fileRef = C5CDAC8277563FE79AD59909 /* figma.zip */; };
 		D1E991D0C4A8AA3D4CCF9E24 /* ScrollEdgeFades.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE226A28022C8CB65008346 /* ScrollEdgeFades.swift */; };
+		D29FCA91AAEC25BEEBCE2152 /* FriendLookupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2BCB8A25D5A96921D75E1 /* FriendLookupService.swift */; };
+		D3127BE67731F82DBE1A565F /* AssignFlightCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0262AE3355AFB9CB25371D1F /* AssignFlightCoordinator.swift */; };
+		D62C5E5C16FECB48453EBB42 /* Assignee.swift in Sources */ = {isa = PBXBuildFile; fileRef = C207F400083E1A8EF29D1C7F /* Assignee.swift */; };
 		D7DC96B1A4727056DAA7DA2D /* TodoTaskGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF34C03A72DD58688BC1DBD /* TodoTaskGrid.swift */; };
+		D87A8FC91AEFAAA3A52CD84A /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A88D0D57E6FBFA20FCA318B /* RootView.swift */; };
+		DA13395F5D59D7597A55E457 /* TodoDayLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F04BE08BC2D62696C2655C /* TodoDayLabel.swift */; };
 		DACE947D49F1D0ADDD287F89 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35510CE899357E7BBEB68595 /* Profile.swift */; };
+		DD21A176AB4C1D3E2A0EAE83 /* HomeBottomBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15953CD899FE32F8C207ED4C /* HomeBottomBar.swift */; };
+		DF438DA2859639924DEE0DDC /* SupabaseClient+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCED4B9897F2DFD97EC2387D /* SupabaseClient+Shared.swift */; };
+		DF902188C06C6E1E64EB44AD /* FigmaHand-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 09120A290AD3A5DB17691CE7 /* FigmaHand-Regular.ttf */; };
+		E05BB6C34B159571AFDDDCB1 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 448CC6FC4908B6DD93EDAD47 /* AuthService.swift */; };
 		E111FC8E2CE188D8100C0EAF /* InviteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BFE143B366E147516F54699 /* InviteService.swift */; };
 		E39D78AB84A9D8ACED84FE03 /* StickyNoteCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03B574970CEE345A2E65A0A /* StickyNoteCardView.swift */; };
 		E3FC2C4097F3AAED15E5E65B /* AssignFlightOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C806C8D1BCDEEDF18C8D5D /* AssignFlightOverlay.swift */; };
+		E7AB5BFEA351A2BF566FDB68 /* ContactsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932FD0A835541FB8A924C7F4 /* ContactsService.swift */; };
+		E91F7A532BFBF3B2D7F00A0A /* CheckmateCatalogApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB88FC1BA33B9B92356C0912 /* CheckmateCatalogApp.swift */; };
 		EE92439853EA92F666970E12 /* StickyColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6451EC1662B40727029ABBC2 /* StickyColor.swift */; };
+		F005C8F1DA7A9052A86592E0 /* StickyNoteGridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74277328907116BCFE8B8445 /* StickyNoteGridCell.swift */; };
+		F12ECEE83BBF4DA541C9CA7D /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BCC0D0D799B5FA79DC7F0F /* Task.swift */; };
 		F1F57DEF03B44D5C3640EA56 /* CheckmateMessages.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = DAB78F9BB350AF1643AF7625 /* CheckmateMessages.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		FB4859C0157FD9C9F2338731 /* AppGroupStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC613E02FD54F6BDFEFEEE24 /* AppGroupStore.swift */; };
 		FC1B2037096922B6613C9DA4 /* CardFocusController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABED372453A8ACDCFF004F1 /* CardFocusController.swift */; };
 /* End PBXBuildFile section */
 
@@ -141,9 +234,11 @@
 		35510CE899357E7BBEB68595 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		3621DEEEC9953A82A9FFC3D7 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		448CC6FC4908B6DD93EDAD47 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		4EE1E571BA2EF1EBD9679C65 /* CardFocusTuning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardFocusTuning.swift; sourceTree = "<group>"; };
 		580D1848DEE000BC565CAF26 /* RealtimeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealtimeService.swift; sourceTree = "<group>"; };
 		62156498D30044EBC7E39D9A /* TodoEmptyDayPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoEmptyDayPage.swift; sourceTree = "<group>"; };
 		6451EC1662B40727029ABBC2 /* StickyColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickyColor.swift; sourceTree = "<group>"; };
+		6D7C68671174F988FB561E04 /* CheckmateComponentPreviews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckmateComponentPreviews.swift; sourceTree = "<group>"; };
 		737E969145A085F3EFE759A1 /* TaskStore+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskStore+Cloud.swift"; sourceTree = "<group>"; };
 		74277328907116BCFE8B8445 /* StickyNoteGridCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickyNoteGridCell.swift; sourceTree = "<group>"; };
 		745E013478049914C8C19F07 /* MarkDoneIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkDoneIntent.swift; sourceTree = "<group>"; };
@@ -163,13 +258,30 @@
 		A5480EC867E109710725730E /* TaskEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskEntry.swift; sourceTree = "<group>"; };
 		A6BDA4D22B2B6FE0BDF56C9C /* CheckmateWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CheckmateWidget.entitlements; sourceTree = "<group>"; };
 		A7C806C8D1BCDEEDF18C8D5D /* AssignFlightOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignFlightOverlay.swift; sourceTree = "<group>"; };
+		AB8EFD9AF37DF69B2789D298 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		ABCEBC380F43F17E6F87BE34 /* CheckmateCatalog.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = CheckmateCatalog.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B20F16E3D7A0F8BC06C9697B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		B45D006C26566FD6338BE283 /* FigmaIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FigmaIcon.swift; sourceTree = "<group>"; };
 		B68A3A4E584B94833BABCFEA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B781784D70B297060B411FE9 /* BottomAnchoredTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomAnchoredTextEditor.swift; sourceTree = "<group>"; };
+		BB88FC1BA33B9B92356C0912 /* CheckmateCatalogApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckmateCatalogApp.swift; sourceTree = "<group>"; };
 		BD9CA42DB038078A1DCC3BA2 /* CheckmateTask+Routing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CheckmateTask+Routing.swift"; sourceTree = "<group>"; };
 		C207F400083E1A8EF29D1C7F /* Assignee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assignee.swift; sourceTree = "<group>"; };
 		C5CDAC8277563FE79AD59909 /* figma.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = figma.zip; sourceTree = "<group>"; };
+		C8201996ACA64BC5494B769E /* CardFocusDialKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardFocusDialKit.swift; sourceTree = "<group>"; };
+		A0B00000000000000000C0A1 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		A0B00000000000000000C0A2 /* OnboardingStickiesPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingStickiesPage.swift; sourceTree = "<group>"; };
+		A0B00000000000000000C0A3 /* OnboardingConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingConfettiView.swift; sourceTree = "<group>"; };
+		A0B00000000000000000C2A1 /* OnboardingDialKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDialKit.swift; sourceTree = "<group>"; };
+		A0B00000000000000000C2A2 /* OnboardingDialKitTuning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDialKitTuning.swift; sourceTree = "<group>"; };
+		A0B00000000000000000C0A4 /* OnboardingAssignPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingAssignPage.swift; sourceTree = "<group>"; };
+		A0B00000000000000000C0A5 /* OnboardingWidgetPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingWidgetPage.swift; sourceTree = "<group>"; };
+		A0B00000000000000000C1A1 /* ConfettiBurst.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ConfettiBurst.json; sourceTree = "<group>"; };
+		A0B00000000000000000C1A2 /* ConfettiSoundEffect.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = ConfettiSoundEffect.m4a; sourceTree = "<group>"; };
+		A0B00000000000000000C1A3 /* CheckConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckConfettiView.swift; sourceTree = "<group>"; };
+		A0B00000000000000000C1A4 /* ConfettiCelebration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiCelebration.swift; sourceTree = "<group>"; };
+		D1A1C0DE0000000000000011 /* DialKitTuning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialKitTuning.swift; sourceTree = "<group>"; };
+		D1A1C0DE0000000000000012 /* CheckmateDialKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckmateDialKit.swift; sourceTree = "<group>"; };
 		CC613E02FD54F6BDFEFEEE24 /* AppGroupStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroupStore.swift; sourceTree = "<group>"; };
 		CF16F3033B1664B2CBCA8C13 /* CheckBurstView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBurstView.swift; sourceTree = "<group>"; };
 		CFCBD7D3368C2E12AFE82340 /* TaskWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskWidgetView.swift; sourceTree = "<group>"; };
@@ -183,6 +295,8 @@
 		DCED4B9897F2DFD97EC2387D /* SupabaseClient+Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SupabaseClient+Shared.swift"; sourceTree = "<group>"; };
 		DFCAA367E20C4D7546EED410 /* ProgressPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressPill.swift; sourceTree = "<group>"; };
 		E01480FDD78221CDF3CD0A5E /* MessagesTrayTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesTrayTests.swift; sourceTree = "<group>"; };
+		A0B00000000000000000C0A6 /* OnboardingDriverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDriverTests.swift; sourceTree = "<group>"; };
+		A0B00000000000000000C1A7 /* HomeConfettiDriverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeConfettiDriverTests.swift; sourceTree = "<group>"; };
 		E03B574970CEE345A2E65A0A /* StickyNoteCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickyNoteCardView.swift; sourceTree = "<group>"; };
 		E826DBF2E149F132BB9F5B72 /* ToggleTaskIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleTaskIntent.swift; sourceTree = "<group>"; };
 		EA454A0ECDA828105D4BF2C1 /* FriendLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendLink.swift; sourceTree = "<group>"; };
@@ -199,6 +313,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				4D4788D3A61ACA1B18EBC201 /* Supabase in Frameworks */,
+				1EBEEF2AA1F3008C07163DCD /* DialKit in Frameworks */,
+				A0B00000000000000000C1F1 /* Lottie in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		554452DAF5885E293A1577ED /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7ECEAC055D3DE3FD47090AF5 /* Supabase in Frameworks */,
+				559CF9C4E1096A7F4B366644 /* DialKit in Frameworks */,
+				858E8A482768AB5BA00ACAC9 /* Prefire in Frameworks */,
+				A0B00000000000000000C1F2 /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -227,8 +354,32 @@
 				E03B574970CEE345A2E65A0A /* StickyNoteCardView.swift */,
 				0CAD697D50785D63916E226B /* Theme.swift */,
 				65074416B43EFEF9C4A4F773 /* Components */,
+				A0B00000000000000000C0A0 /* Onboarding */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		A0B00000000000000000C1A0 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A0B00000000000000000C1A1 /* ConfettiBurst.json */,
+				A0B00000000000000000C1A2 /* ConfettiSoundEffect.m4a */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		A0B00000000000000000C0A0 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				A0B00000000000000000C0A4 /* OnboardingAssignPage.swift */,
+				A0B00000000000000000C0A3 /* OnboardingConfettiView.swift */,
+				A0B00000000000000000C2A1 /* OnboardingDialKit.swift */,
+				A0B00000000000000000C2A2 /* OnboardingDialKitTuning.swift */,
+				A0B00000000000000000C0A2 /* OnboardingStickiesPage.swift */,
+				A0B00000000000000000C0A1 /* OnboardingView.swift */,
+				A0B00000000000000000C0A5 /* OnboardingWidgetPage.swift */,
+			);
+			path = Onboarding;
 			sourceTree = "<group>";
 		};
 		09FD731D48BB7B6109E1BDC8 /* Models */ = {
@@ -264,6 +415,7 @@
 				0262AE3355AFB9CB25371D1F /* AssignFlightCoordinator.swift */,
 				448CC6FC4908B6DD93EDAD47 /* AuthService.swift */,
 				BD9CA42DB038078A1DCC3BA2 /* CheckmateTask+Routing.swift */,
+				A0B00000000000000000C1A4 /* ConfettiCelebration.swift */,
 				932FD0A835541FB8A924C7F4 /* ContactsService.swift */,
 				EBA2BCB8A25D5A96921D75E1 /* FriendLookupService.swift */,
 				988D734D9B820B4762B07131 /* FriendsStore.swift */,
@@ -281,6 +433,7 @@
 			isa = PBXGroup;
 			children = (
 				DDD26764A0C36BAC69402F67 /* Checkmate */,
+				78CB8CDDA955110B5A5382DD /* CheckmateCatalog */,
 				0C84983B372BE42E92DA2315 /* CheckmateMessages */,
 				E68F215FE929FA947C4B1648 /* CheckmateUITests */,
 				BDFE98DE3B1F260A6950F835 /* CheckmateWidget */,
@@ -296,7 +449,12 @@
 				B781784D70B297060B411FE9 /* BottomAnchoredTextEditor.swift */,
 				04166502A9BB82D2C43CBFB2 /* CardActionBubbles.swift */,
 				FABED372453A8ACDCFF004F1 /* CardFocusController.swift */,
+				A0B00000000000000000C1A3 /* CheckConfettiView.swift */,
+				C8201996ACA64BC5494B769E /* CardFocusDialKit.swift */,
+				4EE1E571BA2EF1EBD9679C65 /* CardFocusTuning.swift */,
+				D1A1C0DE0000000000000012 /* CheckmateDialKit.swift */,
 				CF16F3033B1664B2CBCA8C13 /* CheckBurstView.swift */,
+				D1A1C0DE0000000000000011 /* DialKitTuning.swift */,
 				13593B072FE59DB9585DF624 /* EmptyStateView.swift */,
 				B45D006C26566FD6338BE283 /* FigmaIcon.swift */,
 				15953CD899FE32F8C207ED4C /* HomeBottomBar.swift */,
@@ -312,10 +470,28 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
+		78CB8CDDA955110B5A5382DD /* CheckmateCatalog */ = {
+			isa = PBXGroup;
+			children = (
+				BB88FC1BA33B9B92356C0912 /* CheckmateCatalogApp.swift */,
+				AB8EFD9AF37DF69B2789D298 /* Info.plist */,
+			);
+			path = CheckmateCatalog;
+			sourceTree = "<group>";
+		};
+		7A3046A7E93AF83478F6D4A2 /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				6D7C68671174F988FB561E04 /* CheckmateComponentPreviews.swift */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
 		87F0EB0B4248C984D3FCD253 /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				76D44E3B347C69121EEA66E8 /* Checkmate.app */,
+				ABCEBC380F43F17E6F87BE34 /* CheckmateCatalog.app */,
 				DAB78F9BB350AF1643AF7625 /* CheckmateMessages.appex */,
 				D159A3D0D6794DCB21805DBF /* CheckmateUITests.xctest */,
 				152B791773B171362BCAB551 /* CheckmateWidget.appex */,
@@ -347,8 +523,10 @@
 				8A9E1F543A7B194091F9C2C3 /* CheckmateConfig.swift */,
 				B68A3A4E584B94833BABCFEA /* Info.plist */,
 				D6340FA8D4437B3C006EBAED /* Secrets.example.plist */,
+				7A3046A7E93AF83478F6D4A2 /* DesignSystem */,
 				031BAE64B488E2CAB8468D3F /* Fonts */,
 				09FD731D48BB7B6109E1BDC8 /* Models */,
+				A0B00000000000000000C1A0 /* Resources */,
 				223D684A4EBDA6DF9C618A2A /* Services */,
 				040C4053F53A4BD012FF57EA /* Views */,
 			);
@@ -359,6 +537,8 @@
 			isa = PBXGroup;
 			children = (
 				E01480FDD78221CDF3CD0A5E /* MessagesTrayTests.swift */,
+				A0B00000000000000000C0A6 /* OnboardingDriverTests.swift */,
+				A0B00000000000000000C1A7 /* HomeConfettiDriverTests.swift */,
 			);
 			path = CheckmateUITests;
 			sourceTree = "<group>";
@@ -384,6 +564,30 @@
 			productReference = D159A3D0D6794DCB21805DBF /* CheckmateUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		61FA0E155068500229F8182D /* CheckmateCatalog */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FAE7B318E3422302EACE9883 /* Build configuration list for PBXNativeTarget "CheckmateCatalog" */;
+			buildPhases = (
+				EDFC4865C16B3C3E4BE5D691 /* Sources */,
+				2E70EB051331559ECF4C66AC /* Resources */,
+				554452DAF5885E293A1577ED /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E87FD044C8D2376C8F0B351B /* PBXTargetDependency */,
+			);
+			name = CheckmateCatalog;
+			packageProductDependencies = (
+				8805155F74359DCC6E10D85A /* Supabase */,
+				8BF8D790C1FE5D5E2DD6FC5F /* DialKit */,
+				DA3D0E82F7D16C744E8A8621 /* Prefire */,
+				A0B00000000000000000C1E2 /* Lottie */,
+			);
+			productName = CheckmateCatalog;
+			productReference = ABCEBC380F43F17E6F87BE34 /* CheckmateCatalog.app */;
+			productType = "com.apple.product-type.application";
+		};
 		B7693172E594336FC991AE2C /* Checkmate */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 741B6262152ABA08A119B093 /* Build configuration list for PBXNativeTarget "Checkmate" */;
@@ -402,6 +606,8 @@
 			name = Checkmate;
 			packageProductDependencies = (
 				32D6EA40522676B011FA9DA9 /* Supabase */,
+				404DB9C6CEB68B508FB2AB7A /* DialKit */,
+				A0B00000000000000000C1E1 /* Lottie */,
 			);
 			productName = Checkmate;
 			productReference = 76D44E3B347C69121EEA66E8 /* Checkmate.app */;
@@ -455,6 +661,9 @@
 						ProvisioningStyle = Automatic;
 						TestTargetID = B7693172E594336FC991AE2C;
 					};
+					61FA0E155068500229F8182D = {
+						ProvisioningStyle = Automatic;
+					};
 					B7693172E594336FC991AE2C = {
 						ProvisioningStyle = Automatic;
 					};
@@ -476,6 +685,9 @@
 			mainGroup = 422224056258D95884025989;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				6A507BE0397200127EFF410D /* XCRemoteSwiftPackageReference "dialkit-ios" */,
+				A0B00000000000000000C1E0 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				C5B3F6AEDDBA0B61E78FE940 /* XCRemoteSwiftPackageReference "Prefire" */,
 				065AE3813C28AA1CC18B883D /* XCRemoteSwiftPackageReference "supabase-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -484,14 +696,28 @@
 			projectRoot = "";
 			targets = (
 				B7693172E594336FC991AE2C /* Checkmate */,
+				BFB125D8776FF6416D75C2B5 /* CheckmateWidget */,
 				ED7EE358F3F08110C3ED2212 /* CheckmateMessages */,
 				25323FA7F3EE75590B53AA3B /* CheckmateUITests */,
-				BFB125D8776FF6416D75C2B5 /* CheckmateWidget */,
+				61FA0E155068500229F8182D /* CheckmateCatalog */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		2E70EB051331559ECF4C66AC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C8E9C7A762CA5CDA98496F1E /* Assets.xcassets in Resources */,
+				A0B00000000000000000C1C1 /* ConfettiBurst.json in Resources */,
+				A0B00000000000000000C1C2 /* ConfettiSoundEffect.m4a in Resources */,
+				DF902188C06C6E1E64EB44AD /* FigmaHand-Regular.ttf in Resources */,
+				C7DA4EB5B3410F96F5A0BDF7 /* Secrets.example.plist in Resources */,
+				618FD3ABF2C0255B6429BEB8 /* figma.zip in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8612E5737BE2363F2BAEAA7F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -505,6 +731,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				87C1ED4F3DCAA7AB098F677C /* Assets.xcassets in Resources */,
+				A0B00000000000000000C1B1 /* ConfettiBurst.json in Resources */,
+				A0B00000000000000000C1B2 /* ConfettiSoundEffect.m4a in Resources */,
 				651215433A7ED3CB69CBFC23 /* FigmaHand-Regular.ttf in Resources */,
 				7C8D5C6D9960EC3ED9E00041 /* Secrets.example.plist in Resources */,
 				D05DBC7874425761FBF4D1F1 /* figma.zip in Resources */,
@@ -542,8 +770,15 @@
 				8536E98DD0EE008FFE949FCE /* BottomAnchoredTextEditor.swift in Sources */,
 				26F207568AC8506373D3CB8C /* CardActionBubbles.swift in Sources */,
 				FC1B2037096922B6613C9DA4 /* CardFocusController.swift in Sources */,
+				A0B00000000000000000C1B3 /* CheckConfettiView.swift in Sources */,
+				A0B00000000000000000C1B4 /* ConfettiCelebration.swift in Sources */,
+				351869DB2F6E152D6D30E404 /* CardFocusDialKit.swift in Sources */,
+				48A2D690D0D0B026F00A2E5A /* CardFocusTuning.swift in Sources */,
+				D1A1C0DE0000000000000003 /* CheckmateDialKit.swift in Sources */,
 				77C8E6800FDC458E45F8AE14 /* CheckBurstView.swift in Sources */,
+				D1A1C0DE0000000000000001 /* DialKitTuning.swift in Sources */,
 				C874343041001D35048E35F5 /* CheckmateApp.swift in Sources */,
+				3166690E1AC570D0254D8F14 /* CheckmateComponentPreviews.swift in Sources */,
 				99DA44CAAB728454AD5B0BC5 /* CheckmateConfig.swift in Sources */,
 				66076A34E31ED1908D219295 /* CheckmateTask+Routing.swift in Sources */,
 				0E95F92878BB5DBBE9DBD345 /* ContactPickerView.swift in Sources */,
@@ -560,6 +795,13 @@
 				74CFDA01D6BFCDEE429619C4 /* KeyboardVisibility.swift in Sources */,
 				14ACF24ABFA9E0CC136C1448 /* MyTodoView.swift in Sources */,
 				0CBAFC84B74388A3F94715D4 /* NotificationService.swift in Sources */,
+				A0B00000000000000000C0B4 /* OnboardingAssignPage.swift in Sources */,
+				A0B00000000000000000C0B3 /* OnboardingConfettiView.swift in Sources */,
+				A0B00000000000000000C2B1 /* OnboardingDialKit.swift in Sources */,
+				A0B00000000000000000C2B2 /* OnboardingDialKitTuning.swift in Sources */,
+				A0B00000000000000000C0B2 /* OnboardingStickiesPage.swift in Sources */,
+				A0B00000000000000000C0B1 /* OnboardingView.swift in Sources */,
+				A0B00000000000000000C0B5 /* OnboardingWidgetPage.swift in Sources */,
 				5900AA7902A2EB8AB50FFCC8 /* PersonAvatarView.swift in Sources */,
 				DACE947D49F1D0ADDD287F89 /* Profile.swift in Sources */,
 				A404B525817350AABE35AD24 /* ProgressPill.swift in Sources */,
@@ -586,6 +828,78 @@
 			buildActionMask = 2147483647;
 			files = (
 				72B79EDB469B0F7717CF6E09 /* MessagesTrayTests.swift in Sources */,
+				A0B00000000000000000C0D6 /* OnboardingDriverTests.swift in Sources */,
+				A0B00000000000000000C1D7 /* HomeConfettiDriverTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EDFC4865C16B3C3E4BE5D691 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				53B4AE5D0BB34D0FEFCFDCCE /* AddTodoView.swift in Sources */,
+				228AF01D850B6E4588759918 /* AppDelegate.swift in Sources */,
+				FB4859C0157FD9C9F2338731 /* AppGroupStore.swift in Sources */,
+				D3127BE67731F82DBE1A565F /* AssignFlightCoordinator.swift in Sources */,
+				4A4758DA102F9E16636D8C34 /* AssignFlightOverlay.swift in Sources */,
+				B98CC63FAA939C7991C5084E /* AssignToken.swift in Sources */,
+				D62C5E5C16FECB48453EBB42 /* Assignee.swift in Sources */,
+				23BA9E6F9AFF55EE5D806E87 /* AssigneeCarousel.swift in Sources */,
+				E05BB6C34B159571AFDDDCB1 /* AuthService.swift in Sources */,
+				0FF1C6A6C9B9F5CC52AE399F /* AuthView.swift in Sources */,
+				09C852A7A436D993E92013E8 /* BottomAnchoredTextEditor.swift in Sources */,
+				D0079E5B93C90EE526EDD1AA /* CardActionBubbles.swift in Sources */,
+				9600798277F9C62913A02636 /* CardFocusController.swift in Sources */,
+				A0B00000000000000000C1C3 /* CheckConfettiView.swift in Sources */,
+				A0B00000000000000000C1C4 /* ConfettiCelebration.swift in Sources */,
+				7DCFB9C64D90EE88FF198D16 /* CardFocusDialKit.swift in Sources */,
+				40C16DE20059DE21579206A9 /* CardFocusTuning.swift in Sources */,
+				D1A1C0DE0000000000000004 /* CheckmateDialKit.swift in Sources */,
+				511A97BAE21493E0847FE4CC /* CheckBurstView.swift in Sources */,
+				D1A1C0DE0000000000000002 /* DialKitTuning.swift in Sources */,
+				E91F7A532BFBF3B2D7F00A0A /* CheckmateCatalogApp.swift in Sources */,
+				121E863535AE939D2C5553A2 /* CheckmateComponentPreviews.swift in Sources */,
+				07AF7ABE6F040FE575440545 /* CheckmateConfig.swift in Sources */,
+				52609B70E0A822EACCEA1083 /* CheckmateTask+Routing.swift in Sources */,
+				C21CE664E86BD6F5434F5AA6 /* ContactPickerView.swift in Sources */,
+				C93596E0C41773B51D804D90 /* ContactUserId.swift in Sources */,
+				E7AB5BFEA351A2BF566FDB68 /* ContactsService.swift in Sources */,
+				110B6744096811A2B5588899 /* EmptyStateView.swift in Sources */,
+				A2FEA7252EC443CA17E92B9C /* FigmaIcon.swift in Sources */,
+				6F9FC40ACFB378F917892900 /* FriendLink.swift in Sources */,
+				D29FCA91AAEC25BEEBCE2152 /* FriendLookupService.swift in Sources */,
+				ABDC9372AA04E3DAE3EAE017 /* FriendsStore.swift in Sources */,
+				5E393262B3447FFB76B3F793 /* FriendsTabView.swift in Sources */,
+				DD21A176AB4C1D3E2A0EAE83 /* HomeBottomBar.swift in Sources */,
+				B010C34C2E6BEADD8E339241 /* InviteService.swift in Sources */,
+				BA27A41A6B545DDB858FDFD3 /* KeyboardVisibility.swift in Sources */,
+				067F062633DDF8469C7A9FF2 /* MyTodoView.swift in Sources */,
+				0E2B653B8D87974A0E75A000 /* NotificationService.swift in Sources */,
+				A0B00000000000000000C0C4 /* OnboardingAssignPage.swift in Sources */,
+				A0B00000000000000000C0C3 /* OnboardingConfettiView.swift in Sources */,
+				A0B00000000000000000C2C1 /* OnboardingDialKit.swift in Sources */,
+				A0B00000000000000000C2C2 /* OnboardingDialKitTuning.swift in Sources */,
+				A0B00000000000000000C0C2 /* OnboardingStickiesPage.swift in Sources */,
+				A0B00000000000000000C0C1 /* OnboardingView.swift in Sources */,
+				A0B00000000000000000C0C5 /* OnboardingWidgetPage.swift in Sources */,
+				6018FAA7A6E43B1958AB445D /* PersonAvatarView.swift in Sources */,
+				7EFFB2DD15DEE00E24072134 /* Profile.swift in Sources */,
+				0AEBAF6C46BBFC83DF8B5199 /* ProgressPill.swift in Sources */,
+				8F7ADC80206DD813275BCE29 /* RealtimeService.swift in Sources */,
+				D87A8FC91AEFAAA3A52CD84A /* RootView.swift in Sources */,
+				0A62C25217A3FB6A543BEFD5 /* ScrollEdgeFades.swift in Sources */,
+				5F55FF109010C21AE7E157CE /* SettingsView.swift in Sources */,
+				4838BB750CDA30ED533022F0 /* StickyColor.swift in Sources */,
+				BE2E7B5C8DAF24B5FF2F225A /* StickyNoteCardView.swift in Sources */,
+				F005C8F1DA7A9052A86592E0 /* StickyNoteGridCell.swift in Sources */,
+				DF438DA2859639924DEE0DDC /* SupabaseClient+Shared.swift in Sources */,
+				F12ECEE83BBF4DA541C9CA7D /* Task.swift in Sources */,
+				37F745F4353E729A4DFDB70F /* TaskStore+Cloud.swift in Sources */,
+				4E25C7FD9EB67B09D2594476 /* TaskStore.swift in Sources */,
+				295F530A316A26089B564CCA /* Theme.swift in Sources */,
+				DA13395F5D59D7597A55E457 /* TodoDayLabel.swift in Sources */,
+				3634BD1CEF66810BA229EE32 /* TodoEmptyDayPage.swift in Sources */,
+				95F5F61A196FBA198255ED53 /* TodoTaskGrid.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -616,6 +930,10 @@
 			isa = PBXTargetDependency;
 			target = B7693172E594336FC991AE2C /* Checkmate */;
 			targetProxy = 1B45D8A058250C8C230459E3 /* PBXContainerItemProxy */;
+		};
+		E87FD044C8D2376C8F0B351B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 7B6823BDCA3BA0B854AD4D3D /* PrefirePlaybookPlugin */;
 		};
 		EC24D869561D2DDCBE428B80 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -874,6 +1192,22 @@
 			};
 			name = Release;
 		};
+		934617B99A5B1C533ED080A7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = CheckmateCatalog/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.madhurima.checkmate.catalog;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		9DF202AE43CC95F749994B70 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -888,6 +1222,22 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.madhurima.checkmate.widget;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E84AF6029A8B85944231B2B2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = CheckmateCatalog/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.madhurima.checkmate.catalog;
+				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -940,6 +1290,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
+		FAE7B318E3422302EACE9883 /* Build configuration list for PBXNativeTarget "CheckmateCatalog" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E84AF6029A8B85944231B2B2 /* Debug */,
+				934617B99A5B1C533ED080A7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -951,6 +1310,30 @@
 				minimumVersion = 2.0.0;
 			};
 		};
+		6A507BE0397200127EFF410D /* XCRemoteSwiftPackageReference "dialkit-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mikelikesdesign/dialkit-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.3.0;
+			};
+		};
+		C5B3F6AEDDBA0B61E78FE940 /* XCRemoteSwiftPackageReference "Prefire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/BarredEwe/Prefire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.0;
+			};
+		};
+		A0B00000000000000000C1E0 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.5.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -958,6 +1341,41 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 065AE3813C28AA1CC18B883D /* XCRemoteSwiftPackageReference "supabase-swift" */;
 			productName = Supabase;
+		};
+		404DB9C6CEB68B508FB2AB7A /* DialKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6A507BE0397200127EFF410D /* XCRemoteSwiftPackageReference "dialkit-ios" */;
+			productName = DialKit;
+		};
+		7B6823BDCA3BA0B854AD4D3D /* PrefirePlaybookPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C5B3F6AEDDBA0B61E78FE940 /* XCRemoteSwiftPackageReference "Prefire" */;
+			productName = "plugin:PrefirePlaybookPlugin";
+		};
+		8805155F74359DCC6E10D85A /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 065AE3813C28AA1CC18B883D /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+		8BF8D790C1FE5D5E2DD6FC5F /* DialKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6A507BE0397200127EFF410D /* XCRemoteSwiftPackageReference "dialkit-ios" */;
+			productName = DialKit;
+		};
+		DA3D0E82F7D16C744E8A8621 /* Prefire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C5B3F6AEDDBA0B61E78FE940 /* XCRemoteSwiftPackageReference "Prefire" */;
+			productName = Prefire;
+		};
+		A0B00000000000000000C1E1 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A0B00000000000000000C1E0 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
+		};
+		A0B00000000000000000C1E2 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A0B00000000000000000C1E0 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -13,6 +13,12 @@ struct SettingsView: View {
     @AppStorage("notif.dailySummaryHour") private var dailySummaryHour = 9
     @AppStorage("defaults.color") private var defaultColorRaw = StickyColor.yellow.rawValue
     @AppStorage("defaults.allDay") private var defaultAllDay = true
+    @AppStorage(CheckmateConfig.DialKit.homePageKey) private var dialKitHomePageEnabled = false
+    @AppStorage(CheckmateConfig.DialKit.todoSheetKey) private var dialKitTodoSheetEnabled = false
+    @AppStorage(CheckmateConfig.DialKit.cardFocusKey) private var dialKitCardFocusEnabled = false
+    @AppStorage(CheckmateConfig.DialKit.onboardingKey) private var dialKitOnboardingEnabled = false
+    @AppStorage(CheckmateConfig.Onboarding.completedKey) private var onboardingCompleted = false
+    @State private var showOnboardingPreview = false
 
     private var defaultColor: Binding<StickyColor> {
         Binding(
@@ -27,6 +33,8 @@ struct SettingsView: View {
                 accountSection
                 notificationsSection
                 defaultsSection
+                dialKitSection
+                onboardingSection
                 friendsSection
                 widgetSection
                 aboutSection
@@ -38,6 +46,9 @@ struct SettingsView: View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Done") { dismiss() }
                 }
+            }
+            .fullScreenCover(isPresented: $showOnboardingPreview) {
+                OnboardingView()
             }
         }
     }
@@ -102,6 +113,39 @@ struct SettingsView: View {
                 }
             }
             Toggle("New todos are All-day", isOn: $defaultAllDay)
+        }
+    }
+
+    private var dialKitSection: some View {
+        Section {
+            Toggle("Home Page", isOn: $dialKitHomePageEnabled)
+            Toggle("To-Do Sheet", isOn: $dialKitTodoSheetEnabled)
+            Toggle("Press & Hold", isOn: $dialKitCardFocusEnabled)
+            Toggle("Onboarding", isOn: $dialKitOnboardingEnabled)
+        } header: {
+            Text("DialKit")
+        } footer: {
+            Text("Enabled panels appear in DialKit’s drawer (use the header dropdown to switch). Disabled areas always use shipped defaults. Onboarding panels appear while the intro is open.")
+        }
+    }
+
+    private var onboardingSection: some View {
+        Section {
+            Button {
+                showOnboardingPreview = true
+            } label: {
+                Label("View onboarding", systemImage: "play.circle")
+            }
+            Button {
+                onboardingCompleted = false
+                dismiss()
+            } label: {
+                Label("Restart onboarding", systemImage: "arrow.counterclockwise.circle")
+            }
+        } header: {
+            Text("Onboarding")
+        } footer: {
+            Text("View plays the intro right now. Restart clears the flag so it plays again immediately — and every time you restart.")
         }
     }
 

@@ -3,6 +3,8 @@ import SwiftUI
 /// Figma 571:10465 — confetti bursts from behind the checkbox; each dot/star has its
 /// own spring timing so the motion feels organic rather than mechanical.
 struct CheckBurstView: View {
+    @Environment(\.homePageTuning) private var tuning
+
     var body: some View {
         GeometryReader { geo in
             let scaleX = geo.size.width / Self.viewBox.width
@@ -15,7 +17,10 @@ struct CheckBurstView: View {
                         piece: piece,
                         origin: origin,
                         scaleX: scaleX,
-                        scaleY: scaleY
+                        scaleY: scaleY,
+                        spread: tuning.burstSpread,
+                        responseMultiplier: tuning.burstResponseMultiplier,
+                        dampingOffset: tuning.burstDampingOffset
                     )
                 }
             }
@@ -39,11 +44,19 @@ private struct BurstParticleView: View {
     let origin: CGPoint
     let scaleX: CGFloat
     let scaleY: CGFloat
+    let spread: Double
+    let responseMultiplier: Double
+    let dampingOffset: Double
 
     @State private var progress: CGFloat = 0
 
     private var target: CGPoint {
-        CGPoint(x: piece.center.x * scaleX, y: piece.center.y * scaleY)
+        let original = CGPoint(x: piece.center.x * scaleX, y: piece.center.y * scaleY)
+        let spreadScale = CGFloat(spread)
+        return CGPoint(
+            x: origin.x + (original.x - origin.x) * spreadScale,
+            y: origin.y + (original.y - origin.y) * spreadScale
+        )
     }
 
     private var position: CGPoint {
@@ -83,7 +96,10 @@ private struct BurstParticleView: View {
     private func playBurst() {
         progress = 0
         withAnimation(
-            .spring(response: piece.response, dampingFraction: piece.damping)
+            .spring(
+                response: piece.response * responseMultiplier,
+                dampingFraction: min(1, max(0.1, piece.damping + dampingOffset))
+            )
             .delay(piece.delay)
         ) {
             progress = 1

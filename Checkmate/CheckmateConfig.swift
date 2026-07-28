@@ -30,6 +30,19 @@ enum CheckmateConfig {
     }
 
     static let prototypeUserId = UUID(uuidString: "00000000-0000-0000-0000-000000000001")!
+
+    /// UserDefaults — Settings → DialKit sandbox toggles.
+    enum DialKit {
+        static let cardFocusKey = "dialkit.cardFocus.enabled"
+        static let homePageKey = "dialkit.homePage.enabled"
+        static let todoSheetKey = "dialkit.todoSheet.enabled"
+        static let onboardingKey = "dialkit.onboarding.enabled"
+    }
+
+    /// UserDefaults — onboarding flow. Cleared via Settings → Onboarding → Restart.
+    enum Onboarding {
+        static let completedKey = "onboarding.completed"
+    }
 }
 
 enum Secrets {

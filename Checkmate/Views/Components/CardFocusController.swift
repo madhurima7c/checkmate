@@ -26,6 +26,7 @@ final class CardFocusController: ObservableObject {
     @Published private(set) var focused: FocusedCard?
     @Published private(set) var highlighted: CardAction?
     @Published private(set) var fingerLocation: CGPoint?
+    var tuning: CardFocusTuning = .default
     private var bubbleFrames: [CardAction: CGRect] = [:]
     private var focusGeneration = 0
     private let holdFeedback = UIImpactFeedbackGenerator(style: .medium)
@@ -53,7 +54,8 @@ final class CardFocusController: ObservableObject {
             updateDrag(finger)
         }
         Task { @MainActor in
-            try? await Task.sleep(nanoseconds: 4_000_000_000)
+            let timeout = tuning.focusTimeout
+            try? await Task.sleep(nanoseconds: UInt64(timeout * 1_000_000_000))
             if self.focusGeneration == generation {
                 self.clear()
             }
@@ -110,7 +112,7 @@ final class CardFocusController: ObservableObject {
     }
 
     private func action(at location: CGPoint) -> CardAction? {
-        let magneticRadius: CGFloat = 28
+        let magneticRadius = tuning.magneticRadius
         var best: (action: CardAction, distance: CGFloat)?
         for (action, frame) in bubbleFrames {
             let center = CGPoint(x: frame.midX, y: frame.midY)
@@ -125,9 +127,9 @@ final class CardFocusController: ObservableObject {
     }
 
     private func actionFrames(for card: FocusedCard) -> [CardAction: CGRect] {
-        let bubbleSize: CGFloat = 52
-        let editDelta = editDelta(for: card.edge)
-        let offset = bubbleOffset(for: card.edge)
+        let bubbleSize = tuning.bubbleSize
+        let editDelta = tuning.editDelta(for: card.edge)
+        let offset = tuning.bubbleOffset(for: card.edge)
         let x: CGFloat
 
         switch card.edge {
@@ -153,14 +155,6 @@ final class CardFocusController: ObservableObject {
             .edit: deleteFrame.offsetBy(dx: editDelta.width, dy: editDelta.height)
         ]
     }
-
-    private func bubbleOffset(for edge: StickyNoteGridCell.ActionEdge) -> CGSize {
-        edge == .trailing ? CGSize(width: 26, height: -22) : CGSize(width: -26, height: -22)
-    }
-
-    private func editDelta(for edge: StickyNoteGridCell.ActionEdge) -> CGSize {
-        edge == .trailing ? CGSize(width: 54, height: 42) : CGSize(width: -54, height: 42)
-    }
 }
 
 // MARK: - Root overlay
@@ -169,13 +163,12 @@ final class CardFocusController: ObservableObject {
 /// card is positioned at its captured screen frame so it does not visibly move.
 struct CardFocusOverlay: View {
     @ObservedObject var controller: CardFocusController
-    private let holdTilt: Double = 3.34
 
     var body: some View {
         GeometryReader { _ in
             if let card = controller.focused {
                 ZStack(alignment: .topLeading) {
-                    Color.white.opacity(0.86)
+                    Color.white.opacity(controller.tuning.overlayOpacity)
                         .ignoresSafeArea()
 
                     focusedCard(card)
@@ -191,8 +184,8 @@ struct CardFocusOverlay: View {
     }
 
     private func focusedCard(_ card: CardFocusController.FocusedCard) -> some View {
-        let tilt = card.edge == .leading ? -holdTilt : holdTilt
-        return FocusedCardLift(tilt: tilt) {
+        let tilt = card.edge == .leading ? -controller.tuning.holdTilt : controller.tuning.holdTilt
+        return FocusedCardLift(tilt: tilt, startScale: controller.tuning.liftStartScale) {
             StickyNoteCardView(
                 task: card.task,
                 isNewBadge: card.isNewBadge,
@@ -202,31 +195,29 @@ struct CardFocusOverlay: View {
             )
             .overlay(alignment: card.edge == .trailing ? .topTrailing : .topLeading) {
                 CardActionBubbles(
+                    tuning: controller.tuning,
                     allowsEdit: card.allowsEdit,
                     highlighted: controller.highlighted,
                     editDirection: card.edge == .trailing ? .trailing : .leading,
                     onFramesChange: { controller.reportBubbleFrames($0) }
                 )
-                .offset(bubbleOffset(for: card.edge))
+                .offset(controller.tuning.bubbleOffset(for: card.edge))
             }
         }
-    }
-
-    private func bubbleOffset(for edge: StickyNoteGridCell.ActionEdge) -> CGSize {
-        edge == .trailing ? CGSize(width: 26, height: -22) : CGSize(width: -26, height: -22)
     }
 }
 
 /// Springs the focused card + action bubbles from a press scale into the tilted hold pose.
 private struct FocusedCardLift<Content: View>: View {
     let tilt: Double
+    let startScale: CGFloat
     @ViewBuilder var content: () -> Content
 
     @State private var lifted = false
 
     var body: some View {
         content()
-            .scaleEffect(lifted ? 1 : 0.94)
+            .scaleEffect(lifted ? 1 : startScale)
             .rotationEffect(.degrees(lifted ? tilt : 0))
             .onAppear {
                 withAnimation(Theme.boop) {

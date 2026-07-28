@@ -9,6 +9,15 @@ packages:
   Supabase:
     url: https://github.com/supabase/supabase-swift
     from: 2.0.0
+  DialKit:
+    url: https://github.com/mikelikesdesign/dialkit-ios
+    from: 0.3.0
+  Prefire:
+    url: https://github.com/BarredEwe/Prefire
+    from: 5.7.0
+  Lottie:
+    url: https://github.com/airbnb/lottie-ios
+    from: 4.5.0
 
 settings:
   base:
@@ -45,6 +54,8 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.madhurima.checkmate
     dependencies:
       - package: Supabase
+      - package: DialKit
+      - package: Lottie
       - target: CheckmateWidget
         embed: true
       - target: CheckmateMessages
@@ -121,6 +132,38 @@ targets:
         TEST_TARGET_NAME: Checkmate
         GENERATE_INFOPLIST_FILE: YES
 
+  CheckmateCatalog:
+    type: application
+    platform: iOS
+    sources:
+      - path: Checkmate
+        excludes:
+          - CheckmateApp.swift
+          - Info.plist
+          - Checkmate.entitlements
+      - path: CheckmateCatalog
+    info:
+      path: CheckmateCatalog/Info.plist
+      properties:
+        CFBundleDisplayName: Checkmate Catalog
+        UILaunchScreen: {}
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        UIRequiresFullScreen: true
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.madhurima.checkmate.catalog
+    dependencies:
+      - package: Supabase
+      - package: DialKit
+      - package: Prefire
+      - package: Lottie
+    buildToolPlugins:
+      - plugin: PrefirePlaybookPlugin
+        package: Prefire
+
 schemes:
   Checkmate:
     build:
@@ -133,3 +176,9 @@ schemes:
     test:
       targets:
         - CheckmateUITests
+  CheckmateCatalog:
+    build:
+      targets:
+        CheckmateCatalog: all
+    run:
+      config: Debug

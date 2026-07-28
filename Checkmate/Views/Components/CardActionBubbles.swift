@@ -14,19 +14,22 @@ enum CardActionEditDirection {
 /// Figma — 52pt circles arranged diagonally; selected action fills.
 /// Purely visual: selection is driven by the drag location in `CardFocusController`.
 struct CardActionBubbles: View {
+    var tuning: CardFocusTuning = .default
     var allowsEdit: Bool
     var highlighted: CardAction?
     var editDirection: CardActionEditDirection = .trailing
     var onFramesChange: (([CardAction: CGRect]) -> Void)? = nil
 
-    private let bubbleSize: CGFloat = 52
-    private let iconSize: CGFloat = 24
-    private let selectedScale: CGFloat = 1.1
+    private var bubbleSize: CGFloat { tuning.bubbleSize }
+    private var iconSize: CGFloat { tuning.iconSize }
+    private var selectedScale: CGFloat { tuning.selectedScale }
     private var editOffset: CGSize {
-        editDirection == .trailing ? CGSize(width: 54, height: 42) : CGSize(width: -54, height: 42)
+        editDirection == .trailing
+            ? CGSize(width: tuning.editDeltaX, height: tuning.editDeltaY)
+            : CGSize(width: -tuning.editDeltaX, height: tuning.editDeltaY)
     }
     private var deleteBaseOffset: CGSize {
-        editDirection == .trailing ? .zero : CGSize(width: 54, height: 0)
+        editDirection == .trailing ? .zero : CGSize(width: tuning.editDeltaX, height: 0)
     }
 
     var body: some View {
@@ -78,9 +81,9 @@ struct CardActionBubbles: View {
         guard isHighlighted else { return .white }
         switch action {
         case .delete:
-            return Color(hex: 0xFA3E3E)
+            return Color(dialHex: tuning.deleteHighlightHex)
         case .edit:
-            return Color(hex: 0x393834)
+            return Color(dialHex: tuning.editHighlightHex)
         }
     }
 

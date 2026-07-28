@@ -18,7 +18,7 @@ struct FigmaIcon: View {
 }
 
 extension FigmaIcon {
-    /// Figma 670:3070 — header settings control (28×28, #8C8C8C).
+    /// Figma 2038:2710 — header settings control (28×28, #8C8C8C).
     static func gear(size: CGFloat = 28) -> FigmaIcon {
         FigmaIcon(name: "GearSix", size: size, renderingMode: .original)
     }

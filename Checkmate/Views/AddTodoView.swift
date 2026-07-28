@@ -14,6 +14,8 @@ struct TodoSavePayload {
 /// Figma iPhone 16 & 17 Pro - 30 (573:2413) — Add todo sheet.
 struct AddTodoView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.todoSheetTuning) private var tuning
+    @AppStorage(CheckmateConfig.DialKit.todoSheetKey) private var dialKitTodoSheetEnabled = false
 
     var editingTask: CheckmateTask? = nil
     var onSaved: ((TodoSavePayload) -> Void)? = nil
@@ -54,7 +56,7 @@ struct AddTodoView: View {
 
     var body: some View {
         ZStack {
-            Theme.Palette.canvas.ignoresSafeArea()
+            Color(dialHex: tuning.canvasHex).ignoresSafeArea()
 
             VStack(spacing: 0) {
                 header
@@ -65,10 +67,10 @@ struct AddTodoView: View {
                             .padding(.top, 28)
 
                         colorRow
-                            .padding(.top, 20)
+                            .padding(.top, CGFloat(tuning.previewToColorsSpacing))
 
                         assignScheduleCard
-                            .padding(.top, 29)
+                            .padding(.top, CGFloat(tuning.colorsToDetailsSpacing))
                             .padding(.horizontal, 24)
                     }
                     .padding(.bottom, 32)
@@ -84,6 +86,11 @@ struct AddTodoView: View {
                     .font(.caption)
                     .foregroundStyle(.red)
                     .padding()
+            }
+
+            if dialKitTodoSheetEnabled {
+                PresentedDialKitRoot()
+                    .zIndex(100)
             }
         }
         .dismissKeyboardOnTap {
@@ -129,23 +136,11 @@ struct AddTodoView: View {
     // MARK: - Header (573:2452–2453)
 
     private var header: some View {
-        ZStack {
-            Text(isEditing ? "Edit todo" : "Add todo")
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundStyle(Theme.Palette.ink)
-
-            HStack {
-                Button { dismiss() } label: {
-                    FigmaIcon(name: "CaretLeft", size: 24)
-                        .frame(width: 32, height: 32)
-                }
-                .buttonStyle(BoopButtonStyle())
-                Spacer()
-            }
-            .padding(.horizontal, 24)
-        }
-        .padding(.top, 16)
-        .padding(.bottom, 4)
+        Text(isEditing ? "Edit todo" : "Add todo")
+            .font(.system(size: 18, weight: .semibold))
+            .foregroundStyle(Theme.Palette.ink)
+            .padding(.top, 24)
+            .padding(.bottom, 4)
     }
 
     // MARK: - Sticky preview (573:2513)
@@ -184,7 +179,7 @@ struct AddTodoView: View {
             ForEach(StickyColor.allCases) { c in
                 Button {
                     dismissComposer()
-                    withAnimation(Theme.colorFlip) { color = c }
+                    color = c
                 } label: {
                     ZStack {
                         Circle()
@@ -195,7 +190,7 @@ struct AddTodoView: View {
 
                         if c == color {
                             Circle()
-                                .stroke(Theme.Palette.selectionBlue, lineWidth: 2)
+                                .stroke(Color(dialHex: tuning.selectionHex), lineWidth: 2)
                                 .frame(width: 32.156, height: 32.156)
                         }
                     }
@@ -210,8 +205,9 @@ struct AddTodoView: View {
     // MARK: - Assign + schedule card (573:2469)
 
     private var assignScheduleCard: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            VStack(alignment: .leading, spacing: 16) {
+        let panelShape = RoundedRectangle(cornerRadius: Theme.Radius.panel, style: .continuous)
+        return VStack(alignment: .leading, spacing: 0) {
+            VStack(alignment: .leading, spacing: CGFloat(tuning.sectionSpacing)) {
                 sectionLabel("Assign to")
                     .padding(.horizontal, 20)
                 AssigneeCarousel(
@@ -231,11 +227,13 @@ struct AddTodoView: View {
             .padding(.top, 23)
             .padding(.bottom, 20)
 
-            Rectangle()
-                .fill(Color(hex: 0xEDEDED))
-                .frame(height: 1)
+            if tuning.separatorVisible {
+                Rectangle()
+                    .fill(Color(dialHex: tuning.separatorHex))
+                    .frame(height: CGFloat(tuning.separatorThickness))
+            }
 
-            VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: CGFloat(tuning.sectionSpacing)) {
                 sectionLabel("By when")
                     .padding(.horizontal, 20)
                 dueDateRow
@@ -245,7 +243,8 @@ struct AddTodoView: View {
             .padding(.top, 20)
             .padding(.bottom, 23)
         }
-        .figmaPanelChrome()
+        .background(Color(dialHex: tuning.panelHex), in: panelShape)
+        .overlay(panelShape.stroke(Color.black.opacity(0.03), lineWidth: 1))
     }
 
     /// Figma 573:2473 — Today / Tomorrow / Custom pill row.
@@ -456,18 +455,73 @@ struct AddTodoView: View {
 
 struct ColorFlipCard: View {
     @Binding var color: StickyColor
+    @Environment(\.todoSheetTuning) private var tuning
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var displayed: StickyColor = .yellow
+    @State private var popScale: CGFloat = 1
+    @State private var lift: CGFloat = 0
+    @State private var tilt: Double = 0
+    @State private var motionID = 0
 
     var body: some View {
         let shape = RoundedRectangle(cornerRadius: 24, style: .continuous)
         shape
-            .fill(displayed.paper)
+            .fill(tuning.paperColor(for: displayed))
             .overlay(shape.strokeBorder(.white, lineWidth: 6))
-            .stickyShadow()
+            .shadow(
+                color: .black.opacity(tuning.shadowEnabled ? tuning.shadowOpacity : 0),
+                radius: CGFloat(tuning.shadowRadius),
+                x: 0,
+                y: CGFloat(tuning.shadowYOffset)
+            )
+            .shadow(
+                color: .black.opacity(tuning.shadowEnabled ? 0.03 : 0),
+                radius: 0.5,
+                x: 0,
+                y: 0
+            )
+            .scaleEffect(popScale)
+            .offset(y: lift)
+            .rotationEffect(.degrees(tilt))
             .onChange(of: color) { _, new in
-                withAnimation(Theme.colorFlip) { displayed = new }
+                playColorChange(to: new)
             }
             .onAppear { displayed = color }
+    }
+
+    private func playColorChange(to newColor: StickyColor) {
+        motionID += 1
+        let currentMotionID = motionID
+        let animation = Animation.spring(
+            response: tuning.colorResponse,
+            dampingFraction: tuning.colorDamping
+        )
+
+        guard !reduceMotion else {
+            displayed = newColor
+            popScale = 1
+            lift = 0
+            tilt = 0
+            return
+        }
+
+        withAnimation(animation) {
+            displayed = newColor
+            popScale = CGFloat(tuning.colorPopScale)
+            lift = -CGFloat(tuning.colorLift)
+            tilt = motionID.isMultiple(of: 2) ? tuning.colorTilt : -tuning.colorTilt
+        }
+
+        DispatchQueue.main.asyncAfter(
+            deadline: .now() + max(0.08, tuning.colorResponse * 0.45)
+        ) {
+            guard currentMotionID == motionID else { return }
+            withAnimation(animation) {
+                popScale = 1
+                lift = 0
+                tilt = 0
+            }
+        }
     }
 }
 

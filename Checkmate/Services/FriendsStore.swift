@@ -8,7 +8,7 @@ final class FriendsStore: ObservableObject {
     @Published private(set) var recent: [FriendLink] = []
 
     private let storageKey = "friend_links_recent"
-    private let addTodoCleanupKey = "friend_links_add_todo_cleanup_v1"
+    private let addTodoCleanupKey = "friend_links_add_todo_cleanup_v2"
 
     private init() {
         load()

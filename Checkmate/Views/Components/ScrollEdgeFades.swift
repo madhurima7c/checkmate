@@ -11,51 +11,80 @@ enum TodoListChromeMetrics {
     }
 
     /// Canvas wash height rising above bottom chrome.
-    static let fadeHeight: CGFloat = 268
-    static let topFadeHeight: CGFloat = 56
     static let progressRowHeight: CGFloat = 24
     /// Figma 664:3034 — 16pt frame gap + 20pt nav-row top padding.
     static let progressToNavSpacing: CGFloat = 36
     /// Figma 664:3034 — tab pill / add button are 56pt tall.
-    static let navBarHeight: CGFloat = 56
     /// Figma 664:3034 — nav sits 40pt above the screen bottom; ~34pt is the
     /// home-indicator safe area, leaving ~6pt of explicit inset above it.
     static let navBottomInset: CGFloat = 6
 
-    static var scrollBottomInset: CGFloat {
-        progressRowHeight + progressToNavSpacing + navBarHeight + navBottomInset + 48
+    static func scrollBottomInset(for tuning: HomePageTuning) -> CGFloat {
+        progressRowHeight
+            + progressToNavSpacing
+            + CGFloat(tuning.navControlSize)
+            + navBottomInset
+            + 48
     }
 }
 
 /// Figma 571:10111 — progressive canvas fade from the bottom.
 struct TodoBottomFadeGradient: View {
+    @Environment(\.homePageTuning) private var tuning
+
     var body: some View {
-        LinearGradient(
-            stops: [
-                .init(color: Theme.Palette.canvas.opacity(0), location: 0),
-                .init(color: Theme.Palette.canvas.opacity(0.35), location: 0.32),
-                .init(color: Theme.Palette.canvas.opacity(0.72), location: 0.62),
-                .init(color: Theme.Palette.canvas.opacity(0.94), location: 0.88),
-                .init(color: Theme.Palette.canvas, location: 1)
-            ],
-            startPoint: .top,
-            endPoint: .bottom
-        )
+        ZStack {
+            LinearGradient(
+                stops: [
+                    .init(color: Theme.Palette.canvas.opacity(0), location: 0),
+                    .init(color: Theme.Palette.canvas.opacity(0.35), location: 0.32),
+                    .init(color: Theme.Palette.canvas.opacity(0.72), location: 0.62),
+                    .init(color: Theme.Palette.canvas.opacity(0.94), location: 0.88),
+                    .init(color: Theme.Palette.canvas, location: 1)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            Rectangle()
+                .fill(.ultraThinMaterial)
+                .opacity(tuning.edgeBlurOpacity)
+                .mask(
+                    LinearGradient(
+                        colors: [.clear, .black],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+        }
     }
 }
 
 /// Header zone — 100% canvas at top, 0% at bottom so cards dissolve when scrolling up.
 struct TodoTopFadeGradient: View {
+    @Environment(\.homePageTuning) private var tuning
+
     var body: some View {
-        LinearGradient(
-            stops: [
-                .init(color: Theme.Palette.canvas, location: 0),
-                .init(color: Theme.Palette.canvas.opacity(0.55), location: 0.45),
-                .init(color: Theme.Palette.canvas.opacity(0), location: 1)
-            ],
-            startPoint: .top,
-            endPoint: .bottom
-        )
+        ZStack {
+            LinearGradient(
+                stops: [
+                    .init(color: Theme.Palette.canvas, location: 0),
+                    .init(color: Theme.Palette.canvas.opacity(0.55), location: 0.45),
+                    .init(color: Theme.Palette.canvas.opacity(0), location: 1)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            Rectangle()
+                .fill(.ultraThinMaterial)
+                .opacity(tuning.edgeBlurOpacity)
+                .mask(
+                    LinearGradient(
+                        colors: [.black, .clear],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+        }
     }
 }
 
@@ -65,11 +94,12 @@ struct TodoListBottomChrome: View {
     let total: Int
     @Binding var selectedTab: AppTab
     var onAdd: () -> Void
+    @Environment(\.homePageTuning) private var tuning
 
     private var showProgress: Bool { total > 0 }
 
     private var fadeStackHeight: CGFloat {
-        var height = TodoListChromeMetrics.fadeHeight
+        var height = CGFloat(tuning.bottomFadeHeight)
         if showProgress {
             height += TodoListChromeMetrics.progressRowHeight + TodoListChromeMetrics.progressToNavSpacing
         }
@@ -89,7 +119,7 @@ struct TodoListBottomChrome: View {
                         .padding(.bottom, TodoListChromeMetrics.progressToNavSpacing)
                 }
                 HomeBottomBar(selectedTab: $selectedTab, onAdd: onAdd)
-                    .frame(height: TodoListChromeMetrics.navBarHeight)
+                    .frame(height: CGFloat(tuning.navControlSize))
             }
             .padding(.bottom, TodoListChromeMetrics.navBottomInset)
         }
@@ -105,6 +135,7 @@ private struct TodoScrollOffsetKey: PreferenceKey {
 struct ScrollEdgeFades<Content: View>: View {
     var onScroll: (() -> Void)? = nil
     @ViewBuilder var content: () -> Content
+    @Environment(\.homePageTuning) private var tuning
 
     @State private var lastOffset: CGFloat?
 
@@ -112,7 +143,7 @@ struct ScrollEdgeFades<Content: View>: View {
         ScrollView {
             content()
                 .padding(.top, TodoListChromeMetrics.scrollContentTopPadding)
-                .padding(.bottom, TodoListChromeMetrics.scrollBottomInset)
+                .padding(.bottom, TodoListChromeMetrics.scrollBottomInset(for: tuning))
                 .background(
                     GeometryReader { geo in
                         Color.clear.preference(
@@ -130,9 +161,11 @@ struct ScrollEdgeFades<Content: View>: View {
             onScroll?()
         }
         .scrollIndicators(.hidden)
+        // Let home-page check confetti paint past the scroll clip while bursting.
+        .scrollClipDisabled()
         .overlay(alignment: .top) {
             TodoTopFadeGradient()
-                .frame(height: TodoListChromeMetrics.topFadeHeight)
+                .frame(height: CGFloat(tuning.topFadeHeight))
                 .allowsHitTesting(false)
         }
         .mask {
@@ -146,7 +179,7 @@ struct ScrollEdgeFades<Content: View>: View {
                     startPoint: .top,
                     endPoint: .bottom
                 )
-                .frame(height: TodoListChromeMetrics.topFadeHeight)
+                .frame(height: CGFloat(tuning.topFadeHeight))
 
                 Rectangle()
                     .fill(Color.black)
@@ -160,7 +193,7 @@ struct ScrollEdgeFades<Content: View>: View {
                     startPoint: .top,
                     endPoint: .bottom
                 )
-                .frame(height: 88)
+                .frame(height: CGFloat(tuning.bottomFadeHeight) * (88 / 268))
             }
         }
     }

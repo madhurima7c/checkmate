@@ -1,6 +1,33 @@
 {
-  "originHash" : "5f3436049b395fcbc71828c07d82e81a46af698ebe0b146cdc52345a5a60558d",
+  "originHash" : "14df20e245f628563d024d3b2804b5c572511b5017e3ad9b77db92d31352dcbe",
   "pins" : [
+    {
+      "identity" : "dialkit-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mikelikesdesign/dialkit-ios",
+      "state" : {
+        "revision" : "8cb0060a6b385a3d2899889f7af9d9a7a390fa8d",
+        "version" : "0.3.0"
+      }
+    },
+    {
+      "identity" : "lottie-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/airbnb/lottie-ios",
+      "state" : {
+        "revision" : "f4db77d7feacba0c2360b84a40c38a6ce8ff399d",
+        "version" : "4.6.1"
+      }
+    },
+    {
+      "identity" : "prefire",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/BarredEwe/Prefire",
+      "state" : {
+        "revision" : "482f59ced5a9a041bc516cb258f0af897079c13a",
+        "version" : "5.7.0"
+      }
+    },
     {
       "identity" : "supabase-swift",
       "kind" : "remoteSourceControl",

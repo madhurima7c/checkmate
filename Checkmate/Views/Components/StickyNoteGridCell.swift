@@ -15,11 +15,7 @@ struct StickyNoteGridCell: View {
     var onEdit: () -> Void
     var onDelete: () -> Void
     @ObservedObject var controller: CardFocusController
-
-    /// Short hold so focus feels immediate; movement cancels (scroll).
-    private let holdDuration: TimeInterval = 0.42
-    private let holdMoveLimit: CGFloat = 16
-    private let pressScaleAmount: CGFloat = 0.94
+    @Environment(\.cardFocusTuning) private var tuning
 
     @State private var cellFrame: CGRect = .zero
     @State private var isPressing = false
@@ -29,6 +25,7 @@ struct StickyNoteGridCell: View {
     @State private var startedInCheckbox = false
     @State private var lastFinger: CGPoint?
     @State private var blockCheckboxTap = false
+    @State private var confettiBursting = false
 
     private var isFocused: Bool { controller.focusedId == task.id }
 
@@ -55,6 +52,9 @@ struct StickyNoteGridCell: View {
         .opacity(isFocused ? 0 : 1)
         .background(frameTracker)
         .overlay(holdOverlay)
+        .onPreferenceChange(HomeConfettiBurstKey.self) { confettiBursting = $0 }
+        // Bursting must beat the right-column base stack (1) so confetti paints over neighbors.
+        .zIndex(confettiBursting ? 80 : (isRightColumn ? 1 : 0))
         .onDisappear {
             cancelPressFeedback()
             if isFocused { controller.clear() }
@@ -96,7 +96,7 @@ struct StickyNoteGridCell: View {
                 if !controller.isActive {
                     if !isPressing {
                         startPressFeedback()
-                    } else if moved > holdMoveLimit {
+                    } else if moved > tuning.holdMoveLimit {
                         cancelPressFeedback()
                         return
                     }
@@ -137,12 +137,12 @@ struct StickyNoteGridCell: View {
         isPressing = true
         UIImpactFeedbackGenerator(style: .soft).impactOccurred()
         withAnimation(Theme.snappy) {
-            pressScale = pressScaleAmount
+            pressScale = tuning.pressScale
         }
 
         holdTask?.cancel()
         holdTask = Task { @MainActor in
-            try? await Task.sleep(for: .seconds(holdDuration))
+            try? await Task.sleep(for: .seconds(tuning.holdDuration))
             guard !Task.isCancelled, isPressing, !controller.isActive, cellFrame != .zero else { return }
             controller.begin(makeFocusedCard(), finger: lastFinger)
         }

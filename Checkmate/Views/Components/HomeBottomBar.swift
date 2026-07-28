@@ -4,23 +4,24 @@ import SwiftUI
 struct HomeBottomBar: View {
     @Binding var selectedTab: AppTab
     var onAdd: () -> Void
+    @Environment(\.homePageTuning) private var tuning
 
     var body: some View {
         HStack(alignment: .center, spacing: 0) {
             tabPill
-            Spacer(minLength: 16)
+            Spacer(minLength: CGFloat(tuning.navItemSpacing))
             addButton
         }
         .padding(.horizontal, 24)
     }
 
     private var tabPill: some View {
-        HStack(spacing: 16) {
+        HStack(spacing: CGFloat(tuning.navItemSpacing)) {
             tabIcon(.myTodo, asset: .noteTab)
             tabIcon(.friends, asset: .friendsTab)
         }
         .padding(.horizontal, 20)
-        .frame(height: 56)
+        .frame(height: CGFloat(tuning.navControlSize))
         .background(
             RoundedRectangle(cornerRadius: 19, style: .continuous)
                 .fill(Color.white)
@@ -45,14 +46,17 @@ struct HomeBottomBar: View {
                 Group {
                     switch asset {
                     case .noteTab:
-                        FigmaIcon.noteTab(size: 30)
+                        FigmaIcon.noteTab(size: CGFloat(tuning.navIconSize))
                     case .friendsTab:
-                        FigmaIcon.friendsTab(size: 30)
+                        FigmaIcon.friendsTab(size: CGFloat(tuning.navIconSize))
                     }
                 }
                 .opacity(selected ? 1 : 0.45)
             }
-            .frame(width: 30, height: 56)
+            .frame(
+                width: CGFloat(tuning.navIconSize),
+                height: CGFloat(tuning.navControlSize)
+            )
         }
         .buttonStyle(.plain)
     }
@@ -67,9 +71,12 @@ struct HomeBottomBar: View {
                         RoundedRectangle(cornerRadius: 19, style: .continuous)
                             .stroke(Color.black.opacity(0.03), lineWidth: 1)
                     )
-                FigmaIcon.addFAB(size: 27)
+                FigmaIcon.addFAB(size: CGFloat(tuning.fabIconSize))
             }
-            .frame(width: 56, height: 56)
+            .frame(
+                width: CGFloat(tuning.navControlSize),
+                height: CGFloat(tuning.navControlSize)
+            )
         }
         .buttonStyle(BoopButtonStyle())
     }

@@ -13,11 +13,33 @@ struct MyTodoView: View {
     @State private var editingTask: CheckmateTask?
     @State private var taskToDelete: CheckmateTask?
     @StateObject private var focusController = CardFocusController()
+    @StateObject private var focusTuningStore = CardFocusTuningStore.shared
+    @StateObject private var homePageTuningStore = HomePageTuningStore.shared
+    @StateObject private var todoSheetTuningStore = TodoSheetTuningStore.shared
+    @AppStorage(CheckmateConfig.DialKit.homePageKey) private var dialKitHomePageEnabled = false
+    @AppStorage(CheckmateConfig.DialKit.todoSheetKey) private var dialKitTodoSheetEnabled = false
+    @AppStorage(CheckmateConfig.DialKit.cardFocusKey) private var dialKitCardFocusEnabled = false
     @State private var selectedTab: AppTab = .myTodo
     @State private var addSheetToken = 0
     @Namespace private var stickyNamespace
 
     private let dayRange = 0...14
+
+    private var activeCardFocusTuning: CardFocusTuning {
+        dialKitCardFocusEnabled ? focusTuningStore.values : .default
+    }
+
+    private var activeHomePageTuning: HomePageTuning {
+        dialKitHomePageEnabled ? homePageTuningStore.values : .default
+    }
+
+    private var activeTodoSheetTuning: TodoSheetTuning {
+        dialKitTodoSheetEnabled ? todoSheetTuningStore.values : .default
+    }
+
+    private func syncCardFocusTuning() {
+        focusController.tuning = activeCardFocusTuning
+    }
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -44,6 +66,29 @@ struct MyTodoView: View {
                 .zIndex(28)
             AssignFlightOverlay()
                 .zIndex(30)
+            if dialKitHomePageEnabled || dialKitTodoSheetEnabled || dialKitCardFocusEnabled {
+                CheckmateDialKitHost(
+                    homePageEnabled: dialKitHomePageEnabled,
+                    todoSheetEnabled: dialKitTodoSheetEnabled,
+                    cardFocusEnabled: dialKitCardFocusEnabled,
+                    homeStore: homePageTuningStore,
+                    todoSheetStore: todoSheetTuningStore,
+                    cardFocusStore: focusTuningStore
+                )
+                    .zIndex(100)
+            }
+        }
+        .environment(\.cardFocusTuning, activeCardFocusTuning)
+        .environment(\.homePageTuning, activeHomePageTuning)
+        .environment(\.todoSheetTuning, activeTodoSheetTuning)
+        .onChange(of: dialKitCardFocusEnabled) { _, _ in
+            syncCardFocusTuning()
+        }
+        .onChange(of: focusTuningStore.values) { _, _ in
+            syncCardFocusTuning()
+        }
+        .onAppear {
+            syncCardFocusTuning()
         }
         .coordinateSpace(name: CardFocusSpace.name)
         .animation(Theme.spring, value: selectedTab)
@@ -59,16 +104,14 @@ struct MyTodoView: View {
         .sheet(isPresented: $showAddTodo) {
             AddTodoView(onSaved: handleSave, resetToken: addSheetToken)
                 .presentationDetents([.large])
-                .presentationDragIndicator(.hidden)
-                .interactiveDismissDisabled()
+                .presentationDragIndicator(.visible)
                 .presentationCornerRadius(48)
                 .presentationBackground(Theme.Palette.canvas)
         }
         .sheet(item: $editingTask) { task in
             AddTodoView(editingTask: task, onSaved: handleSave, resetToken: addSheetToken)
                 .presentationDetents([.large])
-                .presentationDragIndicator(.hidden)
-                .interactiveDismissDisabled()
+                .presentationDragIndicator(.visible)
                 .presentationCornerRadius(48)
                 .presentationBackground(Theme.Palette.canvas)
         }

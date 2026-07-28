@@ -9,6 +9,7 @@ struct StickyNoteCardView: View {
     var showsCheckbox: Bool = true
     /// When false, the checkbox ignores touches (e.g. during press-and-hold on the card).
     var allowsCheckboxTap: Bool = true
+    @Environment(\.homePageTuning) private var tuning
 
     @State private var checking = false
     @State private var checked = false
@@ -22,28 +23,40 @@ struct StickyNoteCardView: View {
 
     var body: some View {
         GeometryReader { geo in
-            ZStack(alignment: .topLeading) {
-                ZStack {
-                    task.color.paper
-                    content(in: geo.size)
-                }
-                .clipShape(cardShape)
-                .overlay(cardShape.strokeBorder(Color.white, lineWidth: Theme.Stroke.cardBorder))
-                .stickyShadow()
-                .scaleEffect(checking ? 0.95 : 1)
-
+            ZStack {
+                task.color.paper
+                content(in: geo.size)
+            }
+            .clipShape(cardShape)
+            .overlay(cardShape.strokeBorder(Color.white, lineWidth: Theme.Stroke.cardBorder))
+            .stickyShadow()
+            .scaleEffect(checking ? 0.95 : 1)
+            // Confetti sits outside the paper clip so it can burst past the card edge.
+            .overlay {
                 if showBurst {
-                    CheckBurstView()
-                        .frame(width: 56, height: 45)
+                    let confettiWidth = geo.size.width * CGFloat(tuning.confettiScale)
+                    CheckConfettiView(speed: tuning.confettiSpeed)
+                        .frame(
+                            width: confettiWidth,
+                            height: confettiWidth / CheckConfettiView.aspectRatio
+                        )
+                        .offset(
+                            x: CGFloat(tuning.confettiXOffset),
+                            y: CGFloat(tuning.confettiYOffset)
+                        )
                         .opacity(burstOpacity)
-                        .offset(x: -6, y: -6)
                         .allowsHitTesting(false)
                         .id(burstToken)
                 }
             }
         }
-        .aspectRatio(1, contentMode: .fit)
-        .onAppear { syncFromTask() }
+        .aspectRatio(CGFloat(tuning.cardAspectRatio), contentMode: .fit)
+        .preference(key: HomeConfettiBurstKey.self, value: showBurst)
+        .zIndex(showBurst ? 80 : 0)
+        .onAppear {
+            syncFromTask()
+            ConfettiCelebration.shared.prewarm()
+        }
         .onChange(of: task.status) { _, _ in syncFromTask() }
     }
 
@@ -63,7 +76,11 @@ struct StickyNoteCardView: View {
                 }
                 Spacer()
                 if let avatarName {
-                    PersonAvatarView(name: avatarName, imageData: avatarImageData, size: 24)
+                    PersonAvatarView(
+                        name: avatarName,
+                        imageData: avatarImageData,
+                        size: CGFloat(tuning.avatarSize)
+                    )
                 }
             }
 
@@ -82,38 +99,41 @@ struct StickyNoteCardView: View {
     }
 
     private var checkbox: some View {
-        Button { toggleCheck() } label: {
+        let checkboxSize = CGFloat(tuning.checkboxSize)
+        let scale = checkboxSize / 20
+        return Button { toggleCheck() } label: {
             ZStack {
                 if !checked {
-                    RoundedRectangle(cornerRadius: 6, style: .continuous)
-                        .stroke(Theme.Palette.checkboxStroke, lineWidth: 2)
-                        .frame(width: 20, height: 20)
+                    RoundedRectangle(cornerRadius: 6 * scale, style: .continuous)
+                        .stroke(Theme.Palette.checkboxStroke, lineWidth: 2 * scale)
+                        .frame(width: checkboxSize, height: checkboxSize)
                 }
                 if checked {
-                    RoundedRectangle(cornerRadius: 6, style: .continuous)
+                    RoundedRectangle(cornerRadius: 6 * scale, style: .continuous)
                         .fill(Theme.Palette.blue)
-                        .frame(width: 20, height: 20)
+                        .frame(width: checkboxSize, height: checkboxSize)
                         .scaleEffect(checkFillScale)
                         .overlay(
                             CheckmarkShape()
                                 .trim(from: 0, to: checkTrim)
                                 .stroke(
                                     Color.white,
-                                    style: StrokeStyle(lineWidth: 2.5, lineCap: .round, lineJoin: .round)
+                                    style: StrokeStyle(lineWidth: 2.5 * scale, lineCap: .round, lineJoin: .round)
                                 )
-                                .frame(width: 12, height: 12)
+                                .frame(width: 12 * scale, height: 12 * scale)
                         )
                 }
             }
-            .frame(width: 20, height: 20)
+            .frame(width: checkboxSize, height: checkboxSize)
         }
         .buttonStyle(BoopButtonStyle())
         .allowsHitTesting(allowsCheckboxTap)
+        .accessibilityIdentifier("home.checkbox.\(task.text)")
     }
 
     private var taskText: some View {
         Text(task.text)
-            .font(.system(size: 15, weight: .medium))
+            .font(.system(size: CGFloat(tuning.cardTextSize), weight: .medium))
             .foregroundStyle(checked ? Theme.Palette.strike : Theme.Palette.body)
             .strikethrough(checked, color: Theme.Palette.strike)
             .lineLimit(4)
@@ -127,7 +147,12 @@ struct StickyNoteCardView: View {
     }
 
     private func completeCheck() {
-        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        ConfettiCelebration.shared.play(
+            volume: tuning.confettiVolume,
+            hapticIntensity: tuning.confettiHapticIntensity,
+            sound: tuning.confettiSoundEnabled,
+            haptics: tuning.confettiHapticsEnabled
+        )
         checking = true
         burstToken += 1
         showBurst = true
@@ -140,13 +165,22 @@ struct StickyNoteCardView: View {
             checkTrim = 1
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.38) {
+        // Release the press-squish as soon as the check pop lands; the
+        // confetti keeps playing until doneDelay.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+            withAnimation(Theme.snappy) {
+                checking = false
+            }
+        }
+
+        let doneDelay = max(0.2, tuning.confettiDoneDelay)
+        DispatchQueue.main.asyncAfter(deadline: .now() + max(0.1, doneDelay - 0.16)) {
             withAnimation(.easeOut(duration: 0.14)) {
                 burstOpacity = 0
             }
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.52) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + doneDelay) {
             TaskStore.shared.markDoneLocally(taskId: task.id)
             checking = false
             showBurst = false
@@ -164,6 +198,15 @@ struct StickyNoteCardView: View {
             burstOpacity = 1
         }
         TaskStore.shared.undoPendingLocally(taskId: task.id)
+    }
+}
+
+/// Grid cells raise z-index while a home-page Lottie burst is active so the
+/// confetti can paint over neighboring cards.
+struct HomeConfettiBurstKey: PreferenceKey {
+    static var defaultValue = false
+    static func reduce(value: inout Bool, nextValue: () -> Bool) {
+        value = value || nextValue()
     }
 }
 
